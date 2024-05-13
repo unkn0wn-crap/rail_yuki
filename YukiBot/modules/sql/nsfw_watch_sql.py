@@ -1,6 +1,6 @@
 from sqlalchemy import Column, String
 
-from MukeshRobot.modules.sql import BASE, SESSION
+from YukiBot.modules.sql import BASE, SESSION
 
 
 class Nsfwatch(BASE):
