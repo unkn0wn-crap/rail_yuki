@@ -1,4 +1,4 @@
-# yuki_paradox 
+Yuki Onna
  <img src="https://readme-typing-svg.herokuapp.com?color=810eef&width=480&lines=🄼🄰🄽🄰🄶🄼🄴🄽🅃+🄱🄾🅃">
 
 
