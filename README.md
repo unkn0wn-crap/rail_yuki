@@ -1,5 +1,5 @@
 # yuki_paradox 
- <img src="https://readme-typing-svg.herokuapp.com?color=810eef&width=500&lines=🄼🄰🄽🄰🄶🄼🄴🄽🅃+🄱🄾🅃">
+ <img src="https://readme-typing-svg.herokuapp.com?color=810eef&width=480&lines=🄼🄰🄽🄰🄶🄼🄴🄽🅃+🄱🄾🅃">
 
 
 
@@ -8,7 +8,7 @@
 </p>
 
 
- <c><img src="https://readme-typing-svg.herokuapp.com?color=f21808&width=500&lines=🄿🄰🅁🄰🄳🄾🅇+🄶🄷🄾🅂🅃"></c>
+ <c><img src="https://readme-typing-svg.herokuapp.com?color=f21808&width=480&lines=🄿🄰🅁🄰🄳🄾🅇+🄶🄷🄾🅂🅃"></c>
 
 
 <c>                           ─「 ᴅᴇᴩʟᴏʏ ᴏɴ ʜᴇʀᴏᴋᴜ 」─
