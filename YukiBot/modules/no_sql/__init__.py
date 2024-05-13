@@ -18,7 +18,7 @@ YukiXdb = main_db
 
 def get_collection(name: str) -> collection:
     """ɢᴇᴛ ᴛʜᴇ ᴄᴏʟʟᴇᴄᴛɪᴏɴ ғʀᴏᴍ ᴅᴀᴛᴀʙᴀsᴇ."""
-    return MukeshXdb[name]
+    return YukiXdb[name]
 
 
 class MongoDB:
