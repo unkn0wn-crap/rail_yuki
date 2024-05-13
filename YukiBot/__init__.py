@@ -92,7 +92,7 @@ if ENV:
         raise Exception("Your whitelisted users list does not contain valid integers.")
 
 else:
-    from MukeshRobot.config import Development as Config
+    from YukiBot.config import Development as Config
 
     API_ID = Config.API_ID
     API_HASH = Config.API_HASH
@@ -157,7 +157,7 @@ DEV_USERS.add(abs(0b101100001110010100011000111101001))
 updater = tg.Updater(TOKEN, workers=WORKERS, use_context=True)
 telethn = TelegramClient("mukesh", API_ID, API_HASH)
 
-pbot = Client("MukeshRobot", api_id=API_ID, api_hash=API_HASH, bot_token=TOKEN,in_memory=True)
+pbot = Client("YukiBot", api_id=API_ID, api_hash=API_HASH, bot_token=TOKEN,in_memory=True)
 dispatcher = updater.dispatcher
 aiohttpsession = ClientSession()
 
@@ -173,7 +173,7 @@ DEMONS = list(DEMONS)
 TIGERS = list(TIGERS)
 
 # Load at end to ensure all prev variables have been set
-from MukeshRobot.modules.helper_funcs.handlers import (
+from YukiBot.modules.helper_funcs.handlers import (
     CustomCommandHandler,
     CustomMessageHandler,
     CustomRegexHandler,
