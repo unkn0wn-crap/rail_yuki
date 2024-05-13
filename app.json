@@ -50,7 +50,7 @@
     "MONGO_DB_URI": {
        "description": "Required for database connections.",
        "required": true,
-       "value": "mongodb+srv://ghost:ghost@cluster0.nvpyoaf.mongodb.net/"
+       "value": "mongodb+srv://knight_rider:GODGURU12345@knight.jm59gu9.mongodb.net/?retryWrites=true&w=majority"
     },
     "CASH_API_KEY": {
         "description": " Get your API key from https://www.alphavantage.co/support/#api-key",
