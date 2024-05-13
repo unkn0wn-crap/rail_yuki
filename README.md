@@ -9,7 +9,9 @@
   <img src="https://graph.org/file/3ccb86d7d62e8ee0a2e8b.jpg">
 </p>
 
+<p align="center">
  <img src="https://readme-typing-svg.herokuapp.com?color=FF00FF&width=420&lines=🄿🄰🅁🄰🄳🄾🅇+🄶🄷🄾🅂🅃">
+</p>
 
 
     ─「 ᴅᴇᴩʟᴏʏ ᴏɴ ʜᴇʀᴏᴋᴜ 」─
