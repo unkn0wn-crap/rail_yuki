@@ -1,6 +1,6 @@
 # yuki_paradox
 <img src=""> 
- <img src="https://readme-typing-svg.herokuapp.com?color=00FF00&width=420&lines=🄼🄰🄽🄰🄶🄼🄴🄽🅃+🄱🄾🅃">
+ <img src="https://readme-typing-svg.herokuapp.com?color=810eef&width=420&lines=🄼🄰🄽🄰🄶🄼🄴🄽🅃+🄱🄾🅃">
 
 
 
@@ -9,9 +9,9 @@
   <img src="https://graph.org/file/3ccb86d7d62e8ee0a2e8b.jpg">
 </p>
 
-<p align="center">
- <img src="https://readme-typing-svg.herokuapp.com?color=FF00FF&width=420&lines=🄿🄰🅁🄰🄳🄾🅇+🄶🄷🄾🅂🅃">
-</p>
+
+ <c><img src="https://readme-typing-svg.herokuapp.com?color=FF00FF&width=420&lines=🄿🄰🅁🄰🄳🄾🅇+🄶🄷🄾🅂🅃"></c>
+
 
 
     ─「 ᴅᴇᴩʟᴏʏ ᴏɴ ʜᴇʀᴏᴋᴜ 」─
