@@ -2,7 +2,7 @@ import threading
 
 from sqlalchemy import BigInteger, Column, String, UnicodeText, distinct, func
 
-from MukeshRobot.modules.sql import BASE, SESSION
+from YukiBot.modules.sql import BASE, SESSION
 
 
 class StickersFilters(BASE):
