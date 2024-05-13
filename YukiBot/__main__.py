@@ -27,8 +27,8 @@ from telegram.ext.dispatcher import DispatcherHandlerStop
 from telegram.utils.helpers import escape_markdown
 from telethon import __version__ as tlhver
 
-import MukeshRobot.modules.no_sql.users_db as sql
-from MukeshRobot import (
+import YukiBot.modules.no_sql.users_db as sql
+from YukiBot import (
     BOT_NAME,
     BOT_USERNAME,
     LOGGER,
@@ -42,9 +42,9 @@ from MukeshRobot import (
     telethn,
     updater,
 )
-from MukeshRobot.modules import ALL_MODULES
-from MukeshRobot.modules.helper_funcs.chat_status import is_user_admin
-from MukeshRobot.modules.helper_funcs.misc import paginate_modules
+from YukiBot.modules import ALL_MODULES
+from YukiBot.modules.helper_funcs.chat_status import is_user_admin
+from YukiBot.modules.helper_funcs.misc import paginate_modules
 
 
 def get_readable_time(seconds: int) -> str:
@@ -215,7 +215,7 @@ CHAT_SETTINGS = {}
 USER_SETTINGS = {}
 
 for module_name in ALL_MODULES:
-    imported_module = importlib.import_module("MukeshRobot.modules." + module_name)
+    imported_module = importlib.import_module("YukiBot.modules." + module_name)
     if not hasattr(imported_module, "__mod_name__"):
         imported_module.__mod_name__ = imported_module.__name__
 
@@ -503,7 +503,7 @@ def Mukesh_about_callback(update: Update, context: CallbackContext):
             parse_mode=ParseMode.MARKDOWN,
             timeout=60,
         )
-def MukeshRobot_Main_Callback(update: Update, context: CallbackContext):
+def YukiBot_Main_Callback(update: Update, context: CallbackContext):
     query = update.callback_query
     if query.data == "Main_help":
         query.message.edit_caption(f"""
@@ -1202,8 +1202,8 @@ def main():
     music_callback_handler = CallbackQueryHandler(
         Music_about_callback, pattern=r"Music_",run_async=True
     )
-    mukeshrobot_main_handler = CallbackQueryHandler(
-        MukeshRobot_Main_Callback, pattern=r".*_help",run_async=True)
+    YukiBot_main_handler = CallbackQueryHandler(
+        YukiBot_Main_Callback, pattern=r".*_help",run_async=True)
     donate_handler = CommandHandler("donate", donate)
     migrate_handler = MessageHandler(Filters.status_update.migrate, migrate_chats)
     dispatcher.add_handler(start_handler)
@@ -1215,7 +1215,7 @@ def main():
     dispatcher.add_handler(settings_callback_handler)
     dispatcher.add_handler(migrate_handler)
     dispatcher.add_handler(donate_handler)
-    dispatcher.add_handler(mukeshrobot_main_handler)
+    dispatcher.add_handler(YukiBot_main_handler)
     dispatcher.add_error_handler(error_callback)
     dispatcher.add_handler(source_callback_handler)
     LOGGER.info("Using long polling.")
