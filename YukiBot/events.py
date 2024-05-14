@@ -9,7 +9,7 @@ from YukiBot import MONGO_DB_URI, telethn
 
 client = MongoClient()
 client = MongoClient(MONGO_DB_URI)
-db = client["Mukesh"]
+db = client["Yuki"]
 gbanned = db.gban
 
 
@@ -74,7 +74,7 @@ def callbackquery(**args):
 
     return decorator
 
-def Mukeshinline(**args):
+def Yukiinline(**args):
     def decorator(func):
         telethn.add_event_handler(func, events.CallbackQuery(**args))
         return func
