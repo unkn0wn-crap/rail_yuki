@@ -6,15 +6,15 @@ from telethon.tl.functions.channels import GetParticipantRequest
 from YukiBot import BOT_ID
 from YukiBot import DRAGONS as DEVS
 from YukiBot import OWNER_ID
-from YukiBot import telethn as Mukesh
-from YukiBot.events import Mukeshinline
-from YukiBot.events import register as Mukeshbot
+from YukiBot import telethn as Yuki
+from YukiBot.events import Yukiinline
+from YukiBot.events import register as Yukibot
 from YukiBot.modules.no_sql import fsub_db as db
 
 
 async def is_admin(chat_id, user_id):
     try:
-        p = await Mukesh(GetParticipantRequest(chat_id, user_id))
+        p = await Yuki(GetParticipantRequest(chat_id, user_id))
     except UserNotParticipantError:
         return False
     if isinstance(p.participant, types.ChannelParticipantAdmin) or isinstance(
@@ -27,7 +27,7 @@ async def is_admin(chat_id, user_id):
 
 async def participant_check(channel, user_id):
     try:
-        await Mukesh(GetParticipantRequest(channel, int(user_id)))
+        await Yuki(GetParticipantRequest(channel, int(user_id)))
         return True
     except UserNotParticipantError:
         return False
@@ -35,7 +35,7 @@ async def participant_check(channel, user_id):
         return False
 
 
-@Mukeshbot(pattern="^/(fsub|Fsub|forcesubscribe|Forcesub|forcesub|Forcesubscribe) ?(.*)")
+@Yukibot(pattern="^/(fsub|Fsub|forcesubscribe|Forcesub|forcesub|Forcesubscribe) ?(.*)")
 async def fsub(event):
     if event.is_private:
         return
@@ -90,7 +90,7 @@ async def fsub(event):
         await event.reply(f"✅ **ғᴏʀᴄᴇ sᴜʙsᴄʀɪʙᴇ ɪs ᴇɴᴀʙʟᴇᴅ** to @{channel}.")
 
 
-@Mukesh.on(events.NewMessage())
+@Yuki.on(events.NewMessage())
 async def fsub_n(e):
     if not db.fs_settings(e.chat_id):
         return
@@ -123,7 +123,7 @@ async def fsub_n(e):
         await e.client.edit_permissions(e.chat_id, e.sender_id, send_messages=False)
 
 
-@Mukeshinline(pattern=r"fs(\_(.*))")
+@Yukiinline(pattern=r"fs(\_(.*))")
 async def unmute_fsub(event):
     user_id = int(((event.pattern_match.group(1)).decode()).split("_", 1)[1])
     if not event.sender_id == user_id:
