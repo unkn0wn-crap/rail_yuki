@@ -1,4 +1,4 @@
-import html
+8import html
 import os
 import re
 
@@ -235,7 +235,7 @@ def info(update: Update, context: CallbackContext):
     rep = message.reply_text("⌬ <code>ᴇxᴛʀᴀᴄᴛɪɴɢ ɪɴғᴏʀᴍᴀᴛɪᴏɴ...\n</code>", parse_mode=ParseMode.HTML)
 
     text = (
-        f" ᴜsᴇʀ ɪɴғᴏʀᴍᴀᴛɪᴏɴ ⌬\n•─────────[×]─────────•\n\n"
+        f" ⌬ ᴜsᴇʀ ɪɴғᴏʀᴍᴀᴛɪᴏɴ ⌬\n•─────────[×]─────────•\n\n"
         f"⌥ <b>ᴜsᴇʀ ɪᴅ ➛</b> <code>{user.id}</code>\n"
         f"⌥ <b>ғɪʀsᴛ ɴᴀᴍᴇ ➛</b> {html.escape(user.first_name)}"
     )
