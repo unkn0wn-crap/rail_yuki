@@ -16,7 +16,7 @@ from telegram.utils.helpers import escape_markdown, mention_html
 from telethon import events
 from telethon.tl.functions.channels import GetFullChannelRequest
 from telethon.tl.types import ChannelParticipantsAdmins
-from YukiBot.modules.alive import Mukesh
+from YukiBot.modules.alive import Yuki
 import YukiBot.modules.sql.userinfo_sql as sql
 from YukiBot import (
     DEMONS,
