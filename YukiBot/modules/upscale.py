@@ -3,7 +3,7 @@
 # <==============================================  <=======================================================================================================>
 
 # <================================================ CONSTANTS =====================================================>
-API_URL = "https://lexica.qewertyy.me/models"
+API_URL = "https://api.picsart.io/tools/1.0/upscale"
 PALM_MODEL_ID = 0
 GPT_MODEL_ID = 5
 
@@ -36,7 +36,7 @@ async def upscale_image(client, message):
 
             async with httpx.AsyncClient() as http_client:
                 response = await http_client.post(
-                    "https://lexica.qewertyy.me/upscale",
+                    "https://api.picsart.io/tools/1.0/upscale",
                     data={"image_data": b},
                     timeout=None,
                 )
