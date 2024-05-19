@@ -7,7 +7,7 @@
 #PALM_MODEL_ID = 0
 #GPT_MODEL_ID = 5
 
-#import httpx, base64
+import httpx, base64
 from pyrogram import filters
 
 #BOT FILE IMPORTS
