@@ -11,7 +11,7 @@ from YukiBot import pbot as app
 
 
 from telegram import Update
-from telegram.constants import ParseMode
+from telegram import ParseMode
 from telegram.ext import CommandHandler, ContextTypes
 
 # <=======================================================================================================>
