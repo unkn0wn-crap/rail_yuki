@@ -9,13 +9,13 @@ from YukiBot.utils.errors import capture_err
 @capture_err
 async def github(_, message):
     if len(message.command) != 2:
-        return await message.reply_text("/github {username} \n`/github nykaaxbot`")
+        return await message.reply_text("/github {username} \n`/github YukiBot`")
     username = message.text.split(None, 1)[1]
     URL = f"https://api.github.com/users/{username}"
     async with ClientSession() as session:
         async with session.get(URL) as request:
             if request.status == 404:
-                return await message.reply_text("❍ ʙᴏsᴅᴋ sᴀʜɪ ɢɪᴛʜᴜʙ ᴜsᴇʀɴᴀᴍᴇ ᴅᴀᴀʟ.")
+                return await message.reply_text("𝙴𝚗𝚝𝚎𝚛 𝚛𝚒𝚐𝚑𝚝 𝚐𝚒𝚝𝚑𝚞𝚋 𝚗𝚊𝚖𝚎")
             result = await request.json()
             try:
                 url = result["html_url"]
@@ -29,8 +29,8 @@ async def github(_, message):
                 repositories = result["public_repos"]
                 followers = result["followers"]
                 following = result["following"]
-                global Mukesh
-                Mukesh = [[
+                global Yuki
+                Yuki = [[
             InlineKeyboardButton(text="ᴘʀᴏғɪʟᴇ ʟɪɴᴋ", url=url),
             InlineKeyboardButton("ᴄʟᴏsᴇ",callback_data="close_reply")
             ]]     
@@ -48,11 +48,11 @@ async def github(_, message):
 ๏ ғᴏʟʟᴏᴡᴇʀs ➠ {followers}
 ๏ ғᴏʟʟᴏᴡɪɴɢ ➠ {following}
 
-๏ ᴍᴀᴅᴇ ʙʏ ➠ [ʀᴏʏ-ᴇᴅɪᴛx](https://t.me/roy_editx)"""
+๏ ᴍᴀᴅᴇ ʙʏ ➠ 🄿🄰🅁🄰🄳🄾🅇"""
             except Exception as e:
                 await message.reply(f"#ERROR {e}")
                   
-    await message.reply_photo(photo=avatar_url, caption=caption,reply_markup=InlineKeyboardMarkup(Mukesh))
+    await message.reply_photo(photo=avatar_url, caption=caption,reply_markup=InlineKeyboardMarkup(Yuki))
 
 
 __mod_name__ = "ɢɪᴛʜᴜʙ"
