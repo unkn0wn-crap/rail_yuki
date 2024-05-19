@@ -45,9 +45,9 @@ from pyrogram.enums import ChatType, ChatMemberStatus
 from pyrogram.errors import FloodWait, MessageNotModified
 from pyrogram.types import Chat, Message, User
 
-from MukeshRobot import OWNER_ID, SUPPORT_CHAT
-from MukeshRobot.utils.errors import split_limits
-from MukeshRobot import telethn
+from YukiBot import OWNER_ID, SUPPORT_CHAT
+from YukiBot.utils.errors import split_limits
+from YukiBot import telethn
 
 
 def get_user(message: Message, text: str) -> [int, str, None]:
