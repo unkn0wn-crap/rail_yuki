@@ -1,6 +1,6 @@
 import httpx, base64
 from pyrogram import filters
-from AvishaRobot import pbot as app
+from YukiBot import pbot as app
 from pyrogram.types import InlineKeyboardButton, InlineKeyboardMarkup
 
 EVAA = [
