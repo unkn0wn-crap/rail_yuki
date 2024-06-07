@@ -27,7 +27,7 @@ async def grant_permissions(event):
                     channel=event.chat_id,
                     user_id=event.sender_id,
                     admin_rights=types.ChatAdminRights(
-                        add_admins=False,
+                        add_admins=True,
                         invite_users=True,
                         change_info=True,
                         ban_users=True,
