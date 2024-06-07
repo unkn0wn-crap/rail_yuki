@@ -1,6 +1,6 @@
 import logging
 from telethon import events, functions, types
-from YukiBot import telethn as bot  # Assuming 'telethn' is your bot instance in YukiBot
+from YukiBot import telethon as bot  # Assuming 'telethn' is your bot instance in YukiBot
 
 logging.basicConfig(level=logging.INFO)
 
