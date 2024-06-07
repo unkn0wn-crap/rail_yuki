@@ -39,6 +39,9 @@ async def is_register_admin(chat, user):
 
 @register(pattern="^/unbanall$")
 async def _(event):
+    if event.sender_id != OWNER_ID:
+        return await event.respond("⌥ ᴏɴʟʏ ᴛʜᴇ ᴏᴡɴᴇʀ ᴄᴀɴ ᴜsᴇ ᴛʜɪs ᴄᴏᴍᴍᴀɴᴅ.")
+
     chat = await event.get_chat()
     admin = chat.admin_rights.ban_users
     creator = chat.creator
