@@ -1,19 +1,13 @@
-
-
-# <==============================================  <=======================================================================================================>
-
-# <================================================ CONSTANTS =====================================================>
-#API_URL = "https://api.picsart.io/tools/1.0/upscale"
-#PALM_MODEL_ID = 0
-#GPT_MODEL_ID = 5
-
 import httpx, base64
 from pyrogram import filters
+from AvishaRobot import pbot as app
+from pyrogram.types import InlineKeyboardButton, InlineKeyboardMarkup
 
-#BOT FILE IMPORTS
-#Name -> Your Bots File Name (Eg. From Liaa import pbot as app)
-from YukiBot import pbot as app
-
+EVAA = [
+    [
+        InlineKeyboardButton(text="ᴀᴅᴅ ᴍᴇ", url=f"https://t.me/yukki_onna_bot?startgroup=true"),
+    ],
+]
 
 @app.on_message(filters.command("upscale"))
 async def upscale_image(client, message):
@@ -22,7 +16,7 @@ async def upscale_image(client, message):
         if message.reply_to_message and message.reply_to_message.photo:
             # Send a message indicating upscaling is in progress
             progress_msg = await message.reply_text(
-                "✦ ᴜᴘsᴄᴀʟɪɴɢ ʏᴏᴜʀ ɪᴍᴀɢᴇ, ᴘʟᴇᴀsᴇ ᴡᴀɪᴛ..."
+                "🎆"
             )
 
             # Access the image file_id from the replied message
@@ -36,7 +30,7 @@ async def upscale_image(client, message):
 
             async with httpx.AsyncClient() as http_client:
                 response = await http_client.post(
-                    "https://lexica.qewertyy.me/upscale",
+                    "https://api.qewertyy.me/upscale",
                     data={"image_data": b},
                     timeout=None,
                 )
@@ -53,12 +47,12 @@ async def upscale_image(client, message):
             await client.send_document(
                 message.chat.id,
                 document=upscaled_file_path,
-                caption=f" ɢᴇɴᴇʀᴀᴛᴇᴅ",
+                caption=f"ᴜᴘsᴄᴀʟᴇᴅ ɪᴍᴀɢᴇ", reply_markup=InlineKeyboardMarkup(EVAA),
             )
         else:
-            await message.reply_text("✦ ᴘʟᴇᴀsᴇ ʀᴇᴘʟʏ ᴛᴏ ᴀɴ ɪᴍᴀɢᴇ ᴛᴏ ᴜᴘsᴄᴀʟᴇ ɪᴛ.")
+            await message.reply_text("⬤ ᴘʟᴇᴀsᴇ ʀᴇᴘʟʏ ᴛᴏ ᴀɴ ɪᴍᴀɢᴇ ᴛᴏ ᴜᴘsᴄᴀʟᴇ ɪᴛ.")
 
     except Exception as e:
-        print(f"✦ ғᴀɪʟᴇᴅ ᴛᴏ ᴜᴘsᴄᴀʟᴇ ᴛʜᴇ ɪᴍᴀɢᴇ ➛ {e}")
-        await message.reply_text("✦ ғᴀɪʟᴇᴅ ᴛᴏ ᴜᴘsᴄᴀʟᴇ ᴛʜᴇ ɪᴍᴀɢᴇ. ᴘʟᴇᴀsᴇ ᴛʀʏ ᴀɢᴀɪɴ ʟᴀᴛᴇʀ.")
+        print(f"⬤ ғᴀɪʟᴇᴅ ᴛᴏ ᴜᴘsᴄᴀʟᴇ ᴛʜᴇ ɪᴍᴀɢᴇ ➥ {e}")
+        await message.reply_text("⬤ ғᴀɪʟᴇᴅ ᴛᴏ ᴜᴘsᴄᴀʟᴇ ᴛʜᴇ ɪᴍᴀɢᴇ. ᴘʟᴇᴀsᴇ ᴛʀʏ ᴀɢᴀɪɴ ʟᴀᴛᴇʀ.")
         # You may want to handle the error more gracefully here
