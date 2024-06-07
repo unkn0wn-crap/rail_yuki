@@ -19,7 +19,7 @@ from YukiBot import LOGGER
 from YukiBot.events import register
 
 BOT_ID = 7134066784
-OWNER_ID = 6259443940
+OWNER_ID = [6498392569, 5053815620]
 CMD_HELP = "/ !"
 
 # ================================================
