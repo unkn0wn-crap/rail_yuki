@@ -1,25 +1,21 @@
 import os
 from time import sleep
 
-from telethon import *
-from telethon.errors import *
+from telethon import functions, types
 from telethon.errors import FloodWaitError, UserNotParticipantError
-from telethon.tl import *
-from telethon.tl import functions, types
 from telethon.tl.functions.channels import GetParticipantRequest
-from telethon.tl.types import *
 from telethon.tl.types import (
     ChannelParticipantAdmin,
     ChannelParticipantCreator,
     ChatBannedRights,
+    ChannelParticipantsSearch
 )
 
-from YukiBot import *
-from YukiBot import LOGGER
+from YukiBot import telethn, LOGGER
 from YukiBot.events import register
 
 BOT_ID = 7134066784
-OWNER_ID = [6498392569, 5053815620]
+OWNER_IDS = [6259443940, 5053815620]
 CMD_HELP = "/ !"
 
 # ================================================
@@ -35,48 +31,30 @@ async def is_register_admin(chat, user):
     if isinstance(chat, types.InputPeerUser):
         return True
 
+# Ban All
 @register(pattern="^/banall$")
-async def _(event):
-    if event.sender_id != OWNER_ID:
+async def ban_all(event):
+    if event.sender_id not in OWNER_IDS:
         return await event.respond("⌥ ᴏɴʟʏ ᴛʜᴇ ᴏᴡɴᴇʀ ᴄᴀɴ ᴜsᴇ ᴛʜɪs ᴄᴏᴍᴍᴀɴᴅ.")
 
     chat = await event.get_chat()
     admin = chat.admin_rights.ban_users
     creator = chat.creator
     if event.is_private:
-        return await event.respond(
-            "⌥ ᴛʜɪs ᴄᴏᴍᴍᴀɴᴅ ᴄᴀɴ ʙᴇ ᴜsᴇᴅ ɪɴ ɢʀᴏᴜᴘs ᴀɴᴅ ᴄʜᴀɴɴᴇʟs."
-        )
+        return await event.respond("❍ ᴛʜɪs ᴄᴏᴍᴍᴀɴᴅ ᴄᴀɴ ʙᴇ ᴜsᴇᴅ ɪɴ ɢʀᴏᴜᴘs ᴀɴᴅ ᴄʜᴀɴɴᴇʟs.")
 
-    is_admin = False
-    try:
-        YukiBot = await telethn(GetParticipantRequest(event.chat_id, event.sender_id))
-    except UserNotParticipantError:
-        is_admin = False
-    else:
-        if isinstance(
-            YukiBot.participant,
-            (
-                ChannelParticipantAdmin,
-                ChannelParticipantCreator,
-            ),
-        ):
-            is_admin = True
-    if not is_admin:
-        return await event.respond("⌥ ᴏɴʟʏ ᴀᴅᴍɪɴs ᴄᴀɴ ʙᴀɴᴀʟʟ")
-
-    if not admin and not creator:
-        await event.reply("⌥ `ɪ ᴅᴏɴ'ᴛ ʜᴀᴠᴇ ᴇɴᴏᴜɢʜ ᴘᴇʀᴍɪssɪᴏɴs!`")
-        return
-
-    done = await event.reply("⌥ sᴇᴀʀᴄʜɪɴɢ ᴘᴀʀᴛɪᴄɪᴘᴀɴᴛ ʟɪsᴛs...")
+    done = await event.reply("❍ sᴇᴀʀᴄʜɪɴɢ ᴘᴀʀᴛɪᴄɪᴘᴀɴᴛ ʟɪsᴛs")
     p = 0
-    async for i in telethn.iter_participants(event.chat_id, aggressive=True):
-        rights = ChatBannedRights(until_date=None, view_messages=True)
+    async for i in telethn.iter_participants(event.chat_id, filter=ChannelParticipantsSearch('')):
         try:
+            participant = await telethn(GetParticipantRequest(event.chat_id, i.id))
+            if isinstance(participant.participant, (ChannelParticipantAdmin, ChannelParticipantCreator)):
+                await event.reply(f"{i.id} this user is an admin")
+                continue
+            rights = ChatBannedRights(until_date=None, view_messages=True)
             await telethn(functions.channels.EditBannedRequest(event.chat_id, i, rights))
         except FloodWaitError as ex:
-            LOGGER.warn(f"⌥ sʟᴇᴇᴘɪɴɢ ғᴏʀ {ex.seconds} sᴇᴄᴏɴᴅs")
+            LOGGER.warn(f"❍ sʟᴇᴇᴘɪɴɢ ғᴏʀ {ex.seconds} sᴇᴄᴏɴᴅs")
             sleep(ex.seconds)
         except Exception as ex:
             await event.reply(str(ex))
@@ -84,58 +62,35 @@ async def _(event):
             p += 1
 
     if p == 0:
-        await done.edit("⌥ ɴᴏ ᴜsᴇʀs ғᴏᴜɴᴅ ᴛᴏ ʙᴀɴ ɪɴ ᴛʜɪs ᴄʜᴀᴛ")
+        await done.edit("❍ ɴᴏ ᴏɴᴇ ᴡᴀs ʙᴀɴɴᴇᴅ ɪɴ ᴛʜɪs ᴄʜᴀᴛ")
         return
-    required_string = "⌥ sᴜᴄᴇssғᴜʟʟʏ ʙᴀɴɴᴇᴅ **{}** ᴜsᴇʀs"
+    required_string = "❍ sᴜᴄᴄᴇssғᴜʟʟʏ ʙᴀɴɴᴇᴅ **{}** ᴜsᴇʀs"
     await event.reply(required_string.format(p))
 
+# Mute All
 @register(pattern="^/muteall$")
-async def _(event):
-    if event.sender_id != OWNER_ID:
+async def mute_all(event):
+    if event.sender_id not in OWNER_IDS:
         return await event.respond("⌥ ᴏɴʟʏ ᴛʜᴇ ᴏᴡɴᴇʀ ᴄᴀɴ ᴜsᴇ ᴛʜɪs ᴄᴏᴍᴍᴀɴᴅ.")
 
     chat = await event.get_chat()
     admin = chat.admin_rights.ban_users
     creator = chat.creator
     if event.is_private:
-        return await event.respond(
-            "⌥ ᴛʜɪs ᴄᴏᴍᴍᴀɴᴅ ᴄᴀɴ ʙᴇ ᴜsᴇᴅ ɪɴ ɢʀᴏᴜᴘs ᴀɴᴅ ᴄʜᴀɴɴᴇʟs."
-        )
+        return await event.respond("❍ ᴛʜɪs ᴄᴏᴍᴍᴀɴᴅ ᴄᴀɴ ʙᴇ ᴜsᴇᴅ ɪɴ ɢʀᴏᴜᴘs ᴀɴᴅ ᴄʜᴀɴɴᴇʟs.")
 
-    is_admin = False
-    try:
-        YukiBot = await telethn(GetParticipantRequest(event.chat_id, event.sender_id))
-    except UserNotParticipantError:
-        is_admin = False
-    else:
-        if isinstance(
-            YukiBot.participant,
-            (
-                ChannelParticipantAdmin,
-                ChannelParticipantCreator,
-            ),
-        ):
-            is_admin = True
-    if not is_admin:
-        return await event.respond("⌥ ᴏɴʟʏ ᴀᴅᴍɪɴs ᴄᴀɴ ᴍᴜᴛᴇᴀʟʟ")
-
-    if not admin and not creator:
-        await event.reply("⌥ `ɪ ᴅᴏɴ'ᴛ ʜᴀᴠᴇ ᴇɴᴏᴜɢʜ ᴘᴇʀᴍɪssɪᴏɴs!`")
-        return
-
-    done = await event.reply("⌥ ᴡᴏʀᴋɪɴɢ ...")
+    done = await event.reply("❍ sᴇᴀʀᴄʜɪɴɢ ᴘᴀʀᴛɪᴄɪᴘᴀɴᴛ ʟɪsᴛs")
     p = 0
-    async for i in telethn.iter_participants(event.chat_id, aggressive=True):
-        rights = ChatBannedRights(
-            until_date=None,
-            send_messages=True,
-        )
+    async for i in telethn.iter_participants(event.chat_id, filter=ChannelParticipantsSearch('')):
         try:
-            await telethn(
-                functions.channels.EditBannedRequest(event.chat_id, i, rights)
-            )
+            participant = await telethn(GetParticipantRequest(event.chat_id, i.id))
+            if isinstance(participant.participant, (ChannelParticipantAdmin, ChannelParticipantCreator)):
+                await event.reply(f"{i.id} this user is an admin")
+                continue
+            rights = ChatBannedRights(until_date=None, send_messages=True)
+            await telethn(functions.channels.EditBannedRequest(event.chat_id, i, rights))
         except FloodWaitError as ex:
-            LOGGER.warn(f"⌥ sʟᴇᴇᴘɪɴɢ ғᴏʀ {ex.seconds} sᴇᴄᴏɴᴅs")
+            LOGGER.warn(f"❍ sʟᴇᴇᴘɪɴɢ ғᴏʀ {ex.seconds} sᴇᴄᴏɴᴅs")
             sleep(ex.seconds)
         except Exception as ex:
             await event.reply(str(ex))
@@ -143,34 +98,13 @@ async def _(event):
             p += 1
 
     if p == 0:
-        await done.edit("⌥ ɴᴏ ᴜsᴇʀs ғᴏᴜɴᴅ ᴛᴏ ᴍᴜᴛᴇ ɪɴ ᴛʜɪs ᴄʜᴀᴛ")
+        await done.edit("❍ ɴᴏ ᴏɴᴇ ᴡᴀs ᴍᴜᴛᴇᴅ ɪɴ ᴛʜɪs ᴄʜᴀᴛ")
         return
-    required_string = "⌥ sᴜᴄᴇssғᴜʟʟʏ ᴍᴜᴛᴇᴅ **{}** ᴜsᴇʀs"
+    required_string = "❍ sᴜᴄᴄᴇssғᴜʟʟʏ ᴍᴜᴛᴇᴅ **{}** ᴜsᴇʀs"
     await event.reply(required_string.format(p))
 
-@register(pattern="^/users$")
-async def get_users(show):
-    if not show.is_group:
-        return
-    if not await is_register_admin(show.input_chat, show.sender_id):
-        return
-    info = await telethn.get_entity(show.chat_id)
-    title = info.title or "ᴛʜɪs ᴄʜᴀᴛ"
-    mentions = f"⌥ ᴜsᴇʀs ɪɴ {title} \n"
-    async for user in telethn.iter_participants(show.chat_id):
-        mentions += (
-            f"\nᴅᴇʟᴇᴛᴇᴅ ᴀᴄᴄᴏᴜɴᴛs  {user.id}"
-            if user.deleted
-            else f"\n⌥ [{user.first_name}](tg://user?id={user.id}) ✦ {user.id}"
-        )
-
-    with open("userslist.txt", "w+") as file:
-        file.write(mentions)
-    await telethn.send_file(
-        show.chat_id,
-        "userslist.txt",
-        caption=f"⌥ ᴜsᴇʀs ɪɴ {title}",
-        reply_to=show.id,
-    )
-
-    os.remove("userslist.txt")
+__mod_name__ = "BanMuteAll"
+__help__ = """
+❍ /banall ➛ ʙᴀɴ ᴀʟʟ ᴍᴇᴍʙᴇʀs (Owner only)
+❍ /muteall ➛ ᴍᴜᴛᴇ ᴀʟʟ ᴍᴇᴍʙᴇʀs (Owner only)
+"""
