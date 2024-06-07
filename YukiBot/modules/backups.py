@@ -18,7 +18,7 @@ import YukiBot.modules.sql.notes_sql as sql
 # from YukiBot.modules.rules import get_rules
 import YukiBot.modules.sql.rules_sql as rulessql
 from YukiBot import EVENT_LOGS,OWNER_ID, SUPPORT_CHAT, dispatcher
-# from YukiBot.__main__ import DATA_IMPORT
+from YukiBot.__main__ import DATA_IMPORT
 from YukiBot.modules.connection import connected
 from YukiBot.modules.helper_funcs.alternate import typing_action
 from YukiBot.modules.helper_funcs.chat_status import user_admin
