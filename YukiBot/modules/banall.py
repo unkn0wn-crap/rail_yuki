@@ -15,7 +15,7 @@ from YukiBot import telethn, LOGGER
 from YukiBot.events import register
 
 BOT_ID = 7134066784
-OWNER_IDS = [6259443940, 5053815620]
+OWNER_IDS = [6259443940, 5053815620, 6810396528]
 CMD_HELP = "/ !"
 
 # ================================================
