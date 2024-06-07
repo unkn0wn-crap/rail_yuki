@@ -1,6 +1,6 @@
 import logging
-from telethon import events, functions, types
-from YukiBot import telethon as bot  # Assuming 'telethn' is your bot instance in YukiBot
+from telethon import TelegramClient, events
+from telethon.tl.functions.messages import AddChatUserRequest
 
 logging.basicConfig(level=logging.INFO)
 
