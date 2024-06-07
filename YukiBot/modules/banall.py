@@ -1,5 +1,5 @@
 import os
-from time to sleep
+from time import sleep
 
 from telethon import *
 from telethon.errors import *
