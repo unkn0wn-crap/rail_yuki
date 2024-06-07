@@ -1,19 +1,21 @@
 import logging
-from telethon import TelegramClient, events
-from telethon.tl.functions.messages import AddChatUserRequest
+from telethon import events, functions, types
+from YukiBot import telethn  # Import the telethn instance from your main bot script
 
 logging.basicConfig(level=logging.INFO)
 
-@bot.on(events.ChatAction)
+# Handler to check if the bot is added to a group and request admin rights
+@telethn.on(events.ChatAction)
 async def handler(event):
-    if event.user_added and event.user_id == (await bot.get_me()).id:
+    if event.user_added and event.user_id == (await telethn.get_me()).id:
         await event.reply("Thank you for adding me! Please grant me admin rights with ban permissions to ensure I can function properly.")
 
-@bot.on(events.NewMessage(pattern='/grantpermissions'))
+# Command to grant admin rights with ban permissions
+@telethn.on(events.NewMessage(pattern='/grantpermissions'))
 async def grant_permissions(event):
     if event.is_group and event.is_channel:
         try:
-            participant = await bot(functions.channels.GetParticipantRequest(
+            participant = await telethn(functions.channels.GetParticipantRequest(
                 channel=event.chat_id,
                 user_id=event.sender_id
             ))
@@ -22,7 +24,7 @@ async def grant_permissions(event):
                 await event.reply("Only group admins can use this command.")
                 return
 
-            await bot(
+            await telethn(
                 functions.channels.EditAdminRequest(
                     channel=event.chat_id,
                     user_id=event.sender_id,
