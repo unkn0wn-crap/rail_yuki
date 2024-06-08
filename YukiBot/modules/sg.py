@@ -52,4 +52,6 @@ async def sg(client: Client, message: Message):
     await lol.delete()
 
 
-__mod_name__= sᴀɴɢᴍᴇᴛᴀ
+__mod_name__= "sᴀɴɢᴍᴇᴛᴀ"
+__help__= """
+/sg (user id)"""
