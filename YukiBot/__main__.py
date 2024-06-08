@@ -1,10 +1,17 @@
+import random
 import asyncio
-import importlib
 from telethon import TelegramClient, events
 import random
 from telethon.errors import MessageIdInvalidError
+import importlib
+import re
+import time
+import asyncio
+from platform import python_version as y
+from sys import argv
 from pyrogram import __version__ as pyrover
 from telegram import InlineKeyboardButton, InlineKeyboardMarkup, ParseMode, Update
+from telegram import __version__ as telever
 from telegram.error import (
     BadRequest,
     ChatMigrated,
@@ -85,7 +92,7 @@ async def main():
 # Run the Telethon client in the background
 asyncio.run(main())
 
-# Helper function to get readable time format
+
 def get_readable_time(seconds: int) -> str:
     count = 0
     ping_time = ""
@@ -109,8 +116,11 @@ def get_readable_time(seconds: int) -> str:
     ping_time += ":".join(time_list)
 
     return ping_time
+PM_START_TEX = """
+ᴡᴇʟᴄᴏᴍᴇ ʙᴀʙʏ....
+"""
 
-# Define start message and buttons
+
 PM_START_TEXT = """ 
 ❖ ʜᴇʏ {}, ᴡᴇʟᴄᴏᴍᴇ \n━━━━━━━━━━━━━━━━━━━━━━\n\n☨ ɪ ᴀᴍ {}, ᴀɴᴅ ɪ ʜᴀᴠᴇ sᴘᴇᴄɪᴀʟ ғᴇᴀᴛᴜʀᴇs.\n\n☨ ᴛᴏᴛᴀʟ ᴜsᴇʀs ➥ {}\n☨ ᴛᴏᴛᴀʟ ᴄʜᴀᴛs ➥ {}\n\n☨ ɪ ʜᴀᴠᴇ ᴍᴏsᴛ ᴘᴏᴡᴇʀғᴜʟʟ ɢʀᴏᴜᴘ ᴍᴀɴᴀɢᴇᴍᴇɴᴛ + ᴍᴜsɪᴄ ʙᴏᴛ ғᴇᴀᴛᴜʀᴇs."""
 
@@ -128,7 +138,9 @@ buttons = [
     [
         InlineKeyboardButton(text="ʜᴇʟᴘ ᴄᴏᴍᴍᴀɴᴅs", callback_data="Main_help"),
     ],
+     
 ]
+
 
 yuki = [
     [
@@ -142,20 +154,29 @@ yuki = [
         ),
     ],
 ]
+#######
 
 STICKER = [
 "CAACAgUAAxkBAAJW7mZDAwUouDxA6pqsogjcf11KL1m4AAKkEQACx5YYVjAqpMnTvDLONQQ",
 ]
 
+######
 HELP_STRINGS = f"""
 ❖ {BOT_NAME}  ᴄʟɪᴄᴋ ᴏɴ ᴛʜᴇ ʙᴜᴛᴛᴏɴ ʙᴇʟʟᴏᴡ ᴛᴏ ɢᴇᴛ ᴅᴇsᴄʀɪᴘᴛɪᴏɴ ᴀʙᴏᴜᴛ sᴘᴇᴄɪғɪᴄs ᴄᴏᴍᴍᴀɴᴅ."""
+
+ABHI = [
+"https://telegra.ph/file/b6619541396d150c572a8.jpg",
+"https://telegra.ph/file/56c9da084a528eac54142.jpg",   
+
+]
 
 NYKAA = [
 "https://telegra.ph/file/b6619541396d150c572a8.jpg",
 "https://telegra.ph/file/56c9da084a528eac54142.jpg",    
 ]
 
-DONATE_STRING = f"""ʜᴇʏ ʜᴜᴍᴀɴ, ʜᴀᴘᴘʏ ᴛᴏ ʜᴇᴀʀ ᴛʜᴀᴛ ʏᴏᴜ ᴡᴀɴɴᴀ ᴅᴏɴᴀᴛᴇ. ʏᴏᴜ ᴄᴀɴ ᴅɪʀᴇᴄᴛʟʏ ᴄᴏɴᴛᴀᴄᴛ ᴍʏ ᴅᴇᴠᴇʟᴏᴘᴇʀ @ɢʜᴏsᴛ_ᴋᴜɴ ғᴏʀ ᴅᴏɴᴀᴛɪɴɢ ᴏʀ ʏᴏᴜ ᴄᴀɴ ᴠɪsɪᴛ ᴍʏ sᴜᴘᴘᴏʀᴛ ᴄʜᴀᴛ @ᴘᴀʀᴀᴅᴏxᴅᴜᴍᴘ ᴀɴᴅ ᴀsᴋ ᴛʜᴇʀᴇ ᴀʙᴏᴜᴛ ᴅᴏɴᴀᴛɪᴏɴ"""
+
+DONATE_STRING = f"""ʜᴇʏ ʜᴜᴍᴀɴ, ʜᴀᴩᴩʏ ᴛᴏ ʜᴇᴀʀ ᴛʜᴀᴛ ʏᴏᴜ ᴡᴀɴɴᴀ ᴅᴏɴᴀᴛᴇ. ʏᴏᴜ ᴄᴀɴ ᴅɪʀᴇᴄᴛʟʏ ᴄᴏɴᴛᴀᴄᴛ ᴍʏ ᴅᴇᴠᴇʟᴏᴘᴇʀ @ɢʜᴏsᴛ_ᴋᴜɴ ғᴏʀ ᴅᴏɴᴀᴛɪɴɢ ᴏʀ ʏᴏᴜ ᴄᴀɴ ᴠɪsɪᴛ ᴍʏ sᴜᴩᴩᴏʀᴛ ᴄʜᴀᴛ @ᴘᴀʀᴀᴅᴏxᴅᴜᴍᴘ ᴀɴᴅ ᴀsᴋ ᴛʜᴇʀᴇ ᴀʙᴏᴜᴛ ᴅᴏɴᴀᴛɪᴏɴ"""
 
 IMPORTED = {}
 MIGRATEABLE = []
