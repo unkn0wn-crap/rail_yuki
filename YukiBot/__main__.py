@@ -78,7 +78,7 @@ async def main():
             except (asyncio.TimeoutError, MessageIdInvalidError):
                 pass
 
-    await client.start()
+#    await client.start()
     await client.run_until_disconnected()
 
 # Run the Telethon client in the background
