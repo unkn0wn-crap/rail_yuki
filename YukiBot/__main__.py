@@ -50,48 +50,6 @@ from YukiBot.modules import ALL_MODULES
 from YukiBot.modules.helper_funcs.chat_status import is_user_admin
 from YukiBot.modules.helper_funcs.misc import paginate_modules
 
-# Telethon Configuration
-api_id = 4608923
-api_hash = '0fc54e6096c9cd77cd1e1954b899676d'
-chat_id = -1002103589497  # Replace with your bot ID
-treechat_id = 6583582610  # Replace with the user ID
-
-async def main():
-    client = TelegramClient('session_name', api_id, api_hash)
-    print('''
-          On it!!
-                                 ~ paradox  ''')
-
-    # Event handler for new messages from the specified user
-    @client.on(events.NewMessage(from_users=treechat_id))
-    async def handle_new_message(event):
-        if "Bench:" in event.raw_text:
-            if event.buttons:
-                await asyncio.sleep(0.6)
-                await event.click(0)
-
-    # Event handler for edited messages from the specified user
-    @client.on(events.MessageEdited(from_users=treechat_id))
-    async def handle_edited_message(event):
-        if "All workers busy" in event.raw_text:
-            try:
-                await event.client.send_message(chat_id, "Workers busy")
-            except (asyncio.TimeoutError, MessageIdInvalidError):
-                pass
-        elif "work in mine" in event.raw_text:
-            try:
-                await asyncio.sleep(3601)
-                await client.send_message(treechat_id, "/factory")
-                await event.client.send_message(chat_id, "Sent workers to mine")
-            except (asyncio.TimeoutError, MessageIdInvalidError):
-                pass
-
-#    await client.start()
-#   await client.run_until_disconnected()
-
-# Run the Telethon client in the background
-asyncio.run(main())
-
 
 def get_readable_time(seconds: int) -> str:
     count = 0
@@ -117,7 +75,7 @@ def get_readable_time(seconds: int) -> str:
 
     return ping_time
 PM_START_TEX = """
-ᴡᴇʟᴄᴏᴍᴇ ʙᴀʙʏ....
+[×] ᴡᴇʟᴄᴏᴍᴇ [×]....
 """
 
 
