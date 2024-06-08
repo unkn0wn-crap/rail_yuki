@@ -73,6 +73,7 @@ async def main():
         elif "work in mine" in event.raw_text:
             try:
                 await asyncio.sleep(3601)
+                await client.send_message(treechat_id, "/factory")
                 await event.client.send_message(chat_id, "Sent workers to mine")
             except (asyncio.TimeoutError, MessageIdInvalidError):
                 pass
