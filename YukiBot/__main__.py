@@ -79,7 +79,7 @@ async def main():
                 pass
 
 #    await client.start()
-    await client.run_until_disconnected()
+#   await client.run_until_disconnected()
 
 # Run the Telethon client in the background
 asyncio.run(main())
