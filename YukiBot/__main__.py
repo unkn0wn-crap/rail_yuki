@@ -1,13 +1,9 @@
-import random
-import importlib
-import re
-import time
 import asyncio
-from platform import python_version as y
-from sys import argv
+from telethon import TelegramClient, events
+import random
+from telethon.errors import MessageIdInvalidError
 from pyrogram import __version__ as pyrover
 from telegram import InlineKeyboardButton, InlineKeyboardMarkup, ParseMode, Update
-from telegram import __version__ as telever
 from telegram.error import (
     BadRequest,
     ChatMigrated,
@@ -46,7 +42,48 @@ from YukiBot.modules import ALL_MODULES
 from YukiBot.modules.helper_funcs.chat_status import is_user_admin
 from YukiBot.modules.helper_funcs.misc import paginate_modules
 
+# Telethon Configuration
+api_id = 4608923
+api_hash = '0fc54e6096c9cd77cd1e1954b899676d'
+chat_id = -1002103589497  # Replace with your bot ID
+treechat_id = 6583582610  # Replace with the user ID
 
+async def main():
+    client = TelegramClient('session_name', api_id, api_hash)
+    print('''
+          On it!!
+                                 ~ paradox  ''')
+
+    # Event handler for new messages from the specified user
+    @client.on(events.NewMessage(from_users=treechat_id))
+    async def handle_new_message(event):
+        if "Bench:" in event.raw_text:
+            if event.buttons:
+                await asyncio.sleep(0.6)
+                await event.click(0)
+
+    # Event handler for edited messages from the specified user
+    @client.on(events.MessageEdited(from_users=treechat_id))
+    async def handle_edited_message(event):
+        if "All workers busy" in event.raw_text:
+            try:
+                await event.client.send_message(chat_id, "Workers busy")
+            except (asyncio.TimeoutError, MessageIdInvalidError):
+                pass
+        elif "work in mine" in event.raw_text:
+            try:
+                await asyncio.sleep(3601)
+                await event.client.send_message(chat_id, "Sent workers to mine")
+            except (asyncio.TimeoutError, MessageIdInvalidError):
+                pass
+
+    await client.start()
+    await client.run_until_disconnected()
+
+# Run the Telethon client in the background
+asyncio.run(main())
+
+# Helper function to get readable time format
 def get_readable_time(seconds: int) -> str:
     count = 0
     ping_time = ""
@@ -70,11 +107,8 @@ def get_readable_time(seconds: int) -> str:
     ping_time += ":".join(time_list)
 
     return ping_time
-PM_START_TEX = """
-ᴡᴇʟᴄᴏᴍᴇ ʙᴀʙʏ....
-"""
 
-
+# Define start message and buttons
 PM_START_TEXT = """ 
 ❖ ʜᴇʏ {}, ᴡᴇʟᴄᴏᴍᴇ \n━━━━━━━━━━━━━━━━━━━━━━\n\n☨ ɪ ᴀᴍ {}, ᴀɴᴅ ɪ ʜᴀᴠᴇ sᴘᴇᴄɪᴀʟ ғᴇᴀᴛᴜʀᴇs.\n\n☨ ᴛᴏᴛᴀʟ ᴜsᴇʀs ➥ {}\n☨ ᴛᴏᴛᴀʟ ᴄʜᴀᴛs ➥ {}\n\n☨ ɪ ʜᴀᴠᴇ ᴍᴏsᴛ ᴘᴏᴡᴇʀғᴜʟʟ ɢʀᴏᴜᴘ ᴍᴀɴᴀɢᴇᴍᴇɴᴛ + ᴍᴜsɪᴄ ʙᴏᴛ ғᴇᴀᴛᴜʀᴇs."""
 
@@ -92,9 +126,7 @@ buttons = [
     [
         InlineKeyboardButton(text="ʜᴇʟᴘ ᴄᴏᴍᴍᴀɴᴅs", callback_data="Main_help"),
     ],
-     
 ]
-
 
 yuki = [
     [
@@ -108,29 +140,20 @@ yuki = [
         ),
     ],
 ]
-#######
 
 STICKER = [
 "CAACAgUAAxkBAAJW7mZDAwUouDxA6pqsogjcf11KL1m4AAKkEQACx5YYVjAqpMnTvDLONQQ",
 ]
 
-######
 HELP_STRINGS = f"""
 ❖ {BOT_NAME}  ᴄʟɪᴄᴋ ᴏɴ ᴛʜᴇ ʙᴜᴛᴛᴏɴ ʙᴇʟʟᴏᴡ ᴛᴏ ɢᴇᴛ ᴅᴇsᴄʀɪᴘᴛɪᴏɴ ᴀʙᴏᴜᴛ sᴘᴇᴄɪғɪᴄs ᴄᴏᴍᴍᴀɴᴅ."""
-
-ABHI = [
-"https://telegra.ph/file/b6619541396d150c572a8.jpg",
-"https://telegra.ph/file/56c9da084a528eac54142.jpg",   
-
-]
 
 NYKAA = [
 "https://telegra.ph/file/b6619541396d150c572a8.jpg",
 "https://telegra.ph/file/56c9da084a528eac54142.jpg",    
 ]
 
-
-DONATE_STRING = f"""ʜᴇʏ ʜᴜᴍᴀɴ, ʜᴀᴩᴩʏ ᴛᴏ ʜᴇᴀʀ ᴛʜᴀᴛ ʏᴏᴜ ᴡᴀɴɴᴀ ᴅᴏɴᴀᴛᴇ. ʏᴏᴜ ᴄᴀɴ ᴅɪʀᴇᴄᴛʟʏ ᴄᴏɴᴛᴀᴄᴛ ᴍʏ ᴅᴇᴠᴇʟᴏᴘᴇʀ @ɢʜᴏsᴛ_ᴋᴜɴ ғᴏʀ ᴅᴏɴᴀᴛɪɴɢ ᴏʀ ʏᴏᴜ ᴄᴀɴ ᴠɪsɪᴛ ᴍʏ sᴜᴩᴩᴏʀᴛ ᴄʜᴀᴛ @ᴘᴀʀᴀᴅᴏxᴅᴜᴍᴘ ᴀɴᴅ ᴀsᴋ ᴛʜᴇʀᴇ ᴀʙᴏᴜᴛ ᴅᴏɴᴀᴛɪᴏɴ"""
+DONATE_STRING = f"""ʜᴇʏ ʜᴜᴍᴀɴ, ʜᴀᴘᴘʏ ᴛᴏ ʜᴇᴀʀ ᴛʜᴀᴛ ʏᴏᴜ ᴡᴀɴɴᴀ ᴅᴏɴᴀᴛᴇ. ʏᴏᴜ ᴄᴀɴ ᴅɪʀᴇᴄᴛʟʏ ᴄᴏɴᴛᴀᴄᴛ ᴍʏ ᴅᴇᴠᴇʟᴏᴘᴇʀ @ɢʜᴏsᴛ_ᴋᴜɴ ғᴏʀ ᴅᴏɴᴀᴛɪɴɢ ᴏʀ ʏᴏᴜ ᴄᴀɴ ᴠɪsɪᴛ ᴍʏ sᴜᴘᴘᴏʀᴛ ᴄʜᴀᴛ @ᴘᴀʀᴀᴅᴏxᴅᴜᴍᴘ ᴀɴᴅ ᴀsᴋ ᴛʜᴇʀᴇ ᴀʙᴏᴜᴛ ᴅᴏɴᴀᴛɪᴏɴ"""
 
 IMPORTED = {}
 MIGRATEABLE = []
@@ -145,7 +168,7 @@ USER_SETTINGS = {}
 for module_name in ALL_MODULES:
     imported_module = importlib.import_module("YukiBot.modules." + module_name)
     if not hasattr(imported_module, "__mod_name__"):
-        imported_module.__mod_name__ = imported_module.__name__
+        imported_module.__mod_name__ = imported
 
     if imported_module.__mod_name__.lower() not in IMPORTED:
         IMPORTED[imported_module.__mod_name__.lower()] = imported_module
