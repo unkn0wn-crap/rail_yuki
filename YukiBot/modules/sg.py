@@ -5,7 +5,7 @@ from pyrogram import Client, filters
 from pyrogram.types import Message
 from pyrogram.raw.functions.messages import DeleteHistory
 
-from YukiBot import userbot as us, app
+from YukiBot.core import userbot as us, app
 from YukiBot.core.userbot import assistants
 
 @app.on_message(filters.command("sg"))
