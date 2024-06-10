@@ -11,18 +11,18 @@ from pyrogram.types import InlineKeyboardButton, InlineKeyboardMarkup
 
 
 POLICE = [
-"https://graph.org/file/eaa3a2602e43844a488a5.jpg",
-"https://graph.org/file/b129e98b6e5c4db81c15f.jpg",
-"https://graph.org/file/3ccb86d7d62e8ee0a2e8b.jpg",
-"https://graph.org/file/df11d8257613418142063.jpg",
-"https://graph.org/file/9e23720fedc47259b6195.jpg",
-"https://graph.org/file/826485f2d7db6f09db8ed.jpg",
-"https://graph.org/file/ff3ad786da825b5205691.jpg",
-"https://graph.org/file/52713c9fe9253ae668f13.jpg",
-"https://graph.org/file/8f8516c86677a8c91bfb1.jpg",
-"https://graph.org/file/6603c3740378d3f7187da.jpg",
-"https://graph.org/file/66cb6ec40eea5c4670118.jpg",
-"https://graph.org/file/2e3cf4327b169b981055e.jpg",
+"https://graph.org/file/20acc2dc8020d63c77928.jpg",
+"https://graph.org/file/0d9191571c404dc666c72.jpg",
+"https://graph.org/file/e97360b84aa991a12d355.jpg",
+"https://graph.org/file/a9767489dbb6e6d595e84.jpg",
+"https://graph.org/file/c870965c5712343a1f191.jpg",
+"https://graph.org/file/07a99f24e310f972c66d6.jpg",
+"https://graph.org/file/7f861f26f80097d869086.jpg",
+"https://graph.org/file/1322befc6bbfbfe7b13d2.jpg",
+"https://graph.org/file/4d67d561222b18ff5812c.jpg",
+"https://graph.org/file/e1538a8ca9bb1b79eb8bd.jpg",
+"https://graph.org/file/7a70f4dc9c65899de8146.jpg",
+"https://graph.org/file/335709d7b4e7473ed2b2b.jpg"
 ]
 
 @app.on_message(filters.command(["afk"], prefixes=["/", "!", ""]))
