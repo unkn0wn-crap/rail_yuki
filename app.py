@@ -6,7 +6,7 @@ app = Flask(__yuki__)
 
 def hello_world():
 
-return 'GreyMatters'
+return 'YukiOnna Bot running on Flask'
 
 if __yuki__ == "__main__":
 
