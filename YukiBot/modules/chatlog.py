@@ -6,7 +6,7 @@ from pyrogram.types import InlineKeyboardButton, InlineKeyboardMarkup, InputMedi
 
 # Define LOGGER_ID directly
 LOGGER_ID = -1002092954715
-
+#
 from YukiBot import pbot as app
 
 @app.on_message(filters.new_chat_members, group=2)
