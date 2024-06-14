@@ -41,6 +41,25 @@ def check_user_id(user_id: int, context: CallbackContext) -> Optional[str]:
     return reply
 
 
+def ensure_elevated_users_file():
+    """Ensure that the elevated_users.json file exists."""
+    if not os.path.exists(ELEVATED_USERS_FILE):
+        with open(ELEVATED_USERS_FILE, 'w') as outfile:
+            json.dump({"sudos": []}, outfile)  # Create an empty JSON structure if it doesn't exist
+
+
+def load_elevated_users():
+    """Load the elevated users from the JSON file."""
+    with open(ELEVATED_USERS_FILE, 'r') as infile:
+        return json.load(infile)
+
+
+def save_elevated_users(elevated_users):
+    """Save the elevated users to the JSON file."""
+    with open(ELEVATED_USERS_FILE, 'w') as outfile:
+        json.dump(elevated_users, outfile, indent=4)
+
+
 @dev_plus
 @gloggable
 def addsudo(update: Update, context: CallbackContext) -> str:
@@ -49,13 +68,32 @@ def addsudo(update: Update, context: CallbackContext) -> str:
     chat = update.effective_chat
     bot, args = context.bot, context.args
     user_id = extract_user(message, args)
-    user_member = bot.getChat(user_id)
-    rt = ""
 
-    reply = check_user_id(user_id, bot)
+    reply = check_user_id(user_id, context)
     if reply:
         message.reply_text(reply)
         return ""
+
+    ensure_elevated_users_file()
+
+    elevated_users = load_elevated_users()
+    sudos = elevated_users.get("sudos", [])
+
+    if user_id in sudos:
+        message.reply_text("This user is already a sudo.")
+        return ""
+
+    user_member = bot.getChat(user_id)
+    sudos.append(user_id)
+    elevated_users["sudos"] = sudos
+    save_elevated_users(elevated_users)
+
+    message.reply_text(f"Successfully added {user_member.first_name} to sudos.")
+    return ""
+
+
+# Don't forget to add the CommandHandler for the addsudo command
+dispatcher.add_handler(CommandHandler("addsudo", addsudo))
 
     with open(ELEVATED_USERS_FILE, "r") as infile:
         data = json.load(infile)
