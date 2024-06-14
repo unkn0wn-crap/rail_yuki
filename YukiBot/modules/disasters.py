@@ -93,7 +93,7 @@ def addsudo(update: Update, context: CallbackContext) -> str:
 
 
 # Don't forget to add the CommandHandler for the addsudo command
-dispatcher.add_handler(CommandHandler("addsudo", addsudo))
+
 
     with open(ELEVATED_USERS_FILE, "r") as infile:
         data = json.load(infile)
@@ -602,6 +602,7 @@ SUPPORTLIST_HANDLER = CommandHandler("supportlist", supportlist, run_async=True)
 SUDOLIST_HANDLER = CommandHandler("sudolist", sudolist, run_async=True)
 DEVLIST_HANDLER = CommandHandler("devlist", devlist, run_async=True)
 
+dispatcher.add_handler(CommandHandler("addsudo", addsudo))
 dispatcher.add_handler(SUDO_HANDLER)
 dispatcher.add_handler(SUPPORT_HANDLER)
 dispatcher.add_handler(TIGER_HANDLER)
