@@ -17,7 +17,7 @@ from YukiBot.modules.helper_funcs.chat_status import dev_plus
 def allow_groups(update: Update, context: CallbackContext):
     args = context.args
     if not args:
-        update.effective_message.reply_text(f"✦ ᴄᴜʀʀᴇɴᴛ sᴛᴀᴛᴇ ᴏғ ᴀᴠɪsʜᴀ ✦ {YukiBot.ALLOW_CHATS}")
+        update.effective_message.reply_text(f"✦ ᴄᴜʀʀᴇɴᴛ sᴛᴀᴛᴇ ᴏғ ʙᴏᴛ {YukiBot.ALLOW_CHATS}")
         return
     if args[0].lower() in ["off", "no"]:
         YukiBot.ALLOW_CHATS = True
