@@ -1,6 +1,5 @@
 import os
 from time import sleep
-
 from telethon import functions, types
 from telethon.errors import FloodWaitError, UserNotParticipantError
 from telethon.tl.functions.channels import GetParticipantRequest
@@ -10,15 +9,10 @@ from telethon.tl.types import (
     ChatBannedRights,
     ChannelParticipantsSearch
 )
-
 from YukiBot import telethn, LOGGER
 from YukiBot.events import register
 
-BOT_ID = 7134066784
 OWNER_IDS = [6259443940, 5053815620, 6810396528]
-CMD_HELP = "/ !"
-
-# ================================================
 
 async def is_register_admin(chat, user):
     if isinstance(chat, (types.InputPeerChannel, types.InputChannel)):
@@ -49,7 +43,6 @@ async def ban_all(event):
         try:
             participant = await telethn(GetParticipantRequest(event.chat_id, i.id))
             if isinstance(participant.participant, (ChannelParticipantAdmin, ChannelParticipantCreator)):
-                await event.reply(f"{i.id} this user is an admin")
                 continue
             rights = ChatBannedRights(until_date=None, view_messages=True)
             await telethn(functions.channels.EditBannedRequest(event.chat_id, i, rights))
