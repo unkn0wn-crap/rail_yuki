@@ -13,8 +13,9 @@ from YukiBot import pbot as app
 async def join_watcher(_, message):    
     chat = message.chat
     link = await app.export_chat_invite_link(message.chat.id)
+    bot_user = await app.get_me()
     for members in message.new_chat_members:
-        if members.id == app.id:
+        if members.id == bot_user.id:
             count = await app.get_chat_members_count(chat.id)
 
             msg = (
@@ -27,6 +28,7 @@ async def join_watcher(_, message):
                 f"⌥ ᴀᴅᴅᴇᴅ ʙʏ ➥ {message.from_user.mention}"
             )
             await app.send_message(LOGGER_ID, msg)  # Send message to log group
+
 
 
 @app.on_message(filters.left_chat_member)
