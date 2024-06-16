@@ -1,7 +1,6 @@
 import html
 import json
 import re
-from time import sleep
 import requests
 from telegram import (
     CallbackQuery,
@@ -20,12 +19,12 @@ from telegram.ext import (
     MessageHandler,
 )
 from telegram.utils.helpers import mention_html
+from typing import Optional
 
 import YukiBot.modules.sql.chatbot_sql as sql
 from YukiBot import BOT_ID, BOT_NAME, BOT_USERNAME, dispatcher
 from YukiBot.modules.helper_funcs.chat_status import user_admin, user_admin_no_reply
 from YukiBot.modules.log_channel import gloggable
-
 
 @user_admin_no_reply
 @gloggable
@@ -34,26 +33,15 @@ def mukeshrm(update: Update, context: CallbackContext) -> str:
     user: Optional[User] = update.effective_user
     match = re.match(r"rm_chat\((.+?)\)", query.data)
     if match:
-        user_id = match.group(1)
+        chat_id = match.group(1)
         chat: Optional[Chat] = update.effective_chat
-        is_mukesh = sql.set_mukesh(chat.id)
-        if is_mukesh:
-            is_mukesh = sql.set_mukesh(user_id)
-            return (
-                f"❍ <b>{html.escape(chat.title)}</b>\n"
-                f"❍ ᴀɪ ᴅɪꜱᴀʙʟᴇᴅ\n"
-                f"❍ <b>ᴀᴅᴍɪɴ ➛</b> {mention_html(user.id, html.escape(user.first_name))}\n"
-            )
-        else:
-            update.effective_message.edit_text(
-                "❍ {} ᴄʜᴀᴛʙᴏᴛ ᴅɪsᴀʙʟᴇᴅ ʙʏ ➛ {}.".format(
-                    dispatcher.bot.first_name, mention_html(user.id, user.first_name)
-                ),
-                parse_mode=ParseMode.HTML,
-            )
-
-    return ""
-
+        sql.rem_mukesh(chat_id)
+        update.effective_message.edit_text(
+            f"❍ <b>{html.escape(chat.title)}</b>\n"
+            f"❍ ᴀɪ ᴅɪꜱᴀʙʟᴇᴅ\n"
+            f"❍ <b>ᴀᴅᴍɪɴ ➛</b> {mention_html(user.id, html.escape(user.first_name))}\n",
+            parse_mode=ParseMode.HTML
+        )
 
 @user_admin_no_reply
 @gloggable
@@ -62,26 +50,15 @@ def mukeshadd(update: Update, context: CallbackContext) -> str:
     user: Optional[User] = update.effective_user
     match = re.match(r"add_chat\((.+?)\)", query.data)
     if match:
-        user_id = match.group(1)
+        chat_id = match.group(1)
         chat: Optional[Chat] = update.effective_chat
-        is_mukesh = sql.rem_mukesh(chat.id)
-        if is_mukesh:
-            is_mukesh = sql.rem_mukesh(user_id)
-            return (
-                f"❍ <b>{html.escape(chat.title)}</b>\n"
-                f"❍ ᴀɪ ᴇɴᴀʙʟᴇ\n"
-                f"❍ <b>ᴀᴅᴍɪɴ ➛</b> {mention_html(user.id, html.escape(user.first_name))}\n"
-            )
-        else:
-            update.effective_message.edit_text(
-                "❍ {} ᴄʜᴀᴛʙᴏᴛ ᴇɴᴀʙʟᴇᴅ ʙʏ ➛ {}".format(
-                    dispatcher.bot.first_name, mention_html(user.id, user.first_name)
-                ),
-                parse_mode=ParseMode.HTML,
-            )
-
-    return ""
-
+        sql.set_mukesh(chat_id)
+        update.effective_message.edit_text(
+            f"❍ <b>{html.escape(chat.title)}</b>\n"
+            f"❍ ᴀɪ ᴇɴᴀʙʟᴇᴅ\n"
+            f"❍ <b>ᴀᴅᴍɪɴ ➛</b> {mention_html(user.id, html.escape(user.first_name))}\n",
+            parse_mode=ParseMode.HTML
+        )
 
 @user_admin
 @gloggable
@@ -91,8 +68,8 @@ def mukesh(update: Update, context: CallbackContext):
     keyboard = InlineKeyboardMarkup(
         [
             [
-                InlineKeyboardButton(text="ᴇɴᴀʙʟᴇ", callback_data="add_chat({})"),
-                InlineKeyboardButton(text="ᴅɪsᴀʙʟᴇ", callback_data="rm_chat({})"),
+                InlineKeyboardButton(text="ᴇɴᴀʙʟᴇ", callback_data=f"add_chat({message.chat_id})"),
+                InlineKeyboardButton(text="ᴅɪsᴀʙʟᴇ", callback_data=f"rm_chat({message.chat_id})"),
             ],
         ]
     )
@@ -101,7 +78,6 @@ def mukesh(update: Update, context: CallbackContext):
         reply_markup=keyboard,
         parse_mode=ParseMode.HTML,
     )
-
 
 def mukesh_message(context: CallbackContext, message):
     reply_message = message.reply_to_message
@@ -115,33 +91,27 @@ def mukesh_message(context: CallbackContext, message):
     else:
         return False
 
-
 def chatbot(update: Update, context: CallbackContext):
     message = update.effective_message
     chat_id = update.effective_chat.id
     bot = context.bot
-    is_mukesh = sql.is_mukesh(chat_id)
-    if is_mukesh:
+    if sql.is_mukesh(chat_id):
         return
 
     if message.text and not message.document:
         if not mukesh_message(context, message):
             return
         bot.send_chat_action(chat_id, action="typing")
-        url=f"https://mukesh-api.vercel.app/chatbot/{message.text}"
-        response = requests.get(url).json()["results"]
-        
-        message.reply_text(response)
-
-
-
-
-
-
+        url = f"https://mukesh-api.vercel.app/chatbot/{message.text}"
+        try:
+            response = requests.get(url).json()["results"]
+            message.reply_text(response)
+        except Exception as e:
+            message.reply_text(f"Error: {e}")
 
 CHATBOTK_HANDLER = CommandHandler("chatbot", mukesh, run_async=True)
-ADD_CHAT_HANDLER = CallbackQueryHandler(mukeshadd, pattern=r"add_chat", run_async=True)
-RM_CHAT_HANDLER = CallbackQueryHandler(mukeshrm, pattern=r"rm_chat", run_async=True)
+ADD_CHAT_HANDLER = CallbackQueryHandler(mukeshadd, pattern=r"add_chat\(.+\)", run_async=True)
+RM_CHAT_HANDLER = CallbackQueryHandler(mukeshrm, pattern=r"rm_chat\(.+\)", run_async=True)
 CHATBOT_HANDLER = MessageHandler(
     Filters.text
     & (~Filters.regex(r"^#[^\s]+") & ~Filters.regex(r"^!") & ~Filters.regex(r"^\/")),
