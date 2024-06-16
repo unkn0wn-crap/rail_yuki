@@ -35,7 +35,7 @@ class Config(object):
    
     BOT_USERNAME = getenv("BOT_USERNAME" , "Yuki_Obot")
    
-    DATABASE_URL = getenv("DATABASE_URL", None)
+    DATABASE_URL = getenv("DATABASE_URL", postgres://koyeb-adm:gRf7YuhG8ZIm@ep-shy-hill-a42qjv7m.us-east-1.pg.koyeb.app/koyebdb)
 
     CASH_API_KEY = getenv("CASH_API_KEY", "V48U2FLLKRHSVD4X")
     
