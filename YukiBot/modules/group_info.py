@@ -51,7 +51,7 @@ def group_status(client, message):
                   f"⌥ ᴛʏᴘᴇ ➾ {chat.type}\n"
                   
     if chat.username:  # Not all groups have a username
-        status_text += f"⌥ ᴜsᴇʀɴᴀᴍᴇ ➾ @{chat.username}\n\n༗ ᴘᴏᴡᴇʀᴇᴅ ʙʏ ➾ ๛ᴀ ᴠ ɪ s ʜ ᴀ ࿐"
+        status_text += f"⌥ ᴜsᴇʀɴᴀᴍᴇ ➾ @{chat.username}\n\n"
     else:
         status_text += "Username: None"
 
