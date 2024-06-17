@@ -80,8 +80,7 @@ from telethon import __version__ as s
 from YukiBot import OWNER_ID, dispatcher
 from YukiBot import pbot as client
 
-Mukesh = "https://telegra.ph/file/6f04cb09ff8e8af19ae02.jpg"
-
+Mukesh = "https://graph.org/file/f97e3c200cd88a366bc21.jpg"
 
 @client.on_message(filters.command(["repo", "source"]))
 async def repo(client, message):
@@ -115,4 +114,4 @@ async def gib_repo_callback(_, callback_query):
             ]
         ),
         )
-close_button = InlineKeyboardButton("ᴄʟᴏsᴇ", callback_data="close")
+close_button = InlineKeyboardButton("ᴀʀᴀ ᴀʀᴀ ~", callback_data="help_back")
