@@ -82,7 +82,7 @@ from YukiBot import pbot as client
 
 Mukesh = "https://graph.org/file/f97e3c200cd88a366bc21.jpg"
 
-@client.on_message(filters.command(["repo", "source"]))
+@client.on_message(filters.command(["bot_repo", "source"]))
 async def repo(client, message):
     await message.reply_photo(
         photo=Mukesh,
