@@ -1,5 +1,12 @@
-(DEV_USERS or [])
-            + (DRAGONS or [6144093089])
-            + (WOLVES or [])
-            + (DEMONS or [])
-            + (TIGERS or [])
+{
+    "devs": [],
+    "supports": [],
+    "whitelists": [],
+    "spammers": [],
+    "dragons": [],
+    "demons": [],
+    "wolfes": [],
+    "heroes": [],
+    "tigers": [],
+    "sudos": []
+}
