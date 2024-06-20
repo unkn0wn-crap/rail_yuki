@@ -31,33 +31,14 @@ ELEVATED_USERS_FILE = os.path.join(os.getcwd(), "YukiBot/elevated_users.json")
 def check_user_id(user_id: int, context: CallbackContext) -> Optional[str]:
     bot = context.bot
     if not user_id:
-        reply = "๏ ᴛʜᴀᴛ...ɪs ᴀ ᴄʜᴀᴛ ! ʙᴀᴋᴀ ᴋᴀ ᴏᴍᴀᴇ ?"
+        reply = "⌥ ᴛʜᴀᴛ...ɪs ᴀ ᴄʜᴀᴛ ! ʙᴀᴋᴀ ᴋᴀ ᴏᴍᴀᴇ ?"
 
     elif user_id == bot.id:
-        reply = "๏ ᴛʜɪs ᴅᴏᴇs ɴᴏᴛ ᴡᴏʀᴋ ᴛʜᴀᴛ ᴡᴀʏ."
+        reply = "⌥ ᴛʜɪs ᴅᴏᴇs ɴᴏᴛ ᴡᴏʀᴋ ᴛʜᴀᴛ ᴡᴀʏ."
 
     else:
         reply = None
     return reply
-
-
-def ensure_elevated_users_file():
-    """Ensure that the elevated_users.json file exists."""
-    if not os.path.exists(ELEVATED_USERS_FILE):
-        with open(ELEVATED_USERS_FILE, 'w') as outfile:
-            json.dump({"sudos": []}, outfile)  # Create an empty JSON structure if it doesn't exist
-
-
-def load_elevated_users():
-    """Load the elevated users from the JSON file."""
-    with open(ELEVATED_USERS_FILE, 'r') as infile:
-        return json.load(infile)
-
-
-def save_elevated_users(elevated_users):
-    """Save the elevated users to the JSON file."""
-    with open(ELEVATED_USERS_FILE, 'w') as outfile:
-        json.dump(elevated_users, outfile, indent=4)
 
 
 @dev_plus
@@ -68,47 +49,28 @@ def addsudo(update: Update, context: CallbackContext) -> str:
     chat = update.effective_chat
     bot, args = context.bot, context.args
     user_id = extract_user(message, args)
+    user_member = bot.getChat(user_id)
+    rt = ""
 
-    reply = check_user_id(user_id, context)
+    reply = check_user_id(user_id, bot)
     if reply:
         message.reply_text(reply)
         return ""
-
-    ensure_elevated_users_file()
-
-    elevated_users = load_elevated_users()
-    sudos = elevated_users.get("sudos", [])
-
-    if user_id in sudos:
-        message.reply_text("This user is already a sudo.")
-        return ""
-
-    user_member = bot.getChat(user_id)
-    sudos.append(user_id)
-    elevated_users["sudos"] = sudos
-    save_elevated_users(elevated_users)
-
-    message.reply_text(f"Successfully added {user_member.first_name} to sudos.")
-    return ""
-
-
-# Don't forget to add the CommandHandler for the addsudo command
-
 
     with open(ELEVATED_USERS_FILE, "r") as infile:
         data = json.load(infile)
 
     if user_id in DRAGONS:
-        message.reply_text("๏ ᴛʜɪs ᴍᴇᴍʙᴇʀ ɪs ᴀʟʀᴇᴀᴅʏ ᴀ ᴅʀᴀɢᴏɴ ᴅɪsᴀsᴛᴇʀ")
+        message.reply_text("⌥ ᴛʜɪs ᴍᴇᴍʙᴇʀ ɪs ᴀʟʀᴇᴀᴅʏ ᴀ ᴅʀᴀɢᴏɴ ᴅɪsᴀsᴛᴇʀ")
         return ""
 
     if user_id in DEMONS:
-        rt += "๏ ʀᴇǫᴜᴇsᴛᴇᴅ ʜᴀ ᴛᴏ ᴘʀᴏᴍᴏᴛᴇ ᴀ ᴅᴇᴍᴏɴ ᴅɪsᴀsᴛᴇʀ ᴛᴏ ᴅʀᴀɢᴏɴ."
+        rt += "⌥ ʀᴇǫᴜᴇsᴛᴇᴅ ʜᴀ ᴛᴏ ᴘʀᴏᴍᴏᴛᴇ ᴀ ᴅᴇᴍᴏɴ ᴅɪsᴀsᴛᴇʀ ᴛᴏ ᴅʀᴀɢᴏɴ."
         data["supports"].remove(user_id)
         DEMONS.remove(user_id)
 
     if user_id in WOLVES:
-        rt += "๏ ʀᴇǫᴜᴇsᴛᴇᴅ ʜᴀ ᴛᴏ ᴘʀᴏᴍᴏᴛᴇ ᴀ ᴡᴏʟғ ᴅɪsᴀsᴛᴇʀ ᴛᴏ ᴅʀᴀɢᴏɴ."
+        rt += "⌥ ʀᴇǫᴜᴇsᴛᴇᴅ ʜᴀ ᴛᴏ ᴘʀᴏᴍᴏᴛᴇ ᴀ ᴡᴏʟғ ᴅɪsᴀsᴛᴇʀ ᴛᴏ ᴅʀᴀɢᴏɴ."
         data["whitelists"].remove(user_id)
         WOLVES.remove(user_id)
 
@@ -120,19 +82,19 @@ def addsudo(update: Update, context: CallbackContext) -> str:
 
     update.effective_message.reply_text(
         rt
-        + "\n๏ sᴜᴄᴄᴇssғᴜʟʟʏ sᴇᴛ ᴅɪsᴀsᴛᴇʀ ʟᴇᴠᴇʟ ᴏғ {} ᴛᴏ ᴅʀᴀɢᴏɴ !".format(
+        + "\n⌥ sᴜᴄᴄᴇssғᴜʟʟʏ sᴇᴛ ᴅɪsᴀsᴛᴇʀ ʟᴇᴠᴇʟ ᴏғ {} ᴛᴏ ᴅʀᴀɢᴏɴ !".format(
             user_member.first_name
         )
     )
 
     log_message = (
-        f"๏ #sᴜᴅᴏ\n"
-        f"๏ <b>ᴀᴅᴍɪɴ ➠</b> {mention_html(user.id, html.escape(user.first_name))}\n"
-        f"๏ <b>ᴜsᴇʀ ➠</b> {mention_html(user_member.id, html.escape(user_member.first_name))}"
+        f"⌥ #sᴜᴅᴏ\n"
+        f"⌥ <b>ᴀᴅᴍɪɴ ➠</b> {mention_html(user.id, html.escape(user.first_name))}\n"
+        f"⌥ <b>ᴜsᴇʀ ➠</b> {mention_html(user_member.id, html.escape(user_member.first_name))}"
     )
 
     if chat.type != "private":
-        log_message = f"๏ <b>{html.escape(chat.title)}</b>\n" + log_message
+        log_message = f"⌥ <b>{html.escape(chat.title)}</b>\n" + log_message
 
     return log_message
 
@@ -160,16 +122,16 @@ def addsupport(
         data = json.load(infile)
 
     if user_id in DRAGONS:
-        rt += "๏ ʀᴇǫᴜᴇsᴛᴇᴅ ʜᴀ ᴛᴏ ᴅᴇᴍᴏᴛᴇ ᴛʜɪs ᴅʀᴀɢᴏɴ ᴛᴏ ᴅᴇᴍᴏɴ"
+        rt += "⌥ ʀᴇǫᴜᴇsᴛᴇᴅ ʜᴀ ᴛᴏ ᴅᴇᴍᴏᴛᴇ ᴛʜɪs ᴅʀᴀɢᴏɴ ᴛᴏ ᴅᴇᴍᴏɴ"
         data["sudos"].remove(user_id)
         DRAGONS.remove(user_id)
 
     if user_id in DEMONS:
-        message.reply_text("๏ ᴛʜɪs ᴜsᴇʀ ɪs ᴀʟʀᴇᴀᴅʏ ᴀ ᴅᴇᴍᴏɴ ᴅɪsᴀsᴛᴇʀ.")
+        message.reply_text("⌥ ᴛʜɪs ᴜsᴇʀ ɪs ᴀʟʀᴇᴀᴅʏ ᴀ ᴅᴇᴍᴏɴ ᴅɪsᴀsᴛᴇʀ.")
         return ""
 
     if user_id in WOLVES:
-        rt += "๏ ʀᴇǫᴜᴇsᴛᴇᴅ ʜᴀ ᴛᴏ ᴘʀᴏᴍᴏᴛᴇ ᴛʜɪs ᴡᴏʟғ ᴅɪsᴀsᴛᴇʀ ᴛᴏ ᴅᴇᴍᴏɴ"
+        rt += "⌥ ʀᴇǫᴜᴇsᴛᴇᴅ ʜᴀ ᴛᴏ ᴘʀᴏᴍᴏᴛᴇ ᴛʜɪs ᴡᴏʟғ ᴅɪsᴀsᴛᴇʀ ᴛᴏ ᴅᴇᴍᴏɴ"
         data["whitelists"].remove(user_id)
         WOLVES.remove(user_id)
 
@@ -180,17 +142,17 @@ def addsupport(
         json.dump(data, outfile, indent=4)
 
     update.effective_message.reply_text(
-        rt + f"\n๏ {user_member.first_name} ᴡᴀs ᴀᴅᴅᴇᴅ ᴀs ᴀ ᴅᴇᴍᴏɴ ᴅɪsᴀsᴛᴇʀ !"
+        rt + f"\n⌥ {user_member.first_name} ᴡᴀs ᴀᴅᴅᴇᴅ ᴀs ᴀ ᴅᴇᴍᴏɴ ᴅɪsᴀsᴛᴇʀ !"
     )
 
     log_message = (
-        f"๏ #sᴜᴘᴘᴏʀᴛ\n"
-        f"๏ <b>ᴀᴅᴍɪɴ ➠</b> {mention_html(user.id, html.escape(user.first_name))}\n"
-        f"๏ <b>ᴜsᴇʀ ➠</b> {mention_html(user_member.id, html.escape(user_member.first_name))}"
+        f"⌥ #sᴜᴘᴘᴏʀᴛ\n"
+        f"⌥ <b>ᴀᴅᴍɪɴ ➠</b> {mention_html(user.id, html.escape(user.first_name))}\n"
+        f"⌥ <b>ᴜsᴇʀ ➠</b> {mention_html(user_member.id, html.escape(user_member.first_name))}"
     )
 
     if chat.type != "private":
-        log_message = f"๏ <b>{html.escape(chat.title)}</b>\n" + log_message
+        log_message = f"⌥ <b>{html.escape(chat.title)}</b>\n" + log_message
 
     return log_message
 
@@ -215,17 +177,17 @@ def addwhitelist(update: Update, context: CallbackContext) -> str:
         data = json.load(infile)
 
     if user_id in DRAGONS:
-        rt += "๏ ᴛʜɪs ᴍᴇᴍʙᴇʀ ɪs ᴀ ᴅʀᴀɢᴏɴ ᴅɪsᴀsᴛᴇʀ, ᴅᴇᴍᴏᴛɪɴɢ ᴛᴏ ᴡᴏʟғ."
+        rt += "⌥ ᴛʜɪs ᴍᴇᴍʙᴇʀ ɪs ᴀ ᴅʀᴀɢᴏɴ ᴅɪsᴀsᴛᴇʀ, ᴅᴇᴍᴏᴛɪɴɢ ᴛᴏ ᴡᴏʟғ."
         data["sudos"].remove(user_id)
         DRAGONS.remove(user_id)
 
     if user_id in DEMONS:
-        rt += "๏ ᴛʜɪs ᴜsᴇʀ ɪs ᴀʟʀᴇᴀᴅʏ ᴀ ᴅᴇᴍᴏɴ ᴅɪsᴀsᴛᴇʀ, ᴅᴇᴍᴏᴛɪɴɢ ᴛᴏ ᴡᴏʟғ."
+        rt += "⌥ ᴛʜɪs ᴜsᴇʀ ɪs ᴀʟʀᴇᴀᴅʏ ᴀ ᴅᴇᴍᴏɴ ᴅɪsᴀsᴛᴇʀ, ᴅᴇᴍᴏᴛɪɴɢ ᴛᴏ ᴡᴏʟғ."
         data["supports"].remove(user_id)
         DEMONS.remove(user_id)
 
     if user_id in WOLVES:
-        message.reply_text("๏ ᴛʜɪs ᴜsᴇʀ ɪs ᴀʟʀᴇᴀᴅʏ ᴀ ᴡᴏʟғ ᴅɪsᴀsᴛᴇʀ.")
+        message.reply_text("⌥ ᴛʜɪs ᴜsᴇʀ ɪs ᴀʟʀᴇᴀᴅʏ ᴀ ᴡᴏʟғ ᴅɪsᴀsᴛᴇʀ.")
         return ""
 
     data["whitelists"].append(user_id)
@@ -235,17 +197,17 @@ def addwhitelist(update: Update, context: CallbackContext) -> str:
         json.dump(data, outfile, indent=4)
 
     update.effective_message.reply_text(
-        rt + f"\n๏ sᴜᴄᴄᴇssғᴜʟʟʏ ᴘʀᴏᴍᴏᴛᴇᴅ {user_member.first_name} ᴛᴏ ᴀ ᴡᴏʟғ ᴅɪsᴀsᴛᴇʀ !"
+        rt + f"\n⌥ sᴜᴄᴄᴇssғᴜʟʟʏ ᴘʀᴏᴍᴏᴛᴇᴅ {user_member.first_name} ᴛᴏ ᴀ ᴡᴏʟғ ᴅɪsᴀsᴛᴇʀ !"
     )
 
     log_message = (
-        f"๏ #ᴡʜɪᴛᴇʟɪsᴛ\n"
-        f"๏ <b>ᴀᴅᴍɪɴ ➠</b> {mention_html(user.id, html.escape(user.first_name))} \n"
-        f"๏ <b>ᴜsᴇʀ ➠</b> {mention_html(user_member.id, html.escape(user_member.first_name))}"
+        f"⌥ #ᴡʜɪᴛᴇʟɪsᴛ\n"
+        f"⌥ <b>ᴀᴅᴍɪɴ ➠</b> {mention_html(user.id, html.escape(user.first_name))} \n"
+        f"⌥ <b>ᴜsᴇʀ ➠</b> {mention_html(user_member.id, html.escape(user_member.first_name))}"
     )
 
     if chat.type != "private":
-        log_message = f"๏ <b>{html.escape(chat.title)}</b>\n" + log_message
+        log_message = f"⌥ <b>{html.escape(chat.title)}</b>\n" + log_message
 
     return log_message
 
@@ -270,22 +232,22 @@ def addtiger(update: Update, context: CallbackContext) -> str:
         data = json.load(infile)
 
     if user_id in DRAGONS:
-        rt += "๏ ᴛʜɪs ᴍᴇᴍʙᴇʀ ɪs ᴀ ᴅʀᴀɢᴏɴ ᴅɪsᴀsᴛᴇʀ, ᴅᴇᴍᴏᴛɪɴɢ ᴛᴏ ᴛɪɢᴇʀ."
+        rt += "⌥ ᴛʜɪs ᴍᴇᴍʙᴇʀ ɪs ᴀ ᴅʀᴀɢᴏɴ ᴅɪsᴀsᴛᴇʀ, ᴅᴇᴍᴏᴛɪɴɢ ᴛᴏ ᴛɪɢᴇʀ."
         data["sudos"].remove(user_id)
         DRAGONS.remove(user_id)
 
     if user_id in DEMONS:
-        rt += "๏ ᴛʜɪs ᴜsᴇʀ ɪs ᴀʟʀᴇᴀᴅʏ ᴀ ᴅᴇᴍᴏɴ ᴅɪsᴀsᴛᴇʀ, ᴅᴇᴍᴏᴛɪɴɢ ᴛᴏ ᴛɪɢᴇʀ."
+        rt += "⌥ ᴛʜɪs ᴜsᴇʀ ɪs ᴀʟʀᴇᴀᴅʏ ᴀ ᴅᴇᴍᴏɴ ᴅɪsᴀsᴛᴇʀ, ᴅᴇᴍᴏᴛɪɴɢ ᴛᴏ ᴛɪɢᴇʀ."
         data["supports"].remove(user_id)
         DEMONS.remove(user_id)
 
     if user_id in WOLVES:
-        rt += "๏ ᴛʜɪs ᴜsᴇʀ ɪs ᴀʟʀᴇᴀᴅʏ ᴀ ᴡᴏʟғ ᴅɪsᴀsᴛᴇʀ, ᴅᴇᴍᴏᴛɪɴɢ ᴛᴏ ᴛɪɢᴇʀ."
+        rt += "⌥ ᴛʜɪs ᴜsᴇʀ ɪs ᴀʟʀᴇᴀᴅʏ ᴀ ᴡᴏʟғ ᴅɪsᴀsᴛᴇʀ, ᴅᴇᴍᴏᴛɪɴɢ ᴛᴏ ᴛɪɢᴇʀ."
         data["whitelists"].remove(user_id)
         WOLVES.remove(user_id)
 
     if user_id in TIGERS:
-        message.reply_text("๏ ᴛʜɪs ᴜsᴇʀ ɪs ᴀʟʀᴇᴀᴅʏ ᴀ ᴛɪɢᴇʀ.")
+        message.reply_text("⌥ ᴛʜɪs ᴜsᴇʀ ɪs ᴀʟʀᴇᴀᴅʏ ᴀ ᴛɪɢᴇʀ.")
         return ""
 
     data["tigers"].append(user_id)
@@ -295,17 +257,17 @@ def addtiger(update: Update, context: CallbackContext) -> str:
         json.dump(data, outfile, indent=4)
 
     update.effective_message.reply_text(
-        rt + f"\n๏ sᴜᴄᴄᴇssғᴜʟʟʏ ᴘʀᴏᴍᴏᴛᴇᴅ {user_member.first_name} ᴛᴏ ᴀ ᴛɪɢᴇʀ ᴅɪsᴀsᴛᴇʀ !"
+        rt + f"\n⌥ sᴜᴄᴄᴇssғᴜʟʟʏ ᴘʀᴏᴍᴏᴛᴇᴅ {user_member.first_name} ᴛᴏ ᴀ ᴛɪɢᴇʀ ᴅɪsᴀsᴛᴇʀ !"
     )
 
     log_message = (
-        f"๏ #ᴛɪɢᴇʀ\n"
-        f"๏ <b>ᴀᴅᴍɪɴ ➠</b> {mention_html(user.id, html.escape(user.first_name))} \n"
-        f"๏ <b>ᴜsᴇʀ ➠</b> {mention_html(user_member.id, html.escape(user_member.first_name))}"
+        f"⌥ #ᴛɪɢᴇʀ\n"
+        f"⌥ <b>ᴀᴅᴍɪɴ ➠</b> {mention_html(user.id, html.escape(user.first_name))} \n"
+        f"⌥ <b>ᴜsᴇʀ ➠</b> {mention_html(user_member.id, html.escape(user_member.first_name))}"
     )
 
     if chat.type != "private":
-        log_message = f"๏ <b>{html.escape(chat.title)}</b>\n" + log_message
+        log_message = f"⌥ <b>{html.escape(chat.title)}</b>\n" + log_message
 
     return log_message
 
@@ -329,7 +291,7 @@ def removesudo(update: Update, context: CallbackContext) -> str:
         data = json.load(infile)
 
     if user_id in DRAGONS:
-        message.reply_text("๏ ʀᴇǫᴜᴇsᴛᴇᴅ ʜᴀ to ᴅᴇᴍᴏᴛᴇ ᴛʜɪs ᴜsᴇʀ ᴛᴏ ᴄɪᴠɪʟɪᴀɴ")
+        message.reply_text("⌥ ʀᴇǫᴜᴇsᴛᴇᴅ ʜᴀ to ᴅᴇᴍᴏᴛᴇ ᴛʜɪs ᴜsᴇʀ ᴛᴏ ᴄɪᴠɪʟɪᴀɴ")
         DRAGONS.remove(user_id)
         data["sudos"].remove(user_id)
 
@@ -337,18 +299,18 @@ def removesudo(update: Update, context: CallbackContext) -> str:
             json.dump(data, outfile, indent=4)
 
         log_message = (
-            f"๏ #ᴜɴsᴜᴅᴏ\n"
-            f"๏ <b>ᴀᴅᴍɪɴ ➠</b> {mention_html(user.id, html.escape(user.first_name))}\n"
-            f"๏ <b>ᴜsᴇʀ ➠</b> {mention_html(user_member.id, html.escape(user_member.first_name))}"
+            f"⌥ #ᴜɴsᴜᴅᴏ\n"
+            f"⌥ <b>ᴀᴅᴍɪɴ ➠</b> {mention_html(user.id, html.escape(user.first_name))}\n"
+            f"⌥ <b>ᴜsᴇʀ ➠</b> {mention_html(user_member.id, html.escape(user_member.first_name))}"
         )
 
         if chat.type != "private":
-            log_message = "๏ <b>{}</b>\n".format(html.escape(chat.title)) + log_message
+            log_message = "⌥ <b>{}</b>\n".format(html.escape(chat.title)) + log_message
 
         return log_message
 
     else:
-        message.reply_text("๏ ᴛʜɪs ᴜsᴇʀ ɪs ɴᴏᴛ ᴀ ᴅʀᴀɢᴏɴ ᴅɪsᴀsᴛᴇʀ !")
+        message.reply_text("⌥ ᴛʜɪs ᴜsᴇʀ ɪs ɴᴏᴛ ᴀ ᴅʀᴀɢᴏɴ ᴅɪsᴀsᴛᴇʀ !")
         return ""
 
 
@@ -371,7 +333,7 @@ def removesupport(update: Update, context: CallbackContext) -> str:
         data = json.load(infile)
 
     if user_id in DEMONS:
-        message.reply_text("๏ ʀᴇǫᴜᴇsᴛᴇᴅ ʜᴀ ᴛᴏ ᴅᴇᴍᴏᴛᴇ ᴛʜɪs ᴜsᴇʀ ᴛᴏ ᴄɪᴠɪʟɪᴀɴ")
+        message.reply_text("⌥ ʀᴇǫᴜᴇsᴛᴇᴅ ʜᴀ ᴛᴏ ᴅᴇᴍᴏᴛᴇ ᴛʜɪs ᴜsᴇʀ ᴛᴏ ᴄɪᴠɪʟɪᴀɴ")
         DEMONS.remove(user_id)
         data["supports"].remove(user_id)
 
@@ -379,18 +341,18 @@ def removesupport(update: Update, context: CallbackContext) -> str:
             json.dump(data, outfile, indent=4)
 
         log_message = (
-            f"๏ #ᴜɴsᴜᴘᴘᴏʀᴛ\n"
-            f"๏ <b>ᴀᴅᴍɪɴ ➠</b> {mention_html(user.id, html.escape(user.first_name))}\n"
-            f"๏ <b>ᴜsᴇʀ ➠</b> {mention_html(user_member.id, html.escape(user_member.first_name))}"
+            f"⌥ #ᴜɴsᴜᴘᴘᴏʀᴛ\n"
+            f"⌥ <b>ᴀᴅᴍɪɴ ➠</b> {mention_html(user.id, html.escape(user.first_name))}\n"
+            f"⌥ <b>ᴜsᴇʀ ➠</b> {mention_html(user_member.id, html.escape(user_member.first_name))}"
         )
 
         if chat.type != "private":
-            log_message = f"๏ <b>{html.escape(chat.title)}</b>\n" + log_message
+            log_message = f"⌥ <b>{html.escape(chat.title)}</b>\n" + log_message
 
         return log_message
 
     else:
-        message.reply_text("๏ ᴛʜɪs ᴜsᴇʀ ɪs ɴᴏᴛ ᴀ ᴅᴇᴍᴏɴ ʟᴇᴠᴇʟ ᴅɪsᴀsᴛᴇʀ !")
+        message.reply_text("⌥ ᴛʜɪs ᴜsᴇʀ ɪs ɴᴏᴛ ᴀ ᴅᴇᴍᴏɴ ʟᴇᴠᴇʟ ᴅɪsᴀsᴛᴇʀ !")
         return ""
 
 
@@ -413,7 +375,7 @@ def removewhitelist(update: Update, context: CallbackContext) -> str:
         data = json.load(infile)
 
     if user_id in WOLVES:
-        message.reply_text("๏ ᴅᴇᴍᴏᴛɪɴɢ ᴛᴏ ɴᴏʀᴍᴀʟ ᴜsᴇʀ")
+        message.reply_text("⌥ ᴅᴇᴍᴏᴛɪɴɢ ᴛᴏ ɴᴏʀᴍᴀʟ ᴜsᴇʀ")
         WOLVES.remove(user_id)
         data["whitelists"].remove(user_id)
 
@@ -421,17 +383,17 @@ def removewhitelist(update: Update, context: CallbackContext) -> str:
             json.dump(data, outfile, indent=4)
 
         log_message = (
-            f"๏ #ᴜɴᴡʜɪᴛᴇʟɪsᴛ\n"
-            f"๏ <b>ᴀᴅᴍɪɴ ➠</b> {mention_html(user.id, html.escape(user.first_name))}\n"
-            f"๏ <b>ᴜsᴇʀ ➠</b> {mention_html(user_member.id, html.escape(user_member.first_name))}"
+            f"⌥ #ᴜɴᴡʜɪᴛᴇʟɪsᴛ\n"
+            f"⌥ <b>ᴀᴅᴍɪɴ ➠</b> {mention_html(user.id, html.escape(user.first_name))}\n"
+            f"⌥ <b>ᴜsᴇʀ ➠</b> {mention_html(user_member.id, html.escape(user_member.first_name))}"
         )
 
         if chat.type != "private":
-            log_message = f"๏ <b>{html.escape(chat.title)}</b>\n" + log_message
+            log_message = f"⌥ <b>{html.escape(chat.title)}</b>\n" + log_message
 
         return log_message
     else:
-        message.reply_text("๏ ᴛʜɪs ᴜsᴇʀ ɪs ɴᴏᴛ ᴀ ᴡᴏʟғ ᴅɪsᴀsᴛᴇʀ !")
+        message.reply_text("⌥ ᴛʜɪs ᴜsᴇʀ ɪs ɴᴏᴛ ᴀ ᴡᴏʟғ ᴅɪsᴀsᴛᴇʀ !")
         return ""
 
 
@@ -454,7 +416,7 @@ def removetiger(update: Update, context: CallbackContext) -> str:
         data = json.load(infile)
 
     if user_id in TIGERS:
-        message.reply_text("๏ ᴅᴇᴍᴏᴛɪɴɢ ᴛᴏ ɴᴏʀᴍᴀʟ ᴜsᴇʀ")
+        message.reply_text("⌥ ᴅᴇᴍᴏᴛɪɴɢ ᴛᴏ ɴᴏʀᴍᴀʟ ᴜsᴇʀ")
         TIGERS.remove(user_id)
         data["tigers"].remove(user_id)
 
@@ -462,23 +424,23 @@ def removetiger(update: Update, context: CallbackContext) -> str:
             json.dump(data, outfile, indent=4)
 
         log_message = (
-            f"๏ #ᴜɴᴛɪɢᴇʀ\n"
-            f"๏ <b>ᴀᴅᴍɪɴ ➠</b> {mention_html(user.id, html.escape(user.first_name))}\n"
-            f"๏ <b>ᴜsᴇʀ ➠</b> {mention_html(user_member.id, html.escape(user_member.first_name))}"
+            f"⌥ #ᴜɴᴛɪɢᴇʀ\n"
+            f"⌥ <b>ᴀᴅᴍɪɴ ➠</b> {mention_html(user.id, html.escape(user.first_name))}\n"
+            f"⌥ <b>ᴜsᴇʀ ➠</b> {mention_html(user_member.id, html.escape(user_member.first_name))}"
         )
 
         if chat.type != "private":
-            log_message = f"๏ <b>{html.escape(chat.title)}</b>\n" + log_message
+            log_message = f"⌥ <b>{html.escape(chat.title)}</b>\n" + log_message
 
         return log_message
     else:
-        message.reply_text("๏ ᴛʜɪs ᴜsᴇʀ ɪs ɴᴏᴛ ᴀ ᴛɪɢᴇʀ ᴅɪsᴀsᴛᴇʀ !")
+        message.reply_text("⌥ ᴛʜɪs ᴜsᴇʀ ɪs ɴᴏᴛ ᴀ ᴛɪɢᴇʀ ᴅɪsᴀsᴛᴇʀ !")
         return ""
 
 
 @whitelist_plus
 def whitelistlist(update: Update, context: CallbackContext):
-    reply = "๏ <b>ᴋɴᴏᴡɴ ᴡᴏʟғ ᴅɪsᴀsᴛᴇʀs 🐺</b>\n"
+    reply = "⌥ <b>ᴋɴᴏᴡɴ ᴡᴏʟғ ᴅɪsᴀsᴛᴇʀs 🐺</b>\n"
     m = update.effective_message.reply_text(
         "<code>..</code>", parse_mode=ParseMode.HTML
     )
@@ -488,7 +450,7 @@ def whitelistlist(update: Update, context: CallbackContext):
         try:
             user = bot.get_chat(user_id)
 
-            reply += f"๏ {mention_html(user_id, html.escape(user.first_name))}\n"
+            reply += f"⌥ {mention_html(user_id, html.escape(user.first_name))}\n"
         except TelegramError:
             pass
     m.edit_text(reply, parse_mode=ParseMode.HTML)
@@ -496,7 +458,7 @@ def whitelistlist(update: Update, context: CallbackContext):
 
 @whitelist_plus
 def tigerlist(update: Update, context: CallbackContext):
-    reply = "๏ <b>ᴋɴᴏᴡɴ ᴛɪɢᴇʀ ᴅɪsᴀsᴛᴇʀs 🐯</b>\n"
+    reply = "⌥ <b>ᴋɴᴏᴡɴ ᴛɪɢᴇʀ ᴅɪsᴀsᴛᴇʀs 🐯</b>\n"
     m = update.effective_message.reply_text(
         "<code>ɢᴀᴛʜᴇʀɪɴɢ ɪɴᴛᴇʟ..</code>", parse_mode=ParseMode.HTML
     )
@@ -505,7 +467,7 @@ def tigerlist(update: Update, context: CallbackContext):
         user_id = int(each_user)
         try:
             user = bot.get_chat(user_id)
-            reply += f"๏ {mention_html(user_id, html.escape(user.first_name))}\n"
+            reply += f"⌥ {mention_html(user_id, html.escape(user.first_name))}\n"
         except TelegramError:
             pass
     m.edit_text(reply, parse_mode=ParseMode.HTML)
@@ -517,12 +479,12 @@ def supportlist(update: Update, context: CallbackContext):
     m = update.effective_message.reply_text(
         "<code>ɢᴀᴛʜᴇʀɪɴɢ ɪɴᴛᴇʟ..</code>", parse_mode=ParseMode.HTML
     )
-    reply = "๏<b> ᴋɴᴏᴡɴ ᴅᴇᴍᴏɴ ᴅɪsᴀsᴛᴇʀs 👹</b>\n"
+    reply = "⌥<b> ᴋɴᴏᴡɴ ᴅᴇᴍᴏɴ ᴅɪsᴀsᴛᴇʀs 👹</b>\n"
     for each_user in DEMONS:
         user_id = int(each_user)
         try:
             user = bot.get_chat(user_id)
-            reply += f"๏ {mention_html(user_id, html.escape(user.first_name))}\n"
+            reply += f"⌥ {mention_html(user_id, html.escape(user.first_name))}\n"
         except TelegramError:
             pass
     m.edit_text(reply, parse_mode=ParseMode.HTML)
@@ -535,12 +497,12 @@ def sudolist(update: Update, context: CallbackContext):
         "<code>ɢᴀᴛʜᴇʀɪɴɢ ɪɴᴛᴇʟ..</code>", parse_mode=ParseMode.HTML
     )
     true_sudo = list(set(DRAGONS)- set(DEV_USERS))
-    reply = "๏ <b> ᴋɴᴏᴡɴ ᴅʀᴀɢᴏɴ ᴅɪsᴀsᴛᴇʀs 🐉</b>\n"
+    reply = "⌥ <b> ᴋɴᴏᴡɴ ᴅʀᴀɢᴏɴ ᴅɪsᴀsᴛᴇʀs 🐉</b>\n"
     for each_user in true_sudo:
         user_id = int(each_user)
         try:
             user = bot.get_chat(user_id)
-            reply += f"๏ {mention_html(user_id, html.escape(user.first_name))}\n"
+            reply += f"⌥ {mention_html(user_id, html.escape(user.first_name))}\n"
         except TelegramError:
             pass
     m.edit_text(reply, parse_mode=ParseMode.HTML)
@@ -553,12 +515,12 @@ def devlist(update: Update, context: CallbackContext):
         "<code>ɢᴀᴛʜᴇʀɪɴɢ..</code>", parse_mode=ParseMode.HTML
     )
     true_dev = list(set(DEV_USERS) -{OWNER_ID})
-    reply = "๏ <b>ᴅᴇᴠs ᴜsᴇʀ ʟɪsᴛ </b>\n"
+    reply = "⌥ <b>ᴅᴇᴠs ᴜsᴇʀ ʟɪsᴛ </b>\n"
     for each_user in true_dev:
         user_id = int(each_user)
         try:
             user = bot.get_chat(user_id)
-            reply += f"๏ {mention_html(user_id, html.escape(user.first_name))}\n"
+            reply += f"⌥ {mention_html(user_id, html.escape(user.first_name))}\n"
         except TelegramError:
             pass
     m.edit_text(reply, parse_mode=ParseMode.HTML)
@@ -602,7 +564,6 @@ SUPPORTLIST_HANDLER = CommandHandler("supportlist", supportlist, run_async=True)
 SUDOLIST_HANDLER = CommandHandler("sudolist", sudolist, run_async=True)
 DEVLIST_HANDLER = CommandHandler("devlist", devlist, run_async=True)
 
-dispatcher.add_handler(CommandHandler("addsudo", addsudo))
 dispatcher.add_handler(SUDO_HANDLER)
 dispatcher.add_handler(SUPPORT_HANDLER)
 dispatcher.add_handler(TIGER_HANDLER)
