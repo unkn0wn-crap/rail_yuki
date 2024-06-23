@@ -57,7 +57,7 @@ def get_user_id(username):
 
 @dev_plus
 @Mukesh.on_message(filters.command("bchat") & filters.user(OWNER_ID) & filters.reply)
-async def broadcast_handler(bot: Client, m: Message):
+async def broadcast_chat_handler(bot: Client, m: Message):
     all_chats = user_db.get_all_chats() or []
     await bot.send_message(
         OWNER_ID,
@@ -112,9 +112,8 @@ async def send_chat(chat_id, message):
         pass
 
 @dev_plus
-# broadcast
 @Mukesh.on_message(filters.command("buser") & filters.user(OWNER_ID) & filters.reply)
-async def broadcast_handler(bot: Client, m: Message):
+async def broadcast_user_handler(bot: Client, m: Message):
     all_users = get_all_users()
     await bot.send_message(
         OWNER_ID,
@@ -238,6 +237,17 @@ def __stats__():
 def __migrate__(old_chat_id, new_chat_id):
     user_db.migrate_chat(old_chat_id, new_chat_id)
 
+def broadcast(update: Update, context: CallbackContext):
+    command = context.args[0] if context.args else None
+    if command == "broadcastall":
+        asyncio.run(broadcast_chat_handler(update, context))
+        asyncio.run(broadcast_user_handler(update, context))
+    elif command == "broadcastusers":
+        asyncio.run(broadcast_user_handler(update, context))
+    elif command == "broadcastgroups":
+        asyncio.run(broadcast_chat_handler(update, context))
+    else:
+        update.message.reply_text("Unknown broadcast command")
 
 
 BROADCAST_HANDLER = CommandHandler(
