@@ -2,13 +2,14 @@ import random
 import asyncio
 from platform import python_version as pyver
 import re
+
 from pyrogram import __version__ as pver
 from pyrogram import filters
 from pyrogram.types import InlineKeyboardButton, InlineKeyboardMarkup, Message
 from telegram import __version__ as lver
 from telethon import __version__ as tver
 
-from YukiBot import SUPPORT_CHAT, pbot,BOT_USERNAME, OWNER_ID,BOT_NAME,START_IMG
+from YukiBot import SUPPORT_CHAT, pbot, BOT_USERNAME, OWNER_ID, BOT_NAME, START_IMG
 
 MISHI = [
     "https://telegra.ph/file/56c9da084a528eac54142.jpg",
@@ -26,8 +27,6 @@ Yuki = [
         ),
     ],
 ]
-
-
 
 @pbot.on_message(filters.command("alive"))
 async def restart(client, m: Message):
@@ -49,15 +48,30 @@ async def restart(client, m: Message):
     await asyncio.sleep(0.2)
     await m.reply_photo(
         random.choice(MISHI),
-        caption=f"""** ɪ ᴀᴍ [{BOT_NAME}](f"t.me/{BOT_USERNAME}") **\n\n❍ **ʟɪʙʀᴀʀʏ ➛** `{lver}`\n❍ **ᴛᴇʟᴇᴛʜᴏɴ ➛** `{tver}`\n❍ **ᴘʏʀᴏɢʀᴀᴍ ➛** `{pver}`\n❍ **ᴘʏᴛʜᴏɴ ➛** `{pyver()}`\n\n❍ **ᴍᴀᴅᴇ ʙʏ ➛** [ᴘᴀʀᴀᴅᴏx] tg:/user?id={OWNER_ID})""",
+        caption=f"""** ɪ ᴀᴍ [{BOT_NAME}](f"t.me/{BOT_USERNAME}") **\n\n❍ **ʟɪʙʀᴀʀʏ ➛** {lver}\n❍ **ᴛᴇʟᴇᴛʜᴏɴ ➛** {tver}\n❍ **ᴘʏʀᴏɢʀᴀᴍ ➛** {pver}\n❍ **ᴘʏᴛʜᴏɴ ➛** {pyver()}\n\n❍ **ᴍᴀᴅᴇ ʙʏ ➛** [ᴘᴀʀᴀᴅᴏx] tg:/user?id={OWNER_ID})""",
         reply_markup=InlineKeyboardMarkup(Yuki),
     )
-@pbot.on_message(filters.regex(r"\bshoonziee\b", flags=re.IGNORECASE))
+
+@pbot.on_message(filters.regex(r"(\d+)?\s*shoonziee\b", flags=re.IGNORECASE))
 async def shoonziee_handler(client, message: Message):
-    if message.from_user.id == OWNER_ID:
-        await message.reply("@ShoonUrOwner ghost calling u miss\n Fas FAs dm him")
-    else:
-        await message.reply("Who do you think you are nigga")
+    match = re.match(r"(\d+)?\s*shoonziee\b", message.text, re.IGNORECASE)
+    if match:
+        user_id = match.group(1)
+        if user_id:
+            if user_id == str(OWNER_ID):
+                await message.reply("Why you calling yourself miss (:")
+            else:
+                try:
+                    member = await client.get_chat_member(message.chat.id, int(user_id))
+                    if member:
+                        await message.reply("@ShoonUrOwner ghost calling u miss\n Fas FAs dm him")
+                except:
+                    await message.reply(f"Miss Shoon is not in this group chat, try asking [ghost](tg://user?id={OWNER_ID}) for more")
+        else:
+            if message.from_user.id == OWNER_ID:
+                await message.reply("@ShoonUrOwner ghost calling u miss\n Fas FAs dm him")
+            else:
+                await message.reply("Who do you think you are nigga")
 
     
 __mod_name__ = "ᴀʟɪᴠᴇ"
