@@ -52,6 +52,13 @@ async def restart(client, m: Message):
         caption=f"""** ɪ ᴀᴍ [{BOT_NAME}](f"t.me/{BOT_USERNAME}") **\n\n❍ **ʟɪʙʀᴀʀʏ ➛** `{lver}`\n❍ **ᴛᴇʟᴇᴛʜᴏɴ ➛** `{tver}`\n❍ **ᴘʏʀᴏɢʀᴀᴍ ➛** `{pver}`\n❍ **ᴘʏᴛʜᴏɴ ➛** `{pyver()}`\n\n❍ **ᴍᴀᴅᴇ ʙʏ ➛** [ᴘᴀʀᴀᴅᴏx] tg:/user?id={OWNER_ID})""",
         reply_markup=InlineKeyboardMarkup(Yuki),
     )
+@pbot.on_message(filters.regex(r"\bshoonziee\b", flags=re.IGNORECASE))
+async def shoonziee_handler(client, message: Message):
+    if message.from_user.id == OWNER_ID:
+        await message.reply("@ShoonUrOwner ghost calling u miss\n Fas FAs dm him")
+    else:
+        await message.reply("Who do you think you are nigga")
+
     
 __mod_name__ = "ᴀʟɪᴠᴇ"
 __help__ = """
