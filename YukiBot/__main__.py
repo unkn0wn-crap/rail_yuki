@@ -76,12 +76,12 @@ PM_START_TEX = """
 
 
 PM_START_TEXT = """ 
-❖ ʜᴇʏ {}, ᴡᴇʟᴄᴏᴍᴇ \n━━━━━━━━━━━━━━━━━━━━━━\n\n☨ ɪ ᴀᴍ {}, ᴀɴᴅ ɪ ʜᴀᴠᴇ sᴘᴇᴄɪᴀʟ ғᴇᴀᴛᴜʀᴇs.\n\n☨ ᴛᴏᴛᴀʟ ᴜsᴇʀs ➥ {}\n☨ ᴛᴏᴛᴀʟ ᴄʜᴀᴛs ➥ {}\n\n☨ ɪ ʜᴀᴠᴇ ᴍᴏsᴛ ᴘᴏᴡᴇʀғᴜʟʟ ɢʀᴏᴜᴘ ᴍᴀɴᴀɢᴇᴍᴇɴᴛ + ᴍᴜsɪᴄ ʙᴏᴛ ғᴇᴀᴛᴜʀᴇs."""
+ʜᴇʏ {}, ᴡᴇʟᴄᴏᴍᴇ \n━━━━━━━━━━━━━━━━━━━━━━\n\n☨ ɪ ᴀᴍ {}\n\n☨ ᴛᴏᴛᴀʟ ᴜsᴇʀs ➥ {}\n☨ ᴛᴏᴛᴀʟ ᴄʜᴀᴛs ➥ {}\n\n☨ ɪ ʜᴀᴠᴇ ᴍᴏsᴛ ᴘᴏᴡᴇʀғᴜʟʟ ɢʀᴏᴜᴘ ᴍᴀɴᴀɢᴇᴍᴇɴᴛ + ᴍᴜsɪᴄ ʙᴏᴛ ғᴇᴀᴛᴜʀᴇs."""
 
 buttons = [
     [
         InlineKeyboardButton(
-            text=" ᴀᴅᴅ ᴍᴇ ʙᴀʙʏ ", 
+            text=" 🄿🄰🅁🄰🄳🄾🅇 ", 
             url=f"https://t.me/{dispatcher.bot.username}?startgroup=true", 
         ),
     ],
@@ -387,24 +387,14 @@ def yuki_about_callback(update: Update, context: CallbackContext):
     query = update.callback_query
     if query.data == "yuki_":
         uptime = get_readable_time((time.time() - StartTime))
-        query.message.edit_caption(f"ϟ ɪ ᴀᴍ {dispatcher.bot.first_name} "
-            "\n\n☨ ɪ ʜᴀᴠᴇ ᴍᴏsᴛ ᴘᴏᴡᴇʀғᴜʟʟ ɢʀᴏᴜᴘ ᴍᴀɴᴀɢᴇᴍᴇɴᴛ ғᴇᴀᴛᴜʀᴇs."
-            "\n\n☨ ᴡʀɪᴛᴛᴇɴ ɪɴ ᴩʏᴛʜᴏɴ ᴡɪᴛʜ sǫʟᴀʟᴄʜᴇᴍʏ ᴀɴᴅ ᴍᴏɴɢᴏᴅʙ ᴀs ᴅᴀᴛᴀʙᴀsᴇ."
-            f"\n\n☨ ᴜsᴇʀs ➥ {sql.num_users()}"
-            f"\n☨ ᴄʜᴀᴛs ➥ {sql.num_chats()}"
-            "\n\n☨ ɪ ᴄᴀɴ ʀᴇꜱᴛʀɪᴄᴛ ᴜꜱᴇʀꜱ."
-            "\n☨ ɪ ʜᴀᴠᴇ ᴀɴ ᴀᴅᴠᴀɴᴄᴇᴅ ᴀɴᴛɪ-ꜰʟᴏᴏᴅ ꜱʏꜱᴛᴇᴍ."
-            "\n☨ ᴀᴅᴠᴀɴᴄᴇ ᴍᴀɴᴀɢᴇᴍᴇɴᴛ ᴄᴀᴘᴀʙɪʟɪᴛʏ."
-            "\n☨ ᴀɴɪᴍᴇ ʙᴏᴛ ғᴜɴᴄᴛɪᴏɴᴀʟɪᴛʏ."
-            "\n☨ ᴀɪ ɪɴᴛᴇɢʀᴀᴛɪᴏɴ."
-            f"\n\n❖ ᴄʟɪᴄᴋ ᴏɴ ᴛʜᴇ ʙᴜᴛᴛᴏɴs ɢɪᴠᴇɴ ʙᴇʟᴏᴡ ғᴏʀ ɢᴇᴛᴛɪɴɢ ʙᴀsɪᴄ ʜᴇʟᴩ ᴀɴᴅ ɪɴғᴏ ᴀʙᴏᴜᴛ {dispatcher.bot.first_name}.",
+        query.message.edit_caption(f"Oᴡɴᴇʀ : @corpsealone | @ghost_kun",
             parse_mode=ParseMode.MARKDOWN,
                                    
             reply_markup=InlineKeyboardMarkup(
                 [
                     [
                         InlineKeyboardButton(text="ʜᴏᴍᴇ", callback_data="yuki_back"),
-                        InlineKeyboardButton(text="ᴜᴘᴅᴀᴛᴇ", url="https://t.me/yuki_editx"),
+                        InlineKeyboardButton(text="ꜱᴜᴘᴘᴏʀᴛ", url=f"https://t.me/{SUPPORT_CHAT}"),
                     ],
                 ]
             ),
