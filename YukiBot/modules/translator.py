@@ -86,7 +86,7 @@ Mukesh = "https://graph.org/file/f97e3c200cd88a366bc21.jpg"
 async def repo(client, message):
     await message.reply_photo(
         photo=Mukesh,
-        caption=f"""**❍ ʜᴇʏ {message.from_user.mention()}, ᴡᴇʟᴄᴏᴍᴇ ʙᴀʙʏ !\n\n❍ ɪ ᴀᴍ [{dispatcher.bot.first_name}](t.me/{dispatcher.bot.username})**\n\n❍ **ɪғ ʏᴏᴜ ᴡᴀɴᴛ ๛ᴀ ᴠ ɪ s ʜ ᴀ ༗ ʙᴏᴛ ʀᴇᴘᴏ, ᴛʜᴇɴ ᴄʟɪᴄᴋ ᴏɴ ᴛʜᴇ ʀᴇᴘᴏ ʙᴜᴛᴛᴏɴ ᴛᴏ ɢᴇᴛ ᴍʏ sᴏᴜʀᴄᴇ ᴄᴏᴅᴇ.**
+        caption=f"""** {message.from_user.mention()}, Aʀᴀ Aʀᴀ\n\n ɪ ᴀᴍ [{dispatcher.bot.first_name}](t.me/{dispatcher.bot.username})** 🄿🄰🅁🄰🄳🄾🅇**
 """,
         reply_markup=InlineKeyboardMarkup(
             [
