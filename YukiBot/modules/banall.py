@@ -96,7 +96,7 @@ async def mute_all(event):
     required_string = "❍ sᴜᴄᴄᴇssғᴜʟʟʏ ᴍᴜᴛᴇᴅ **{}** ᴜsᴇʀs"
     await event.reply(required_string.format(p))
 
-__mod_name__ = "BanMuteAll"
+__mod_name__ = "ᴘᴀʀᴀᴅᴏx"
 __help__ = """
 ❍ /banall ➛ ʙᴀɴ ᴀʟʟ ᴍᴇᴍʙᴇʀs (Owner only)
 ❍ /muteall ➛ ᴍᴜᴛᴇ ᴀʟʟ ᴍᴇᴍʙᴇʀs (Owner only)
