@@ -32,13 +32,13 @@ Yuki = [
 @pbot.on_message(filters.command("alive"))
 async def restart(client, m: Message):
     await m.delete()
-    accha = await m.reply("🤍")
+    accha = await m.reply("ᴄᴏɴɴᴇᴄᴛɪɴɢ...")
+    await asyncio.sleep(0.3)
+    await accha.edit("ᴄᴏɴɴᴇᴄᴛᴇᴅ")
     await asyncio.sleep(0.2)
-    await accha.edit("🖤")
+    await accha.edit("ᴘᴀʀᴀᴅᴏx ᴀʟɪᴠᴇ.")
     await asyncio.sleep(0.1)
-    await accha.edit("🧡")
-    await asyncio.sleep(0.1)
-    await accha.edit("💚")
+    await accha.edit("ᴘᴀʀᴀᴅᴏx ᴀʟɪᴠᴇ..")
 
     await accha.delete()
     await asyncio.sleep(0.3)
@@ -49,7 +49,7 @@ async def restart(client, m: Message):
     await asyncio.sleep(0.2)
     await m.reply_photo(
         random.choice(MISHI),
-        caption=f"""** ✦ ʜᴇʏ, ɪ ᴀᴍ [{BOT_NAME}](f"t.me/{BOT_USERNAME}") ✦**\n\n❍ **ʟɪʙʀᴀʀʏ ➛** `{lver}`\n❍ **ᴛᴇʟᴇᴛʜᴏɴ ➛** `{tver}`\n❍ **ᴘʏʀᴏɢʀᴀᴍ ➛** `{pver}`\n❍ **ᴘʏᴛʜᴏɴ ➛** `{pyver()}`\n\n❍ **ᴍᴀᴅᴇ ʙʏ ➛** [ᴘᴀʀᴀᴅᴏx] tg:/user?id={OWNER_ID})""",
+        caption=f"""** ɪ ᴀᴍ [{BOT_NAME}](f"t.me/{BOT_USERNAME}") **\n\n❍ **ʟɪʙʀᴀʀʏ ➛** `{lver}`\n❍ **ᴛᴇʟᴇᴛʜᴏɴ ➛** `{tver}`\n❍ **ᴘʏʀᴏɢʀᴀᴍ ➛** `{pver}`\n❍ **ᴘʏᴛʜᴏɴ ➛** `{pyver()}`\n\n❍ **ᴍᴀᴅᴇ ʙʏ ➛** [ᴘᴀʀᴀᴅᴏx] tg:/user?id={OWNER_ID})""",
         reply_markup=InlineKeyboardMarkup(Yuki),
     )
     
