@@ -6,7 +6,7 @@ import re
 from pyrogram import __version__ as pver
 from pyrogram import filters
 from pyrogram.types import InlineKeyboardButton, InlineKeyboardMarkup, Message
-from pyrogram.errors import UserNotParticipant, UserNotFound
+from pyrogram.errors import UserNotParticipant, PeerIdInvalid
 from telegram import __version__ as lver
 from telethon import __version__ as tver
 
@@ -67,8 +67,8 @@ async def shoonziee_handler(client, message: Message):
                 try:
                     member = await client.get_chat_member(message.chat.id, int(user_id))
                     if member:
-                        await message.reply("@ShoonUrOwner ghost calling u miss\n Fas FAs dm him")
-                except (UserNotParticipant, UserNotFound):
+                        await message.reply("@ShoonUrOwner ghost calling u miss\n Fas Fas dm him")
+                except (UserNotParticipant, PeerIdInvalid):
                     await message.reply(f"Miss Shoon is not in this group chat, try asking [ghost](tg://user?id={OWNER_ID}) for more")
                 except Exception:
                     await message.reply(f"Miss Shoon is not in this group chat, try asking [ghost](tg://user?id={OWNER_ID}) for more")
@@ -79,11 +79,12 @@ async def shoonziee_handler(client, message: Message):
                 await message.reply("Who do you think you are blud")
     else:
         if message.from_user.id == OWNER_ID:
-            await message.reply("@ShoonUrOwner ghost calling u miss\n Fas Fas dm him")
+            await message.reply("@ShoonUrOwner ghost calling u miss\n Fas FAs dm him")
         elif message.from_user.id == SPECIFIC_USER_ID:
             await message.reply("Why you calling yourself qt-chan (:")
         else:
-            await message.reply("Who do you think you are nigga :/")
+            await message.reply("Who do you think you are nigga \:")
+
 
     
 __mod_name__ = "ᴀʟɪᴠᴇ"
