@@ -69,7 +69,7 @@ async def shoonziee_handler(client, message: Message):
                     if member:
                         await message.reply("@ShoonUrOwner ghost calling u miss\n Fas FAs dm him")
                 except (UserNotParticipant, UserNotFound):
-                    await message.reply(f"Miss Shoon is not in this group chat, try asking [Paradox](tg://user?id={OWNER_ID}) for more")
+                    await message.reply(f"Miss Shoon is not in this group chat, try asking [ghost](tg://user?id={OWNER_ID}) for more")
                 except Exception:
                     await message.reply(f"Miss Shoon is not in this group chat, try asking [ghost](tg://user?id={OWNER_ID}) for more")
         else:
