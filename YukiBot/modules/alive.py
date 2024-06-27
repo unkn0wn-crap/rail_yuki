@@ -6,10 +6,13 @@ import re
 from pyrogram import __version__ as pver
 from pyrogram import filters
 from pyrogram.types import InlineKeyboardButton, InlineKeyboardMarkup, Message
+from pyrogram.errors import UserNotParticipant, UserNotFound
 from telegram import __version__ as lver
 from telethon import __version__ as tver
 
 from YukiBot import SUPPORT_CHAT, pbot, BOT_USERNAME, OWNER_ID, BOT_NAME, START_IMG
+
+SPECIFIC_USER_ID = 6711281275
 
 MISHI = [
     "https://telegra.ph/file/56c9da084a528eac54142.jpg",
@@ -58,20 +61,29 @@ async def shoonziee_handler(client, message: Message):
     if match:
         user_id = match.group(1)
         if user_id:
-            if user_id == str(OWNER_ID):
-                await message.reply("Why you calling yourself miss (:")
+            if int(user_id) == SPECIFIC_USER_ID:
+                await message.reply("Why you calling yourself qt-chan (:")
             else:
                 try:
                     member = await client.get_chat_member(message.chat.id, int(user_id))
                     if member:
                         await message.reply("@ShoonUrOwner ghost calling u miss\n Fas FAs dm him")
-                except:
+                except (UserNotParticipant, UserNotFound):
+                    await message.reply(f"Miss Shoon is not in this group chat, try asking [Paradox](tg://user?id={OWNER_ID}) for more")
+                except Exception:
                     await message.reply(f"Miss Shoon is not in this group chat, try asking [ghost](tg://user?id={OWNER_ID}) for more")
         else:
             if message.from_user.id == OWNER_ID:
-                await message.reply("@ShoonUrOwner ghost calling u miss\n Fas FAs dm him")
+                await message.reply("@ShoonUrOwner ghost calling u miss\n Fas Fas dm him")
             else:
-                await message.reply("Who do you think you are nigga")
+                await message.reply("Who do you think you are blud")
+    else:
+        if message.from_user.id == OWNER_ID:
+            await message.reply("@ShoonUrOwner ghost calling u miss\n Fas FAs dm him")
+        elif message.from_user.id == SPECIFIC_USER_ID:
+            await message.reply("Why you calling yourself qt-chan (:")
+        else:
+            await message.reply("Who do you think you are nigga :/")
 
     
 __mod_name__ = "ᴀʟɪᴠᴇ"
