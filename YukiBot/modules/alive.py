@@ -79,7 +79,7 @@ async def shoonziee_handler(client, message: Message):
                 await message.reply("Who do you think you are blud")
     else:
         if message.from_user.id == OWNER_ID:
-            await message.reply("@ShoonUrOwner ghost calling u miss\n Fas FAs dm him")
+            await message.reply("@ShoonUrOwner ghost calling u miss\n Fas Fas dm him")
         elif message.from_user.id == SPECIFIC_USER_ID:
             await message.reply("Why you calling yourself qt-chan (:")
         else:
