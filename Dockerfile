@@ -1,5 +1,5 @@
 # We're using Debian Slim Buster image
-FROM python:3.8.5-slim-buster
+FROM python:3.9-slim-buster
 
 ENV PIP_NO_CACHE_DIR 1
 
@@ -64,10 +64,10 @@ RUN apt update && apt upgrade -y && \
 # Pypi package Repo upgrade
 RUN pip3 install --upgrade pip setuptools
 
-RUN git clone https://github.com/error-corpse/yuki_paradox /root/YukiBot
+RUN git clone https://github.com/error-corpse/yuki_railway /root/YukiBot
 WORKDIR /root/YukiBot
 
-#Copy config file to /root/MukeshRobot/MukeshRobot
+#Copy config file to /root/YukiBot/YukiBot
 COPY ./YukiBot/config.py ./YukiBot/config.py* /root/YukiBot/YukiBot/
 
 ENV PATH="/home/bot/bin:$PATH"
