@@ -387,7 +387,7 @@ def yuki_about_callback(update: Update, context: CallbackContext):
     query = update.callback_query
     if query.data == "yuki_":
         uptime = get_readable_time((time.time() - StartTime))
-        query.message.edit_caption(f"Oᴡɴᴇʀ : @corpsealone | @ghost_kun",
+        query.message.edit_caption(f"Oᴡɴᴇʀ : @corpsealone | @ghost_kun"),
             parse_mode=ParseMode.MARKDOWN,
                                    
             reply_markup=InlineKeyboardMarkup(
