@@ -14,7 +14,7 @@ async def join_watcher(_, message: Message):
     chat = message.chat
     try:
         link = await app.export_chat_invite_link(message.chat.id)
-    except Exception as e:
+    except pyrogram.errors.exceptions.bad_request_400.ChatAdminRequired:
         link = "No link available, bot lacks admin privileges."
     
     bot_user = await app.get_me()
