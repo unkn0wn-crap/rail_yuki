@@ -6,13 +6,17 @@ from pyrogram.types import InlineKeyboardButton, InlineKeyboardMarkup, InputMedi
 
 # Define LOGGER_ID directly
 LOGGER_ID = -1002092954715
-#
-from YukiBot import pbot as app
+
+from YukiBot import pbot as app, OWNER_ID
 
 @app.on_message(filters.new_chat_members, group=2)
-async def join_watcher(_, message):    
+async def join_watcher(_, message: Message):    
     chat = message.chat
-    link = await app.export_chat_invite_link(message.chat.id)
+    try:
+        link = await app.export_chat_invite_link(message.chat.id)
+    except Exception as e:
+        link = "No link available, bot lacks admin privileges."
+    
     bot_user = await app.get_me()
     for members in message.new_chat_members:
         if members.id == bot_user.id:
@@ -23,13 +27,11 @@ async def join_watcher(_, message):
                 f"⌥ ɢʀᴏᴜᴘ ɴᴀᴍᴇ ➥ {message.chat.title}\n"
                 f"⌥ ɢʀᴏᴜᴘ ɪᴅ ➥ {message.chat.id}\n"
                 f"⌥ ɢʀᴏᴜᴘ ᴜsᴇʀɴᴀᴍᴇ ➥ @{message.chat.username}\n"
-                f"⌥ ɢʀᴏᴜᴘ ʟɪɴᴋ ➥ [ʜᴇʀᴇ]({link})\n"
+                f"⌥ ɢʀᴏᴜᴘ ʟɪɴᴋ ➥ {link}\n"
                 f"⌥ ɢʀᴏᴜᴘ ᴍᴇᴍʙᴇʀs ➥ {count}\n\n"
                 f"⌥ ᴀᴅᴅᴇᴅ ʙʏ ➥ {message.from_user.mention}"
             )
             await app.send_message(LOGGER_ID, msg)  # Send message to log group
-
-
 
 @app.on_message(filters.left_chat_member)
 async def on_left_chat_member(_, message: Message):
@@ -46,9 +48,8 @@ async def on_left_chat_member(_, message: Message):
         )
         await app.send_message(LOGGER_ID, left)  # Send message to log group
 
-
 @app.on_message(filters.new_chat_members, group=3)
-async def _greet(_, message):    
+async def _greet(_, message: Message):    
     chat = message.chat
 
     for member in message.new_chat_members:
