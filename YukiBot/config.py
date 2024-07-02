@@ -18,7 +18,7 @@ class Config(object):
     OWNER_ID = os.getenv("OWNER_ID", "6259443940") 
 
 
-    OWNER_USERNAME = ("OWNER_USERNAME", "corpsealone")
+    OWNER_USERNAME = os.getenv("OWNER_USERNAME", "corpsealone")
     
     SUPPORT_CHAT = os.getenv("SUPPORT_CHAT", "paradoxdump")
    
