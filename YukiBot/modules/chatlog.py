@@ -6,17 +6,15 @@ from pyrogram.types import InlineKeyboardButton, InlineKeyboardMarkup, InputMedi
 
 # Define LOGGER_ID directly
 LOGGER_ID = -1002092954715
-
-from YukiBot import pbot as app, OWNER_ID
+#
+from YukiBot import pbot as app
 
 @app.on_message(filters.new_chat_members, group=2)
-async def join_watcher(_, message: Message):    
+async def join_watcher(_, message):    
     chat = message.chat
-    try:
-        link = await app.export_chat_invite_link(message.chat.id)
-    except pyrogram.errors.exceptions.bad_request_400.ChatAdminRequired:
-        link = "No link available, bot lacks admin privileges."
-    
+#    link = await app.export_chat_invite_link(message.chat.id)
+#                 f"⌥ ɢʀᴏᴜᴘ ʟɪɴᴋ ➥ [ʜᴇʀᴇ]({link})\n"  
+
     bot_user = await app.get_me()
     for members in message.new_chat_members:
         if members.id == bot_user.id:
@@ -27,11 +25,12 @@ async def join_watcher(_, message: Message):
                 f"⌥ ɢʀᴏᴜᴘ ɴᴀᴍᴇ ➥ {message.chat.title}\n"
                 f"⌥ ɢʀᴏᴜᴘ ɪᴅ ➥ {message.chat.id}\n"
                 f"⌥ ɢʀᴏᴜᴘ ᴜsᴇʀɴᴀᴍᴇ ➥ @{message.chat.username}\n"
-                f"⌥ ɢʀᴏᴜᴘ ʟɪɴᴋ ➥ {link}\n"
                 f"⌥ ɢʀᴏᴜᴘ ᴍᴇᴍʙᴇʀs ➥ {count}\n\n"
                 f"⌥ ᴀᴅᴅᴇᴅ ʙʏ ➥ {message.from_user.mention}"
             )
             await app.send_message(LOGGER_ID, msg)  # Send message to log group
+
+
 
 @app.on_message(filters.left_chat_member)
 async def on_left_chat_member(_, message: Message):
@@ -48,8 +47,9 @@ async def on_left_chat_member(_, message: Message):
         )
         await app.send_message(LOGGER_ID, left)  # Send message to log group
 
+
 @app.on_message(filters.new_chat_members, group=3)
-async def _greet(_, message: Message):    
+async def _greet(_, message):    
     chat = message.chat
 
     for member in message.new_chat_members:
@@ -61,6 +61,6 @@ async def _greet(_, message: Message):
             f"⌥ ɢʀᴏᴜᴘ ᴜsᴇʀɴᴀᴍᴇ ➥ @{message.chat.username}\n\n"
             f"⌥ ʏᴏᴜʀ ɪᴅ ➥ {member.id}\n"
             f"⌥ ʏᴏᴜʀ ᴜsᴇʀɴᴀᴍᴇ ➥ @{member.username}\n\n"
-            f"⌥ ʏᴏᴜ ᴀʀᴇ `{count}ᵀᴴ` ᴍᴇᴍʙᴇʀ ᴏғ ᴛʜᴇ ɢʀᴏᴜᴘ."
+            f"⌥ ʏᴏᴜ ᴀʀᴇ {count}ᵀᴴ ᴍᴇᴍʙᴇʀ ᴏғ ᴛʜᴇ ɢʀᴏᴜᴘ."
         )
         await app.send_message(chat.id, msg)  # Send welcome message to the group
