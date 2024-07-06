@@ -47,7 +47,14 @@ async def restart(client, m: Message):
     await asyncio.sleep(0.2)
     await m.reply_photo(
         random.choice(MISHI),
-        caption=f"""** ɪ ᴀᴍ [{BOT_n❍ **ᴘʏʀᴏɢʀᴀᴍ ➛** {pver}\NAME}](f"t.me/{BOT_USERNAME}") **\n\n❍ **ʟɪʙʀᴀʀʏ ➛** {lver}\n❍ **ᴛᴇʟᴇᴛʜᴏɴ ➛** {tver}\n❍ **ᴘʏᴛʜᴏɴ ➛** {pyver()}\n\n❍ **ᴍᴀᴅᴇ ʙʏ ➛** [ᴘᴀʀᴀᴅᴏx] tg:/user?id={OWNER_ID})""",
+        caption = (
+    f"** ɪ ᴀᴍ [{BOT_NAME}](https://t.me/{BOT_USERNAME}) **\n\n"
+    f"❍ **ᴘʏʀᴏɢʀᴀᴍ ➛** {pver}\n"
+    f"❍ **ʟɪʙʀᴀʀʏ ➛** {lver}\n"
+    f"❍ **ᴛᴇʟᴇᴛʜᴏɴ ➛** {tver}\n"
+    f"❍ **ᴘʏᴛʜᴏɴ ➛** {pyver()}\n\n"
+    f"❍ **ᴍᴀᴅᴇ ʙʏ ➛** [ᴘᴀʀᴀᴅᴏx](tg://user?id={OWNER_ID})"
+),
         reply_markup=InlineKeyboardMarkup(
             [
                 [
