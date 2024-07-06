@@ -20,8 +20,7 @@ MISHI = [
 
 Yuki = [
     [
-        InlineKeyboardButton(
-                        "ᴏᴡɴᴇʀ",user_id=OWNER_ID),
+        InlineKeyboardButton("ᴏᴡɴᴇʀ", user_id=OWNER_ID),
         InlineKeyboardButton(text="ꜱᴜᴘᴘᴏʀᴛ", url=f"https://t.me/{SUPPORT_CHAT}"),
     ],
     [
@@ -29,8 +28,9 @@ Yuki = [
             text="ᴀᴅᴅ ᴍᴇ ʜᴜᴍᴀɴ",
             url=f"https://t.me/{BOT_USERNAME}?startgroup=true",
         ),
-    ],
+    ]
 ]
+
 
 @pbot.on_message(filters.command("alive"))
 async def restart(client, m: Message):
