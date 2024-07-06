@@ -18,14 +18,14 @@ MISHI = [
     "https://telegra.ph/file/56c9da084a528eac54142.jpg",
 ]
 
-Yuki = [
-        InlineKeyboardButton(text="ᴜᴘᴅᴀᴛᴇ", url=f"https://t.me/{SUPPORT_CHAT}"),
-        InlineKeyboardButton(text="ꜱᴜᴘᴘᴏʀᴛ", url=f"https://t.me/{SUPPORT_CHAT}"),
-        InlineKeyboardButton(
-            text="ᴀᴅᴅ ᴍᴇ ʜᴜᴍᴀɴ",
-            url=f"https://t.me/{BOT_USERNAME}?startgroup=true",
-        ),
-]
+#Yuki = [
+#        InlineKeyboardButton(text="ᴜᴘᴅᴀᴛᴇ", url=f"https://t.me/{SUPPORT_CHAT}"),
+#        InlineKeyboardButton(text="ꜱᴜᴘᴘᴏʀᴛ", url=f"https://t.me/{SUPPORT_CHAT}"),
+#        InlineKeyboardButton(
+#            text="ᴀᴅᴅ ᴍᴇ ʜᴜᴍᴀɴ",
+#            url=f"https://t.me/{BOT_USERNAME}?startgroup=true",
+#        ),
+#]
 
 @pbot.on_message(filters.command("alive"))
 async def restart(client, m: Message):
@@ -47,8 +47,20 @@ async def restart(client, m: Message):
     await asyncio.sleep(0.2)
     await m.reply_photo(
         random.choice(MISHI),
-        caption=f"""** ɪ ᴀᴍ [{BOT_NAME}](f"t.me/{BOT_USERNAME}") **\n\n❍ **ʟɪʙʀᴀʀʏ ➛** {lver}\n❍ **ᴛᴇʟᴇᴛʜᴏɴ ➛** {tver}\n❍ **ᴘʏʀᴏɢʀᴀᴍ ➛** {pver}\n❍ **ᴘʏᴛʜᴏɴ ➛** {pyver()}\n\n❍ **ᴍᴀᴅᴇ ʙʏ ➛** [ᴘᴀʀᴀᴅᴏx] tg:/user?id={OWNER_ID})""",
-        reply_markup=InlineKeyboardMarkup(Yuki),
+        caption=f"""** ɪ ᴀᴍ [{BOT_n❍ **ᴘʏʀᴏɢʀᴀᴍ ➛** {pver}\NAME}](f"t.me/{BOT_USERNAME}") **\n\n❍ **ʟɪʙʀᴀʀʏ ➛** {lver}\n❍ **ᴛᴇʟᴇᴛʜᴏɴ ➛** {tver}\n❍ **ᴘʏᴛʜᴏɴ ➛** {pyver()}\n\n❍ **ᴍᴀᴅᴇ ʙʏ ➛** [ᴘᴀʀᴀᴅᴏx] tg:/user?id={OWNER_ID})""",
+        reply_markup=InlineKeyboardMarkup(
+            [
+                [
+                    InlineKeyboardButton(
+                        "ᴏᴡɴᴇʀ",user_id=OWNER_ID
+                    ),
+                    InlineKeyboardButton(
+                        "ꜱᴜᴘᴘᴏʀᴛ",
+                          url=f"https://t.me/{SUPPORT_CHAT}"
+                    ),
+                ]
+            ]
+        ),
     )
 
 @pbot.on_message(filters.regex(r"(\d+)?\s*shoonziee\b", flags=re.IGNORECASE))
