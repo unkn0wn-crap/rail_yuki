@@ -19,16 +19,12 @@ MISHI = [
 ]
 
 Yuki = [
-    [
         InlineKeyboardButton(text="ᴜᴘᴅᴀᴛᴇ", url=f"https://t.me/{SUPPORT_CHAT}"),
         InlineKeyboardButton(text="ꜱᴜᴘᴘᴏʀᴛ", url=f"https://t.me/{SUPPORT_CHAT}"),
-    ],
-    [
         InlineKeyboardButton(
             text="ᴀᴅᴅ ᴍᴇ ʜᴜᴍᴀɴ",
             url=f"https://t.me/{BOT_USERNAME}?startgroup=true",
         ),
-    ],
 ]
 
 @pbot.on_message(filters.command("alive"))
