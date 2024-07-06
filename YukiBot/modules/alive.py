@@ -2,7 +2,7 @@ import random
 import asyncio
 from platform import python_version as pyver
 import re
-#
+
 from pyrogram import __version__ as pver
 from pyrogram import filters
 from pyrogram.types import InlineKeyboardButton, InlineKeyboardMarkup, Message
@@ -20,14 +20,15 @@ MISHI = [
 
 Yuki = [
     [
-                InlineKeyboardButton(text="ᴏᴡɴᴇʀ", url=f"https://t.me/{OWNER_ID}"), InlineKeyboardButton(text="ꜱᴜᴘᴘᴏʀᴛ", url=f"https://t.me/{SUPPORT_CHAT}"),
+        InlineKeyboardButton(text="ᴏᴡɴᴇʀ", url=f"https://t.me/{OWNER_ID}"),
+        InlineKeyboardButton(text="ꜱᴜᴘᴘᴏʀᴛ", url=f"https://t.me/{SUPPORT_CHAT}"),
     ],
     [
         InlineKeyboardButton(
             text="ᴀᴅᴅ ᴍᴇ ʜᴜᴍᴀɴ",
             url=f"https://t.me/{BOT_USERNAME}?startgroup=true",
         ),
-    ]
+    ],
 ]
 
 
