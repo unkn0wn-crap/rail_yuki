@@ -20,6 +20,7 @@ from telegram.ext import (
 )
 from telegram.utils.helpers import mention_html
 from typing import Optional
+from MukeshAPI import api
 
 import YukiBot.modules.sql.chatbot_sql as sql
 from YukiBot import BOT_ID, BOT_NAME, BOT_USERNAME, dispatcher
@@ -28,48 +29,70 @@ from YukiBot.modules.log_channel import gloggable
 
 @user_admin_no_reply
 @gloggable
-def mukeshrm(update: Update, context: CallbackContext) -> str:
+def yukirm(update: Update, context: CallbackContext) -> str:
     query: Optional[CallbackQuery] = update.callback_query
     user: Optional[User] = update.effective_user
     match = re.match(r"rm_chat\((.+?)\)", query.data)
     if match:
-        chat_id = match.group(1)
+        user_id = match.group(1)
         chat: Optional[Chat] = update.effective_chat
-        sql.rem_mukesh(chat_id)
-        update.effective_message.edit_text(
-            f"❍ <b>{html.escape(chat.title)}</b>\n"
-            f"❍ ᴀɪ ᴅɪꜱᴀʙʟᴇᴅ\n"
-            f"❍ <b>ᴀᴅᴍɪɴ ➛</b> {mention_html(user.id, html.escape(user.first_name))}\n",
-            parse_mode=ParseMode.HTML
-        )
+        is_yuki = sql.set_yuki(chat.id)
+        if is_yuki:
+            is_yuki = sql.set_yuki(user_id)
+            return (
+                f"<b>{html.escape(chat.title)}:</b>\n"
+                f"ᴀɪ ᴅɪꜱᴀʙʟᴇᴅ\n"
+                f"<b>ᴀᴅᴍɪɴ :</b> {mention_html(user.id, html.escape(user.first_name))}\n"
+            )
+        else:
+            update.effective_message.edit_text(
+                "{} ᴄʜᴀᴛʙᴏᴛ ᴅɪsᴀʙʟᴇᴅ ʙʏ {}.".format(
+                    dispatcher.bot.first_name, mention_html(user.id, user.first_name)
+                ),
+                parse_mode=ParseMode.HTML,
+            )
+
+    return ""
+
 
 @user_admin_no_reply
 @gloggable
-def mukeshadd(update: Update, context: CallbackContext) -> str:
+def yukiadd(update: Update, context: CallbackContext) -> str:
     query: Optional[CallbackQuery] = update.callback_query
     user: Optional[User] = update.effective_user
     match = re.match(r"add_chat\((.+?)\)", query.data)
     if match:
-        chat_id = match.group(1)
+        user_id = match.group(1)
         chat: Optional[Chat] = update.effective_chat
-        sql.set_mukesh(chat_id)
-        update.effective_message.edit_text(
-            f"❍ <b>{html.escape(chat.title)}</b>\n"
-            f"❍ ᴀɪ ᴇɴᴀʙʟᴇᴅ\n"
-            f"❍ <b>ᴀᴅᴍɪɴ ➛</b> {mention_html(user.id, html.escape(user.first_name))}\n",
-            parse_mode=ParseMode.HTML
-        )
+        is_yuki = sql.rem_yuki(chat.id)
+        if is_yuki:
+            is_yuki = sql.rem_yuki(user_id)
+            return (
+                f"<b>{html.escape(chat.title)}:</b>\n"
+                f"ᴀɪ ᴇɴᴀʙʟᴇ\n"
+                f"<b>ᴀᴅᴍɪɴ :</b> {mention_html(user.id, html.escape(user.first_name))}\n"
+            )
+        else:
+            update.effective_message.edit_text(
+                "{} ᴄʜᴀᴛʙᴏᴛ ᴇɴᴀʙʟᴇᴅ ʙʏ {}.".format(
+                    dispatcher.bot.first_name, mention_html(user.id, user.first_name)
+                ),
+                parse_mode=ParseMode.HTML,
+            )
+
+    return ""
+
 
 @user_admin
 @gloggable
-def mukesh(update: Update, context: CallbackContext):
+def yuki(update: Update, context: CallbackContext):
     message = update.effective_message
-    msg = "❍ ᴄʜᴏᴏsᴇ ᴀɴ ᴏᴩᴛɪᴏɴ ᴛᴏ ᴇɴᴀʙʟᴇ/ᴅɪsᴀʙʟᴇ ᴄʜᴀᴛʙᴏᴛ"
+    msg = "• ᴄʜᴏᴏsᴇ ᴀɴ ᴏᴩᴛɪᴏɴ ᴛᴏ ᴇɴᴀʙʟᴇ/ᴅɪsᴀʙʟᴇ ᴄʜᴀᴛʙᴏᴛ"
     keyboard = InlineKeyboardMarkup(
         [
             [
-                InlineKeyboardButton(text="ᴇɴᴀʙʟᴇ", callback_data=f"add_chat({message.chat_id})"),
-                InlineKeyboardButton(text="ᴅɪsᴀʙʟᴇ", callback_data=f"rm_chat({message.chat_id})"),
+                InlineKeyboardButton(text="ᴇɴᴀʙʟᴇ", callback_data="add_chat({})"),
+                InlineKeyboardButton(text="ᴅɪsᴀʙʟᴇ", callback_data="rm_chat({})"),
             ],
         ]
     )
@@ -79,9 +102,10 @@ def mukesh(update: Update, context: CallbackContext):
         parse_mode=ParseMode.HTML,
     )
 
-def mukesh_message(context: CallbackContext, message):
+
+def yuki_message(context: CallbackContext, message):
     reply_message = message.reply_to_message
-    if message.text.lower() == "mukesh":
+    if message.text.lower() == "yuki":
         return True
     elif BOT_USERNAME in message.text.upper():
         return True
@@ -91,27 +115,31 @@ def mukesh_message(context: CallbackContext, message):
     else:
         return False
 
+
 def chatbot(update: Update, context: CallbackContext):
     message = update.effective_message
     chat_id = update.effective_chat.id
     bot = context.bot
-    if sql.is_mukesh(chat_id):
+    is_yuki = sql.is_yuki(chat_id)
+    if is_yuki:
         return
 
     if message.text and not message.document:
-        if not mukesh_message(context, message):
+        if not yuki_message(context, message):
             return
         bot.send_chat_action(chat_id, action="typing")
-        url = f"https://mukesh-api.vercel.app/chatbot/{message.text}"
-        try:
-            response = requests.get(url).json()["results"]
-            message.reply_text(response)
-        except Exception as e:
-            message.reply_text(f"Error: {e}")
+        url=api.chatgpt(message.text,mode="gf")["results"]
+        message.reply_text(url)
 
-CHATBOTK_HANDLER = CommandHandler("chatbot", mukesh, run_async=True)
-ADD_CHAT_HANDLER = CallbackQueryHandler(mukeshadd, pattern=r"add_chat\(.+\)", run_async=True)
-RM_CHAT_HANDLER = CallbackQueryHandler(mukeshrm, pattern=r"rm_chat\(.+\)", run_async=True)
+
+
+
+
+
+
+CHATBOTK_HANDLER = CommandHandler("chatbot", yuki, run_async=True)
+ADD_CHAT_HANDLER = CallbackQueryHandler(yukiadd, pattern=r"add_chat", run_async=True)
+RM_CHAT_HANDLER = CallbackQueryHandler(yukirm, pattern=r"rm_chat", run_async=True)
 CHATBOT_HANDLER = MessageHandler(
     Filters.text
     & (~Filters.regex(r"^#[^\s]+") & ~Filters.regex(r"^!") & ~Filters.regex(r"^\/")),
@@ -123,11 +151,6 @@ dispatcher.add_handler(ADD_CHAT_HANDLER)
 dispatcher.add_handler(CHATBOTK_HANDLER)
 dispatcher.add_handler(RM_CHAT_HANDLER)
 dispatcher.add_handler(CHATBOT_HANDLER)
-
-__mod_name__ = "ᴄʜᴀᴛ-ʙᴏᴛ"
-__help__ = """
- ❍ /chatbot ➛ ᴀɪ ᴄʜᴀᴛʙᴏᴛ [ᴇɴᴀʙʟᴇ/ᴅɪsᴀʙʟᴇ]
- """
 
 __handlers__ = [
     ADD_CHAT_HANDLER,
