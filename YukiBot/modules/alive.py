@@ -20,7 +20,7 @@ MISHI = [
 
 Yuki = [
     [
-        InlineKeyboardButton(text="ᴏᴡɴᴇʀ", url=f"https://t.me/corpsealone"),
+        InlineKeyboardButton(text="GC", url=f"https://t.me/{SUPPORT_CHAT}"),
      InlineKeyboardButton(text="ꜱᴜᴘᴘᴏʀᴛ", url=f"https://t.me/{SUPPORT_CHAT}"),
     ],
     [
