@@ -1,0 +1,8 @@
+[service]
+name = "yuki_bot"
+start = "python3 -m YukiBot"
+
+[deploy]
+services = [
+  { name = "worker" }
+]
