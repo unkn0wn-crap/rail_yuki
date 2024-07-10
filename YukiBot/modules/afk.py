@@ -11,6 +11,10 @@ from pyrogram.types import InlineKeyboardButton, InlineKeyboardMarkup
 
 
 POLICE = [
+"https://graph.org/file/109a941700ce02944afc6.jpg",
+"https://graph.org/file/dd197a3fad2715816528a.jpg",
+"https://graph.org/file/273c4e8811f5249135ae7.jpg",
+"https://graph.org/file/84486beb0429c04806f6c.jpg",
 "https://graph.org/file/609b50e4a4aa03c708247.jpg",
 "https://graph.org/file/6b0a1052c7b64b403a22c.jpg",
 "https://graph.org/file/7ee808520d792c083cdeb.jpg",
