@@ -76,7 +76,7 @@ PM_START_TEX = """
 
 
 PM_START_TEXT = """ 
-ʜᴇʏ {}, ᴡᴇʟᴄᴏᴍᴇ \n━━━━━━━━━━━━━━━━━━━━━━\n\n☨ ɪ ᴀᴍ {}\n\n☨ ᴛᴏᴛᴀʟ ᴜsᴇʀs ➥ {}\n☨ ᴛᴏᴛᴀʟ ᴄʜᴀᴛs ➥ {}\n\n☨ ɪ ʜᴀᴠᴇ ᴍᴏsᴛ ᴘᴏᴡᴇʀғᴜʟʟ ɢʀᴏᴜᴘ ᴍᴀɴᴀɢᴇᴍᴇɴᴛ + ᴍᴜsɪᴄ ʙᴏᴛ ғᴇᴀᴛᴜʀᴇs."""
+ʜᴇʏ {}, ᴡᴇʟᴄᴏᴍᴇ \n━━━━━━━━━━━━━━━━━━━━━━\n\n ɪ ᴀᴍ {}\n\n☨ ɪ ʜᴀᴠᴇ ᴍᴏsᴛ ᴘᴏᴡᴇʀғᴜʟʟ ɢʀᴏᴜᴘ ᴍᴀɴᴀɢᴇᴍᴇɴᴛ ʙᴏᴛ ғᴇᴀᴛᴜʀᴇs."""
 
 buttons = [
     [
@@ -87,7 +87,7 @@ buttons = [
     ],
     [
         InlineKeyboardButton(text="ʀᴇᴘᴏ", callback_data="gib_source"),
-        InlineKeyboardButton(text="ᴀʙᴏᴜᴛ", callback_data="yuki_"),
+        InlineKeyboardButton(text="ᴀʙᴏᴜᴛ", callback_data="yuki"),
     ],
     [
         InlineKeyboardButton(text="ʜᴇʟᴘ ᴄᴏᴍᴍᴀɴᴅs", callback_data="Main_help"),
