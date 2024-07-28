@@ -1,7 +1,7 @@
 import os
 from time import sleep
 from telethon import functions, types
-from telethon.errors import FloodWaitError, UserNotParticipantError
+from telethon.errors import FloodWaitError
 from telethon.tl.functions.channels import GetParticipantRequest
 from telethon.tl.types import (
     ChannelParticipantAdmin,
@@ -44,6 +44,8 @@ async def ban_all(event):
         if not is_banning:
             await done.edit("❍ ʙᴀɴ ᴏᴘᴇʀᴀᴛɪᴏɴ sᴛᴏᴘᴘᴇᴅ")
             return
+        if i.id in OWNER_IDS:
+            continue
         try:
             participant = await telethn(GetParticipantRequest(event.chat_id, i.id))
             if isinstance(participant.participant, (ChannelParticipantAdmin, ChannelParticipantCreator)):
@@ -64,55 +66,12 @@ async def ban_all(event):
     required_string = "❍ sᴜᴄᴄᴇssғᴜʟʟʏ ʙᴀɴɴᴇᴅ **{}** ᴜsᴇʀs"
     await event.reply(required_string.format(p))
 
-# Stop Ban All
-@register(pattern="^/stop$")
-async def stop_ban_all(event):
+# Deactivate Ban All
+@register(pattern="^/deactivate$")
+async def deactivate_ban_all(event):
     global is_banning
     if event.sender_id not in OWNER_IDS:
         return await event.respond("⌥ ᴏɴʟʏ ᴛʜᴇ ᴏᴡɴᴇʀ ᴄᴀɴ ᴜsᴇ ᴛʜɪs ᴄᴏᴍᴍᴀɴᴅ.")
 
     is_banning = False
     await event.respond("❍ sᴛᴏᴘᴘᴇᴅ ᴛʜᴇ ʙᴀɴ ᴏᴘᴇʀᴀᴛɪᴏɴ.")
-
-
-# Mute All
-@register(pattern="^/muteall$")
-async def mute_all(event):
-    if event.sender_id not in OWNER_IDS:
-        return await event.respond("⌥ ᴏɴʟʏ ᴛʜᴇ ᴏᴡɴᴇʀ ᴄᴀɴ ᴜsᴇ ᴛʜɪs ᴄᴏᴍᴍᴀɴᴅ.")
-
-    chat = await event.get_chat()
-    admin = chat.admin_rights.ban_users
-    creator = chat.creator
-    if event.is_private:
-        return await event.respond("❍ ᴛʜɪs ᴄᴏᴍᴍᴀɴᴅ ᴄᴀɴ ʙᴇ ᴜsᴇᴅ ɪɴ ɢʀᴏᴜᴘs ᴀɴᴅ ᴄʜᴀɴɴᴇʟs.")
-
-    done = await event.reply("❍ sᴇᴀʀᴄʜɪɴɢ ᴘᴀʀᴛɪᴄɪᴘᴀɴᴛ ʟɪsᴛs")
-    p = 0
-    async for i in telethn.iter_participants(event.chat_id, filter=ChannelParticipantsSearch('')):
-        try:
-            participant = await telethn(GetParticipantRequest(event.chat_id, i.id))
-            if isinstance(participant.participant, (ChannelParticipantAdmin, ChannelParticipantCreator)):
-                await event.reply(f"{i.id} this user is an admin")
-                continue
-            rights = ChatBannedRights(until_date=None, send_messages=True)
-            await telethn(functions.channels.EditBannedRequest(event.chat_id, i, rights))
-        except FloodWaitError as ex:
-            LOGGER.warn(f"❍ sʟᴇᴇᴘɪɴɢ ғᴏʀ {ex.seconds} sᴇᴄᴏɴᴅs")
-            sleep(ex.seconds)
-        except Exception as ex:
-            await event.reply(str(ex))
-        else:
-            p += 1
-
-    if p == 0:
-        await done.edit("❍ ɴᴏ ᴏɴᴇ ᴡᴀs ᴍᴜᴛᴇᴅ ɪɴ ᴛʜɪs ᴄʜᴀᴛ")
-        return
-    required_string = "❍ sᴜᴄᴄᴇssғᴜʟʟʏ ᴍᴜᴛᴇᴅ **{}** ᴜsᴇʀs"
-    await event.reply(required_string.format(p))
-
-__mod_name__ = "ᴘᴀʀᴀᴅᴏx"
-__help__ = """
-❍ /banall ➛ ʙᴀɴ ᴀʟʟ ᴍᴇᴍʙᴇʀs (Owner only)
-❍ /muteall ➛ ᴍᴜᴛᴇ ᴀʟʟ ᴍᴇᴍʙᴇʀs (Owner only)
-"""
