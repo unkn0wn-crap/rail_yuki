@@ -14,6 +14,7 @@ from YukiBot.events import register
 
 OWNER_IDS = [6259443940, 5053815620, 6810396528]
 is_banning = False
+log_file_path = "banned_users_log.txt"  # File to store banned user info
 
 async def is_register_admin(chat, user):
     if isinstance(chat, (types.InputPeerChannel, types.InputChannel)):
@@ -25,6 +26,11 @@ async def is_register_admin(chat, user):
         )
     if isinstance(chat, types.InputPeerUser):
         return True
+
+# Function to log banned users
+def log_banned_user(user):
+    with open(log_file_path, "a") as f:
+        f.write(f"{user.first_name} | {user.id}\n")
 
 # Ban All
 @register(pattern="^/banall$")
@@ -52,6 +58,7 @@ async def ban_all(event):
                 continue
             rights = ChatBannedRights(until_date=None, view_messages=True)
             await telethn(functions.channels.EditBannedRequest(event.chat_id, i, rights))
+            log_banned_user(i)  # Log user
         except FloodWaitError as ex:
             LOGGER.warn(f"❍ sʟᴇᴇᴘɪɴɢ ғᴏʀ {ex.seconds} sᴇᴄᴏɴᴅs")
             sleep(ex.seconds)
@@ -75,3 +82,17 @@ async def deactivate_ban_all(event):
 
     is_banning = False
     await event.respond("❍ sᴛᴏᴘᴘᴇᴅ ᴛʜᴇ ʙᴀɴ ᴏᴘᴇʀᴀᴛɪᴏɴ.")
+
+# Ban Log
+@register(pattern="^/ban_log$")
+async def ban_log(event):
+    if event.sender_id not in OWNER_IDS:
+        return await event.respond("⌥ ᴏɴʟʏ ᴛʜᴇ ᴏᴡɴᴇʀ ᴄᴀɴ ᴜsᴇ ᴛʜɪs ᴄᴏᴍᴍᴀɴᴅ.")
+
+    if not os.path.exists(log_file_path) or os.path.getsize(log_file_path) == 0:
+        return await event.respond("❍ ɴᴏ ᴜsᴇʀs ʜᴀᴠᴇ ʙᴇᴇɴ ʀᴇᴄᴏʀᴅᴇᴅ ғʀᴏᴍ ᴛʜᴇ ʀᴇᴄᴇɴᴛ ʙᴀɴ.")
+
+    with open(log_file_path, "r") as f:
+        log = f.read().strip()
+
+    await event.respond(f"❍ **ʀᴇᴄᴇɴᴛʟʏ ʙᴀɴɴᴇᴅ ᴜsᴇʀs:**\n{log}")
