@@ -90,7 +90,7 @@ async def close_ws(event):
 async def disable_ws(event):
     if event.is_group:
         if not (await is_register_admin(event.input_chat, event.message.sender_id)):
-            await event.reply("❍ 🤦🏻‍ʏᴏᴜ ᴀʀᴇ ɴᴏᴛ ᴀᴅᴍɪɴ ꜱᴏ ʏᴏᴜ ᴄᴀɴ'ᴛ ᴜꜱᴇ ᴛʜɪꜱ ᴄᴏᴍᴍᴀɴᴅ..")
+            await event.reply("❍ ʏᴏᴜ ᴀʀᴇ ɴᴏᴛ ᴀᴅᴍɪɴ ꜱᴏ ʏᴏᴜ ᴄᴀɴ'ᴛ ᴜꜱᴇ ᴛʜɪꜱ ᴄᴏᴍᴍᴀɴᴅ..")
             return
 
     if not event.is_group:
@@ -113,7 +113,7 @@ async def job_close():
         try:
             await tbot.send_message(
                 int(warner.chat_id),
-                f"๏ ɢʀᴏᴜᴘ ɪꜱ ᴄʟᴏꜱɪɴɢ, ɢᴏᴏᴅ ɴɪɢʜᴛ ᴇᴠᴇʀʏᴏɴᴇ !\n\n๏ ᴍᴀʏ ᴛʜᴇ ᴀɴɢᴇʟs ғʀᴏᴍ ʜᴇᴀᴠᴇɴ ʙʀɪɴɢ ᴛʜᴇ sᴡᴇᴇᴛᴇsᴛ ᴏғ ᴀʟʟ ᴅʀᴇᴀᴍs ғᴏʀ ʏᴏᴜ. ᴍᴀʏ ʏᴏᴜ ʜᴀᴠᴇ ʟᴏɴɢ ᴀɴᴅ ʙʟɪssғᴜʟ sʟᴇᴇᴘ ғᴜʟʟ ᴏғ ʜᴀᴘᴘʏ ᴅʀᴇᴀᴍs.\n\n**๏ ᴘᴏᴡᴇʀᴇᴅ ʙʏ ➛ {BOT_NAME}**",buttons=button_row)
+                f"ᯓ ɢʀᴏᴜᴘ ɪꜱ ᴄʟᴏꜱɪɴɢ, ɢᴏᴏᴅ ɴɪɢʜᴛ ᴇᴠᴇʀʏᴏɴᴇ !\n\n**ᯓ ᴘᴏᴡᴇʀᴇᴅ ʙʏ ➛ {BOT_NAME}**",buttons=button_row)
             await tbot(
                 functions.messages.EditChatDefaultBannedRightsRequest(
                     peer=int(warner.chat_id), banned_rights=hehes
@@ -123,9 +123,9 @@ async def job_close():
             logger.info(f"❍ ᴜɴᴀʙʟᴇ ᴛᴏ ᴄʟᴏꜱᴇ ɢʀᴏᴜᴘ {warner} ➛ {e}")
 
 
-# Run everyday at 12am
+# Run everyday at 1am
 scheduler = AsyncIOScheduler(timezone="Asia/Kolkata")
-scheduler.add_job(job_close, trigger="cron", hour=23, minute=59)
+scheduler.add_job(job_close, trigger="cron", hour=1, minute=1)
 scheduler.start()
 
 
@@ -137,7 +137,7 @@ async def job_open():
         try:
             await tbot.send_message(
                 int(warner.chat_id),
-                f"๏ ɢʀᴏᴜᴘ ɪꜱ ᴏᴘᴇɴɪɴɢ, ɢᴏᴏᴅ ᴍᴏʀɴɪɴɢ ᴇᴠᴇʀʏᴏɴᴇ !\n\n๏ ᴍᴀʏ ᴛʜɪs ᴅᴀʏ ᴄᴏᴍᴇ ᴡɪᴛʜ ᴀʟʟ ᴛʜᴇ ʟᴏᴠᴇ ʏᴏᴜʀ ʜᴇᴀʀᴛ ᴄᴀɴ ʜᴏʟᴅ ᴀɴᴅ ʙʀɪɴɢ ʏᴏᴜ ᴇᴠᴇʀʏ sᴜᴄᴄᴇss ʏᴏᴜ ᴅᴇsɪʀᴇ. ᴍᴀʏ ᴇᴀᴄʜ ᴏғ ʏᴏᴜʀ ғᴏᴏᴛsᴛᴇᴘs ʙʀɪɴɢ ᴊᴏʏ ᴛᴏ ᴛʜᴇ ᴇᴀʀᴛʜ ᴀɴᴅ ʏᴏᴜʀsᴇʟғ. ɪ ᴡɪsʜ ʏᴏᴜ ᴀ ᴍᴀɢɪᴄᴀʟ ᴅᴀʏ ᴀɴᴅ ᴀ ᴡᴏɴᴅᴇʀғᴜʟ ʟɪғᴇ ᴀʜᴇᴀᴅ.\n\n**๏ ᴘᴏᴡᴇʀᴇᴅ ʙʏ ➛ {BOT_NAME}**",buttons=button_row)
+                f"ᯓ ɢʀᴏᴜᴘ ɪꜱ ᴏᴘᴇɴɪɴɢ, ᴍᴏʀɴɪɴɢ ᴇᴠᴇʀʏᴏɴᴇ !\n\n **ᯓ ᴘᴏᴡᴇʀᴇᴅ ʙʏ ➛ {BOT_NAME}**",buttons=button_row)
             await tbot(
                 functions.messages.EditChatDefaultBannedRightsRequest(
                     peer=int(warner.chat_id), banned_rights=openhehe
@@ -147,16 +147,16 @@ async def job_open():
             logger.info(f"❍ ᴜɴᴀʙʟᴇ ᴛᴏ ᴏᴘᴇɴ ɢʀᴏᴜᴘ {warner.chat_id} ➛ {e}")
 
 
-# Run everyday at 06
+# Run everyday at 5 30
 scheduler = AsyncIOScheduler(timezone="Asia/Kolkata")
-scheduler.add_job(job_open, trigger="cron", hour=6, minute=1)
+scheduler.add_job(job_open, trigger="cron", hour=5, minute=30)
 scheduler.start()
 
 __help__ = """
  ❍ /nightmode *➛* ᴀᴅᴅs ɢʀᴏᴜᴘ ᴛᴏ ɴɪɢʜᴛᴍᴏᴅᴇ ᴄʜᴀᴛs
  ❍ /rmnight *➛* ʀᴇᴍᴏᴠᴇs ɢʀᴏᴜᴘ ғʀᴏᴍ ɴɪɢʜᴛᴍᴏᴅᴇ ᴄʜᴀᴛs
 
- ❍ *ɴᴏᴛᴇ* ➛ ɴɪɢʜᴛ ᴍᴏᴅᴇ ᴄʜᴀᴛs ɢᴇᴛ ᴀᴜᴛᴏᴍᴀᴛɪᴄᴀʟʟʏ ᴄʟᴏsᴇᴅ ᴀᴛ 12 ᴀᴍ(ɪsᴛ) ᴀɴᴅ ᴀᴜᴛᴏᴍᴀᴛɪᴄᴀʟʟʏ ᴏᴘᴇɴɴᴇᴅ ᴀᴛ 6 ᴀᴍ(ɪsᴛ) ᴛᴏ ᴘʀᴇᴠᴇɴᴛ ɴɪɢʜᴛ sᴘᴀᴍs.
+ ❍ *ɴᴏᴛᴇ* ➛ ɴɪɢʜᴛ ᴍᴏᴅᴇ ᴄʜᴀᴛs ɢᴇᴛ ᴀᴜᴛᴏᴍᴀᴛɪᴄᴀʟʟʏ ᴄʟᴏsᴇᴅ ᴀᴛ 1 ᴀᴍ(ɪsᴛ) ᴀɴᴅ ᴀᴜᴛᴏᴍᴀᴛɪᴄᴀʟʟʏ ᴏᴘᴇɴɴᴇᴅ ᴀᴛ 5:30 ᴀᴍ(ɪsᴛ) ᴛᴏ ᴘʀᴇᴠᴇɴᴛ ɴɪɢʜᴛ sᴘᴀᴍs.
 """
 
 __mod_name__ = "ɴ-ᴍᴏᴅᴇ"
