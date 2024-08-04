@@ -38,7 +38,7 @@ class Config(object):
    
     DATABASE_URL = os.getenv("DATABASE_URL", "postgres://akzacbob:6OAabTPgO3mdS3Mx0Wlhb-Cswe3ibMPV@hansken.db.elephantsql.com/akzacbob")
 
-    CASH_API_KEY = os.getenv("CASH_API_KEY", "V48U2FLLKRHSVD4X")
+    CASH_API_KEY = os.getenv("CASH_API_KEY", "KMYJ7SJCG1MYX65X")
     
     TIME_API_KEY = os.getenv("TIME_API_KEY", "1CUBX1HXGNHW")
 
