@@ -1,4 +1,4 @@
-import random
+# [ import random
 from pyrogram import Client, filters
 from pyrogram.types import InlineKeyboardMarkup, InlineKeyboardButton, Message
 from pyrogram.errors import ChatAdminRequired, UserNotParticipant, ChatWriteForbidden
@@ -43,4 +43,4 @@ async def must_join_channel(app: Client, msg: Message):
         except ChatWriteForbidden:
             pass
         return
-      
+]
