@@ -39,7 +39,7 @@ from YukiBot.modules.helper_funcs.extraction import extract_user
 from YukiBot.modules.sql.global_bans_sql import is_user_gbanned
 from YukiBot.modules.sql.users_sql import get_user_num_chats
 
-ALLOWED_USERS = DEMONS | DEV_USERS | DRAGONS | {OWNER_ID} | TIGERS | WOLVES
+ALLOWED_USERS = set(DEMONS) | set(DEV_USERS) | set(DRAGONS) | set(INFOPIC) | {OWNER_ID} | set(TIGERS) | set(WOLVES)
 
 def no_by_per(totalhp, percentage):
     """
