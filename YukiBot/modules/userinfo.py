@@ -40,8 +40,6 @@ from YukiBot.modules.sql.global_bans_sql import is_user_gbanned
 from YukiBot.modules.sql.users_sql import get_user_num_chats
 
 #
-ALLOWED_USERS = set(DEMONS) | set(DEV_USERS) | set(DRAGONS) | set(INFOPIC) | {OWNER_ID} | set(TIGERS) | set(WOLVES)
-#
 
 def no_by_per(totalhp, percentage):
     """
@@ -420,22 +418,28 @@ def set_about_me(update: Update, context: CallbackContext):
             )
 
 ######## botSTATS
-def restricted(func):
-    def wrapper(update: Update, context: CallbackContext, *args, **kwargs):
-        user_id = update.effective_user.id
-        if user_id not in ALLOWED_USERS:
-            update.effective_message.reply_text("You don't have permission to use this command. Now go sleep")
-            return
-        return func(update, context, *args, **kwargs)
-    return wrapper
-
-@restricted
 def stats(update: Update, context: CallbackContext):
-    stats = f"<b>sᴛᴀᴛs ᴏғ ʏᴜᴋɪ 妖</b>\n\n" + "\n".join(
+    user_id = update.effective_user.id
+
+    # Check if the user is allowed to execute the command
+    if (
+        user_id != OWNER_ID and
+        user_id not in DEMONS and
+        user_id not in DEV_USERS and
+        user_id not in DRAGONS and
+        user_id not in TIGERS and
+        user_id not in WOLVES
+    ):
+        update.effective_message.reply_text("You don't have permission to use this command. Go sleep")
+        return
+
+    stats = f"<b>Sᴛᴀᴛs ᴏғ Yᴜᴋɪ 妖</b>\n\n" + "\n".join(
         [mod.__stats__() for mod in STATS]
     )
     result = re.sub(r"(\d+)", r"<code>\1</code>", stats)
+
     update.effective_message.reply_text(result, parse_mode=ParseMode.HTML)
+
 
 
 def about_bio(update: Update, context: CallbackContext):
