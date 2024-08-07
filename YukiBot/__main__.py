@@ -87,7 +87,7 @@ buttons = [
     ],
     [
         InlineKeyboardButton(text="ʀᴇᴘᴏ", callback_data="gib_source"),
-        InlineKeyboardButton(text="ᴀʙᴏᴜᴛ", callback_data="yuki"),
+        InlineKeyboardButton(text="ᴀʙᴏᴜᴛ", callback_data="yuki_about"),
     ],
     [
         InlineKeyboardButton(text="ʜᴇʟᴘ ᴄᴏᴍᴍᴀɴᴅs", callback_data="Main_help"),
@@ -1091,7 +1091,7 @@ def main():
                     [
                         InlineKeyboardButton(
                             text="ᴀᴅᴅ ᴍᴇ ʙᴀʙʏ",
-                            url="https://t.me/yuki_obot?startgroup=true"
+                            url="https://t.me/yukii_onna_bot?startgroup=true"
                             )
                        ]
                 ]
@@ -1157,7 +1157,7 @@ def main():
     dispatcher.add_handler(YukiBot_main_handler)
     dispatcher.add_error_handler(error_callback)
     dispatcher.add_handler(source_callback_handler)
-    LOGGER.info("Using long polling.")
+    LOGGER.info("Using long polling....")
     updater.start_polling(timeout=15, read_latency=4, drop_pending_updates=True)
 
     if len(argv) not in (1, 3, 4):
