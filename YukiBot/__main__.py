@@ -123,6 +123,10 @@ HELP_IMG = [
 "https://graph.org/file/7817b4a2c2e8191e0dcb5.jpg",
 ]
 
+YUKI_IMG = [
+"https://graph.org/file/7817b4a2c2e8191e0dcb5.jpg",
+]
+
 ALIVE_IMG = [
 "https://telegra.ph/file/b6619541396d150c572a8.jpg",
 "https://telegra.ph/file/56c9da084a528eac54142.jpg",
