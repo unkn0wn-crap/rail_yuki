@@ -81,7 +81,7 @@ PM_START_TEXT = """
 buttons = [
     [
         InlineKeyboardButton(
-            text=" 🄿🄰🅁🄰🄳🄾🅇 ", 
+            text="「ᴘʌʀʌᴅᴏx」", 
             url=f"https://t.me/{dispatcher.bot.username}?startgroup=true", 
         ),
     ],
@@ -118,19 +118,42 @@ STICKER = [
 HELP_STRINGS = f"""
 ❖ {BOT_NAME}  ᴄʟɪᴄᴋ ᴏɴ ᴛʜᴇ ʙᴜᴛᴛᴏɴ ʙᴇʟʟᴏᴡ ᴛᴏ ɢᴇᴛ ᴅᴇsᴄʀɪᴘᴛɪᴏɴ ᴀʙᴏᴜᴛ sᴘᴇᴄɪғɪᴄs ᴄᴏᴍᴍᴀɴᴅ."""
 
+
+HELP_IMG = [
+"https://graph.org/file/7817b4a2c2e8191e0dcb5.jpg",
+]
+
+YUKI_IMG = [
+"https://graph.org/file/7817b4a2c2e8191e0dcb5.jpg",
+]
+
 ABHI = [
 "https://telegra.ph/file/b6619541396d150c572a8.jpg",
-"https://telegra.ph/file/56c9da084a528eac54142.jpg",   
+"https://telegra.ph/file/56c9da084a528eac54142.jpg",
+"https://graph.org/file/48903560afb84f882d159.jpg",
+"https://graph.org/file/5d4a1cc5a8ae0d4f9fe8d.jpg",
+"https://graph.org/file/e2f50154a3ccfaaff275b.jpg",
+"https://graph.org/file/87aa0cd80229e67e40180.jpg",
+"https://graph.org/file/7817b4a2c2e8191e0dcb5.jpg",
+]
 
+
+STARTUP = [
+"https://graph.org/file/7b43aca498b9f263cbda3.mp4"
 ]
 
 NYKAA = [
 "https://telegra.ph/file/b6619541396d150c572a8.jpg",
-"https://telegra.ph/file/56c9da084a528eac54142.jpg",    
+"https://telegra.ph/file/56c9da084a528eac54142.jpg",
+"https://graph.org/file/48903560afb84f882d159.jpg",
+"https://graph.org/file/5d4a1cc5a8ae0d4f9fe8d.jpg",
+"https://graph.org/file/e2f50154a3ccfaaff275b.jpg",
+"https://graph.org/file/87aa0cd80229e67e40180.jpg",
+"https://graph.org/file/7817b4a2c2e8191e0dcb5.jpg",    
 ]
 
 
-DONATE_STRING = f"""ʜᴇʏ ʜᴜᴍᴀɴ, ʜᴀᴩᴩʏ ᴛᴏ ʜᴇᴀʀ ᴛʜᴀᴛ ʏᴏᴜ ᴡᴀɴɴᴀ ᴅᴏɴᴀᴛᴇ. ʏᴏᴜ ᴄᴀɴ ᴅɪʀᴇᴄᴛʟʏ ᴄᴏɴᴛᴀᴄᴛ ᴍʏ ᴅᴇᴠᴇʟᴏᴘᴇʀ @ɢʜᴏsᴛ_ᴋᴜɴ ғᴏʀ ᴅᴏɴᴀᴛɪɴɢ ᴏʀ ʏᴏᴜ ᴄᴀɴ ᴠɪsɪᴛ ᴍʏ sᴜᴩᴩᴏʀᴛ ᴄʜᴀᴛ @paradoxdump ᴀɴᴅ ᴀsᴋ ᴛʜᴇʀᴇ ᴀʙᴏᴜᴛ ᴅᴏɴᴀᴛɪᴏɴ"""
+DONATE_STRING = f"""ʜᴇʏ ʜᴜᴍᴀɴ, ʜᴀᴩᴩʏ ᴛᴏ ʜᴇᴀʀ ᴛʜᴀᴛ ʏᴏᴜ ᴡᴀɴɴᴀ ᴅᴏɴᴀᴛᴇ. ʏᴏᴜ ᴄᴀɴ ᴅɪʀᴇᴄᴛʟʏ ᴄᴏɴᴛᴀᴄᴛ ᴍʏ ᴅᴇᴠᴇʟᴏᴘᴇʀ @ghost_kun ғᴏʀ ᴅᴏɴᴀᴛɪɴɢ ᴏʀ ʏᴏᴜ ᴄᴀɴ ᴠɪsɪᴛ ᴍʏ sᴜᴩᴩᴏʀᴛ ᴄʜᴀᴛ @paradox_helpdesk ᴀɴᴅ ᴀsᴋ ᴛʜᴇʀᴇ ᴀʙᴏᴜᴛ ᴅᴏɴᴀᴛɪᴏɴ"""
 
 IMPORTED = {}
 MIGRATEABLE = []
@@ -249,7 +272,7 @@ def start(update: Update, context: CallbackContext):
             lol.edit_text("sʏɴᴄʜʀᴏɴɪᴢᴀᴛɪᴏɴ")
             lol.delete()
             
-            update.effective_message.reply_photo(random.choice(NYKAA),PM_START_TEXT.format(escape_markdown(first_name),BOT_NAME,sql.num_users(),sql.num_chats()),
+            update.effective_message.reply_photo(random.choice(STARTUP),PM_START_TEXT.format(escape_markdown(first_name),BOT_NAME,sql.num_users(),sql.num_chats()),
                 reply_markup=InlineKeyboardMarkup(buttons),
                 parse_mode=ParseMode.MARKDOWN,
                 timeout=60,
