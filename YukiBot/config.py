@@ -15,7 +15,7 @@ class Config(object):
    
     TOKEN = os.getenv("TOKEN", "7134066784:AAGVKa8zcfdteUF5jCyKRlSMG7mhlvEecqY")
   
-    OWNER_ID = os.getenv("OWNER_ID", "6810396528") 
+    OWNER_ID = os.getenv("OWNER_ID", "6259443940") 
 
 
     OWNER_USERNAME = os.getenv("OWNER_USERNAME", "corpsealone")
