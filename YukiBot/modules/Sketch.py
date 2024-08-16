@@ -44,7 +44,7 @@ def sketch(update: Update, context: CallbackContext):
             )
 
     except Exception as e:
-      message.reply_text(f'✦ ᴇʀʀᴏʀ , ʀᴇᴘᴏʀᴛ @paradoxdump ➥ {e}')
+      message.reply_text(f'✦ ᴇʀʀᴏʀ , ʀᴇᴘᴏʀᴛ @yukilogs ➥ {e}')
 
 
 
