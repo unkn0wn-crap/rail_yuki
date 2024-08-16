@@ -20,19 +20,19 @@ class Config(object):
 
     OWNER_USERNAME = os.getenv("OWNER_USERNAME", "corpsealone")
     
-    SUPPORT_CHAT = os.getenv("SUPPORT_CHAT", "paradoxdump")
+    SUPPORT_CHAT = os.getenv("SUPPORT_CHAT", "yukilogs")
    
     START_IMG = os.getenv("START_IMG", "https://telegra.ph/file/56c9da084a528eac54142.jpg")
 
-    JOIN_LOGGER = os.getenv("JOIN_LOGGER", "-1002092954715")
+    JOIN_LOGGER = os.getenv("JOIN_LOGGER", "-1002221570986")
    
-    EVENT_LOGS = os.getenv("EVENT_LOGS",  "-1002092954715")
+    EVENT_LOGS = os.getenv("EVENT_LOGS",  "-1002221570986")
   
-    ERROR_LOGS = os.getenv("ERROR_LOGS", "-1002092954715")
+    ERROR_LOGS = os.getenv("ERROR_LOGS", "-1002221570986")
 
     MONGO_DB_URI= os.getenv("MONGO_DB_URI", "mongodb+srv://knight_rider:GODGURU12345@knight.jm59gu9.mongodb.net/?retryWrites=true&w=majority")
    
-    LOG_CHANNEL = os.getenv("LOG_CHANNEL", "-1002092954715")
+    LOG_CHANNEL = os.getenv("LOG_CHANNEL", "-1002221570986")
    
     BOT_USERNAME = os.getenv("BOT_USERNAME" , "Yukii_Onna_bot")
    
@@ -44,7 +44,7 @@ class Config(object):
 
     SPAMWATCH_API = os.getenv("SPAMWATCH_API", "3624487efd8e4ca9c949f1ab99654ad1e4de854f41a14afd00f3ca82d808dc8c")
     
-    SPAMWATCH_SUPPORT_CHAT = os.getenv("SPAMWATCH_SUPPORT_CHAT", "paradoxdump")
+    SPAMWATCH_SUPPORT_CHAT = os.getenv("SPAMWATCH_SUPPORT_CHAT", "yukilogs")
     
     WALL_API = os.getenv("WALL_API", "2455acab48f3a935a8e703e54e26d121")
     
