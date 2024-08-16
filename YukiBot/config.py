@@ -61,7 +61,7 @@ class Config(object):
     # Optional fields
     
     BL_CHATS = []  # List of groups that you want blacklisted.
-    DRAGONS = []  # User id of sudo users
+    DRAGONS = [6331067820, 5053815620, 6693143450]  # User id of sudo users
     DEV_USERS = [6810396528]  # User id of dev users
     DEMONS = []  # User id of support users
     TIGERS = []  # User id of tiger users
