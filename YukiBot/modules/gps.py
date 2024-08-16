@@ -18,7 +18,7 @@ async def gps(bot, message):
     try:
         
         """
-        @paradoxdump
+        @yukilogs
         """
         geolocator = Nominatim(user_agent="yuki")
 #         zoom=[0-18]
@@ -61,7 +61,7 @@ async def distance(bot, message):
 
     try:
 
-        """ @paradoxdump
+        """ @yukilogs
         """
         distance=(great_circle(x,y).miles)
 
