@@ -10,7 +10,7 @@ from telegram.utils.helpers import mention_html
 from pyrogram import filters,enums
 from YukiBot import DRAGONS, dispatcher,OWNER_ID,pbot
 from YukiBot.modules.disable import DisableAbleCommandHandler
-from YukiBot.modules.helper_funcs.admin_rights import user_can_changeinfo
+from YukiBot.modules.helper_funcs.admin_rights import user_can_changeinfo, user_can_promote
 from YukiBot.modules.helper_funcs.alternate import send_message
 from YukiBot.modules.helper_funcs.chat_status import (
     ADMIN_CACHE,
