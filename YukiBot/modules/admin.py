@@ -1,5 +1,7 @@
 import html
 import os
+from telethon.tl import functions, types
+
 
 from telegram import ParseMode, Update, InlineKeyboardButton, InlineKeyboardMarkup
 from telegram.error import BadRequest
@@ -17,6 +19,7 @@ from YukiBot.modules.helper_funcs.chat_status import (
     can_promote,
     connection_status,
     user_admin,
+    can_promote_users,
 )
 from YukiBot.modules.helper_funcs.extraction import (
     extract_user,
@@ -28,6 +31,21 @@ from YukiBot.modules.log_channel import loggable
 PDOX = [6259443940, 6908541951, 7024859229, 6810396528]
 ####
 
+#########----func----###############
+async def can_promote_users(message):
+    result = await pbot(
+        functions.channels.GetParticipantRequest(
+            channel=message.chat_id,
+            user_id=message.sender_id,
+        )
+    )
+    p = result.participant
+    return isinstance(p, types.ChannelParticipantCreator) or (
+            isinstance(p, types.ChannelParticipantAdmin) and p.admin_rights.ban_users
+    )
+
+#########----func----################
+
 @bot_admin
 @user_admin
 def set_sticker(update: Update, context: CallbackContext):
@@ -37,26 +55,26 @@ def set_sticker(update: Update, context: CallbackContext):
 
     if user_can_changeinfo(chat, user, context.bot.id) is False:
         return msg.reply_text(
-            "๏ ʏᴏᴜ ᴅᴏɴ'ᴛ ʜᴀᴠᴇ ᴩᴇʀᴍɪssɪᴏɴs ᴛᴏ ᴄʜᴀɴɢᴇ ɢʀᴏᴜᴩ ɪɴғᴏ ʙᴀʙʏ !"
+            "↻ ʏᴏᴜ ᴅᴏɴ'ᴛ ʜᴀᴠᴇ ᴩᴇʀᴍɪssɪᴏɴs ᴛᴏ ᴄʜᴀɴɢᴇ ɢʀᴏᴜᴩ ɪɴғᴏ ʙᴀʙʏ !"
         )
 
     if msg.reply_to_message:
         if not msg.reply_to_message.sticker:
             return msg.reply_text(
-                "๏ ʀᴇᴩʟʏ ᴛᴏ ᴀ sᴛɪᴄᴋᴇʀ ᴛᴏ sᴇᴛ ɪᴛ ᴀs ɢʀᴏᴜᴩ sᴛɪᴄᴋᴇʀ ᴩᴀᴄᴋ !"
+                "↻ ʀᴇᴩʟʏ ᴛᴏ ᴀ sᴛɪᴄᴋᴇʀ ᴛᴏ sᴇᴛ ɪᴛ ᴀs ɢʀᴏᴜᴩ sᴛɪᴄᴋᴇʀ ᴩᴀᴄᴋ !"
             )
         stkr = msg.reply_to_message.sticker.set_name
         try:
             context.bot.set_chat_sticker_set(chat.id, stkr)
-            msg.reply_text(f"๏ sᴜᴄᴄᴇssғᴜʟʟʏ sᴇᴛ ɢʀᴏᴜᴩ sᴛɪᴄᴋᴇʀs ɪɴ {chat.title}!")
+            msg.reply_text(f"↻ sᴜᴄᴄᴇssғᴜʟʟʏ sᴇᴛ ɢʀᴏᴜᴩ sᴛɪᴄᴋᴇʀs ɪɴ {chat.title}!")
         except BadRequest as excp:
             if excp.message == "Participants_too_few":
                 return msg.reply_text(
-                    "๏ ʏᴏᴜʀ ɢʀᴏᴜᴩ ɴᴇᴇᴅs ᴍɪɴɪᴍᴜᴍ 100 ᴍᴇᴍʙᴇʀs ғᴏʀ sᴇᴛᴛɪɴɢ ᴀ sᴛɪᴄᴋᴇʀ ᴩᴀᴄᴋ ᴀs ɢʀᴏᴜᴩ sᴛɪᴄᴋᴇʀ ᴩᴀᴄᴋ !"
+                    "↻ ʏᴏᴜʀ ɢʀᴏᴜᴩ ɴᴇᴇᴅs ᴍɪɴɪᴍᴜᴍ 100 ᴍᴇᴍʙᴇʀs ғᴏʀ sᴇᴛᴛɪɴɢ ᴀ sᴛɪᴄᴋᴇʀ ᴩᴀᴄᴋ ᴀs ɢʀᴏᴜᴩ sᴛɪᴄᴋᴇʀ ᴩᴀᴄᴋ !"
                 )
             msg.reply_text(f"ᴇʀʀᴏʀ ! {excp.message}.")
     else:
-        msg.reply_text("๏ ʀᴇᴩʟʏ ᴛᴏ ᴀ sᴛɪᴄᴋᴇʀ ᴛᴏ sᴇᴛ ɪᴛ ᴀs ɢʀᴏᴜᴩ sᴛɪᴄᴋᴇʀ ᴩᴀᴄᴋ !")
+        msg.reply_text("↻ ʀᴇᴩʟʏ ᴛᴏ ᴀ sᴛɪᴄᴋᴇʀ ᴛᴏ sᴇᴛ ɪᴛ ᴀs ɢʀᴏᴜᴩ sᴛɪᴄᴋᴇʀ ᴩᴀᴄᴋ !")
 
 
 @bot_admin
@@ -67,7 +85,7 @@ def setchatpic(update: Update, context: CallbackContext):
     user = update.effective_user
 
     if user_can_changeinfo(chat, user, context.bot.id) is False:
-        msg.reply_text("๏ ʏᴏᴜ ᴅᴏɴ'ᴛ ʜᴀᴠᴇ ᴩᴇʀᴍɪssɪᴏɴs ᴛᴏ ᴄʜᴀɴɢᴇ ɢʀᴏᴜᴩ ɪɴғᴏ ʙᴀʙʏ !")
+        msg.reply_text("↻ ʏᴏᴜ ᴅᴏɴ'ᴛ ʜᴀᴠᴇ ᴩᴇʀᴍɪssɪᴏɴs ᴛᴏ ᴄʜᴀɴɢᴇ ɢʀᴏᴜᴩ ɪɴғᴏ ʙᴀʙʏ !")
         return
 
     if msg.reply_to_message:
@@ -76,15 +94,15 @@ def setchatpic(update: Update, context: CallbackContext):
         elif msg.reply_to_message.document:
             pic_id = msg.reply_to_message.document.file_id
         else:
-            msg.reply_text("๏ ʏᴏᴜ ᴄᴀɴ ᴏɴʟʏ sᴇᴛ ᴩʜᴏᴛᴏs ᴀs ɢʀᴏᴜᴩ ᴩғᴩ !")
+            msg.reply_text("↻ ʏᴏᴜ ᴄᴀɴ ᴏɴʟʏ sᴇᴛ ᴩʜᴏᴛᴏs ᴀs ɢʀᴏᴜᴩ ᴩғᴩ !")
             return
-        dlmsg = msg.reply_text("๏ ᴄʜᴀɴɢɪɴɢ ɢʀᴏᴜᴩ's ᴩʀᴏғɪʟᴇ ᴩɪᴄ...")
+        dlmsg = msg.reply_text("↻ ᴄʜᴀɴɢɪɴɢ ɢʀᴏᴜᴩ's ᴩʀᴏғɪʟᴇ ᴩɪᴄ...")
         tpic = context.bot.get_file(pic_id)
         tpic.download("gpic.png")
         try:
             with open("gpic.png", "rb") as chatp:
                 context.bot.set_chat_photo(int(chat.id), photo=chatp)
-                msg.reply_text("๏ sᴜᴄᴄᴇssғᴜʟʟʏ sᴇᴛ ɢʀᴏᴜᴩ ᴩʀᴏғɪʟᴇ ᴩɪᴄ !")
+                msg.reply_text("↻ sᴜᴄᴄᴇssғᴜʟʟʏ sᴇᴛ ɢʀᴏᴜᴩ ᴩʀᴏғɪʟᴇ ᴩɪᴄ !")
         except BadRequest as excp:
             msg.reply_text(f"ᴇʀʀᴏʀ ! {excp.message}")
         finally:
@@ -92,7 +110,7 @@ def setchatpic(update: Update, context: CallbackContext):
             if os.path.isfile("gpic.png"):
                 os.remove("gpic.png")
     else:
-        msg.reply_text("๏ ʀᴇᴩʟʏ ᴛᴏ ᴀ ᴩʜᴏᴛᴏ ᴏʀ ғɪʟᴇ ᴛᴏ sᴇᴛ ɪᴛ ᴀs ɢʀᴏᴜᴩ ᴩʀᴏғɪʟᴇ ᴩɪᴄ !")
+        msg.reply_text("↻ ʀᴇᴩʟʏ ᴛᴏ ᴀ ᴩʜᴏᴛᴏ ᴏʀ ғɪʟᴇ ᴛᴏ sᴇᴛ ɪᴛ ᴀs ɢʀᴏᴜᴩ ᴩʀᴏғɪʟᴇ ᴩɪᴄ !")
 
 
 @bot_admin
@@ -103,11 +121,11 @@ def rmchatpic(update: Update, context: CallbackContext):
     user = update.effective_user
 
     if user_can_changeinfo(chat, user, context.bot.id) is False:
-        msg.reply_text("๏ ʏᴏᴜ ᴅᴏɴ'ᴛ ʜᴀᴠᴇ ᴩᴇʀᴍɪssɪᴏɴs ᴛᴏ ᴄʜᴀɴɢᴇ ɢʀᴏᴜᴩ ɪɴғᴏ ʙᴀʙʏ !")
+        msg.reply_text("↻ ʏᴏᴜ ᴅᴏɴ'ᴛ ʜᴀᴠᴇ ᴩᴇʀᴍɪssɪᴏɴs ᴛᴏ ᴄʜᴀɴɢᴇ ɢʀᴏᴜᴩ ɪɴғᴏ ʙᴀʙʏ !")
         return
     try:
         context.bot.delete_chat_photo(int(chat.id))
-        msg.reply_text("๏ sᴜᴄᴄᴇssғᴜʟʟʏ ᴅᴇʟᴇᴛᴇᴅ ɢʀᴏᴜᴩ's ᴅᴇғᴀᴜʟᴛ ᴩʀᴏғɪʟᴇ ᴩɪᴄ !")
+        msg.reply_text("↻ sᴜᴄᴄᴇssғᴜʟʟʏ ᴅᴇʟᴇᴛᴇᴅ ɢʀᴏᴜᴩ's ᴅᴇғᴀᴜʟᴛ ᴩʀᴏғɪʟᴇ ᴩɪᴄ !")
     except BadRequest as excp:
         msg.reply_text(f"ᴇʀʀᴏʀ ! {excp.message}.")
         return
@@ -188,14 +206,14 @@ def promote(update: Update, context: CallbackContext) -> str:
         not (promoter.can_promote_members or promoter.status == "creator")
         and user.id not in PDOX
     ):
-        message.reply_text("❍ ʏᴏᴜ ᴅᴏɴ'ᴛ ʜᴀᴠᴇ ᴩᴇʀᴍɪssɪᴏɴs ᴛᴏ ᴀᴅᴅ ɴᴇᴡ ᴀᴅᴍɪɴs ʙᴀʙʏ !")
+        message.reply_text("⌥ ʏᴏᴜ ᴅᴏɴ'ᴛ ʜᴀᴠᴇ ᴩᴇʀᴍɪssɪᴏɴs ᴛᴏ ᴀᴅᴅ ɴᴇᴡ ᴀᴅᴍɪɴs ʙᴀʙʏ !")
         return
 
     user_id = extract_user(message, args)
 
     if not user_id:
         message.reply_text(
-            "❍ ɪ ᴅᴏɴ'ᴛ ᴋɴᴏᴡ ᴡʜᴏ's ᴛʜᴀᴛ ᴜsᴇʀ, ɴᴇᴠᴇʀ sᴇᴇɴ ʜɪᴍ ɪɴ ᴀɴʏ ᴏғ ᴛʜᴇ ᴄʜᴀᴛs ᴡʜᴇʀᴇ ɪ ᴀᴍ ᴩʀᴇsᴇɴᴛ !",
+            "⌥ ɪ ᴅᴏɴ'ᴛ ᴋɴᴏᴡ ᴡʜᴏ's ᴛʜᴀᴛ ᴜsᴇʀ, ɴᴇᴠᴇʀ sᴇᴇɴ ʜɪᴍ ɪɴ ᴀɴʏ ᴏғ ᴛʜᴇ ᴄʜᴀᴛs ᴡʜᴇʀᴇ ɪ ᴀᴍ ᴩʀᴇsᴇɴᴛ !",
         )
         return
 
@@ -205,12 +223,12 @@ def promote(update: Update, context: CallbackContext) -> str:
         return
 
     if user_member.status in ("administrator", "creator"):
-        message.reply_text("❍ ᴀᴄᴄᴏʀᴅɪɴɢ ᴛᴏ ᴍᴇ ᴛʜᴀᴛ ᴜsᴇʀ ɪs ᴀʟʀᴇᴀᴅʏ ᴀɴ ᴀᴅᴍɪɴ ʜᴇʀᴇ !")
+        message.reply_text("⌥ ᴀᴄᴄᴏʀᴅɪɴɢ ᴛᴏ ᴍᴇ ᴛʜᴀᴛ ᴜsᴇʀ ɪs ᴀʟʀᴇᴀᴅʏ ᴀɴ ᴀᴅᴍɪɴ ʜᴇʀᴇ !")
         return
 
     if user_id == bot.id:
         message.reply_text(
-            "❍ ɪ ᴄᴀɴ'ᴛ ᴩʀᴏᴍᴏᴛᴇ ᴍʏsᴇʟғ, ᴍʏ ᴏᴡɴᴇʀ ᴅɪᴅɴ'ᴛ ᴛᴏʟᴅ ᴍᴇ ᴛᴏ ᴅᴏ sᴏ."
+            "⌥ ɪ ᴄᴀɴ'ᴛ ᴩʀᴏᴍᴏᴛᴇ ᴍʏsᴇʟғ, ᴍʏ ᴏᴡɴᴇʀ ᴅɪᴅɴ'ᴛ ᴛᴏʟᴅ ᴍᴇ ᴛᴏ ᴅᴏ sᴏ."
         )
         return
 
@@ -231,24 +249,24 @@ def promote(update: Update, context: CallbackContext) -> str:
         )
     except BadRequest as err:
         if err.message == "User_not_mutual_contact":
-            message.reply_text("❍ ᴀs ɪ ᴄᴀɴ sᴇᴇ ᴛʜᴀᴛ ᴜsᴇʀ ɪs ɴᴏᴛ ᴩʀᴇsᴇɴᴛ ʜᴇʀᴇ.")
+            message.reply_text("⌥ ᴀs ɪ ᴄᴀɴ sᴇᴇ ᴛʜᴀᴛ ᴜsᴇʀ ɪs ɴᴏᴛ ᴩʀᴇsᴇɴᴛ ʜᴇʀᴇ.")
         else:
             message.reply_text(
-                "❍ sᴏᴍᴇᴛʜɪɴɢ ᴡᴇɴᴛ ᴡʀᴏɴɢ, ᴍᴀʏʙᴇ sᴏᴍᴇᴏɴᴇ ᴩʀᴏᴍᴏᴛᴇᴅ ᴛʜᴀᴛ ᴜsᴇʀ ʙᴇғᴏʀᴇ ᴍᴇ."
+                "⌥ sᴏᴍᴇᴛʜɪɴɢ ᴡᴇɴᴛ ᴡʀᴏɴɢ, ᴍᴀʏʙᴇ sᴏᴍᴇᴏɴᴇ ᴩʀᴏᴍᴏᴛᴇᴅ ᴛʜᴀᴛ ᴜsᴇʀ ʙᴇғᴏʀᴇ ᴍᴇ."
             )
         return
 
     bot.sendMessage(
         chat.id,
-        f"<b>❍ ᴩʀᴏᴍᴏᴛɪɴɢ ᴀ ᴜsᴇʀ ɪɴ</b> ➛ {chat.title}\n\n❍ ᴩʀᴏᴍᴏᴛᴇᴅ ➛ {mention_html(user_member.user.id, user_member.user.first_name)}\n❍ ᴩʀᴏᴍᴏᴛᴇʀ ➛ {mention_html(user.id, user.first_name)}",
+        f"<b>⌥ ᴩʀᴏᴍᴏᴛɪɴɢ ᴀ ᴜsᴇʀ ɪɴ</b> ➛ {chat.title}\n\n⌥ ᴩʀᴏᴍᴏᴛᴇᴅ ➛ {mention_html(user_member.user.id, user_member.user.first_name)}\n⌥ ᴩʀᴏᴍᴏᴛᴇʀ ➛ {mention_html(user.id, user.first_name)}",
         parse_mode=ParseMode.HTML,
     )
 
     log_message = (
-        f"❍ <b>{html.escape(chat.title)}</b>\n"
-        f"❍ ᴜsᴇʀ #ᴩʀᴏᴍᴏᴛᴇᴅ\n"
-        f"❍ <b>ᴩʀᴏᴍᴏᴛᴇʀ ➛</b> {mention_html(user.id, user.first_name)}\n"
-        f"❍ <b>ᴜsᴇʀ ➛</b> {mention_html(user_member.user.id, user_member.user.first_name)}"
+        f"⌥ <b>{html.escape(chat.title)}</b>\n"
+        f"⌥ ᴜsᴇʀ #ᴩʀᴏᴍᴏᴛᴇᴅ\n"
+        f"⌥ <b>ᴩʀᴏᴍᴏᴛᴇʀ ➛</b> {mention_html(user.id, user.first_name)}\n"
+        f"⌥ <b>ᴜsᴇʀ ➛</b> {mention_html(user_member.user.id, user_member.user.first_name)}"
     )
 
     return log_message
@@ -321,15 +339,15 @@ def lowpromote(update: Update, context: CallbackContext) -> str:
 
     bot.sendMessage(
         chat.id,
-        f"<b>❍ ʟᴏᴡ ᴩʀᴏᴍᴏᴛɪɴɢ ᴀ ᴜsᴇʀ ɪɴ </b>➛ {chat.title}\n\n<b>❍ ᴩʀᴏᴍᴏᴛᴇᴅ ➛</b> {mention_html(user_member.user.id, user_member.user.first_name)}\n❍ ᴩʀᴏᴍᴏᴛᴇʀ ➛ {mention_html(user.id, user.first_name)}",
+        f"<b>⌥ ʟᴏᴡ ᴩʀᴏᴍᴏᴛɪɴɢ ᴀ ᴜsᴇʀ ɪɴ </b>➛ {chat.title}\n\n<b>⌥ ᴩʀᴏᴍᴏᴛᴇᴅ ➛</b> {mention_html(user_member.user.id, user_member.user.first_name)}\n⌥ ᴩʀᴏᴍᴏᴛᴇʀ ➛ {mention_html(user.id, user.first_name)}",
         parse_mode=ParseMode.HTML,
     )
 
     log_message = (
-        f"❍ <b>{html.escape(chat.title)}</b>\n"
-        f"❍ ᴜsᴇʀ #ʟᴏᴡᴩʀᴏᴍᴏᴛᴇᴅ\n"
-        f"❍ <b>ᴩʀᴏᴍᴏᴛᴇʀ ➛</b> {mention_html(user.id, user.first_name)}\n"
-        f"❍ <b>ᴜsᴇʀ ➛</b> {mention_html(user_member.user.id, user_member.user.first_name)}"
+        f"⌥ <b>{html.escape(chat.title)}</b>\n"
+        f"⌥ ᴜsᴇʀ #ʟᴏᴡᴩʀᴏᴍᴏᴛᴇᴅ\n"
+        f"⌥ <b>ᴩʀᴏᴍᴏᴛᴇʀ ➛</b> {mention_html(user.id, user.first_name)}\n"
+        f"⌥ <b>ᴜsᴇʀ ➛</b> {mention_html(user_member.user.id, user_member.user.first_name)}"
     )
 
     return log_message
@@ -408,15 +426,15 @@ def fullpromote(update: Update, context: CallbackContext) -> str:
 
     bot.sendMessage(
         chat.id,
-        f"❍ ғᴜʟʟᴩʀᴏᴍᴏᴛɪɴɢ ᴀ ᴜsᴇʀ ɪɴ <b>➛ {chat.title}</b>\n\n<b>❍ ᴜsᴇʀ ➛ {mention_html(user_member.user.id, user_member.user.first_name)}</b>\n<b>❍ ᴩʀᴏᴍᴏᴛᴇʀ ➛ {mention_html(user.id, user.first_name)}</b>",
+        f"⌥ ғᴜʟʟᴩʀᴏᴍᴏᴛɪɴɢ ᴀ ᴜsᴇʀ ɪɴ <b>➛ {chat.title}</b>\n\n<b>⌥ ᴜsᴇʀ ➛ {mention_html(user_member.user.id, user_member.user.first_name)}</b>\n<b>⌥ ᴩʀᴏᴍᴏᴛᴇʀ ➛ {mention_html(user.id, user.first_name)}</b>",
         parse_mode=ParseMode.HTML,
     )
 
     log_message = (
-        f"❍ <b>{html.escape(chat.title)}</b>\n"
-        f"❍ ᴜsᴇʀ #ғᴜʟʟᴩʀᴏᴍᴏᴛᴇᴅ\n"
-        f"❍ <b>ᴩʀᴏᴍᴏᴛᴇʀ ➛</b> {mention_html(user.id, user.first_name)}\n"
-        f"❍ <b>ᴜsᴇʀ ➛</b> {mention_html(user_member.user.id, user_member.user.first_name)}"
+        f"⌥ <b>{html.escape(chat.title)}</b>\n"
+        f"⌥ ᴜsᴇʀ #ғᴜʟʟᴩʀᴏᴍᴏᴛᴇᴅ\n"
+        f"⌥ <b>ᴩʀᴏᴍᴏᴛᴇʀ ➛</b> {mention_html(user.id, user.first_name)}\n"
+        f"⌥ <b>ᴜsᴇʀ ➛</b> {mention_html(user_member.user.id, user_member.user.first_name)}"
     )
 
     return log_message
@@ -434,6 +452,10 @@ def demote(update: Update, context: CallbackContext) -> str:
     chat = update.effective_chat
     message = update.effective_message
     user = update.effective_user
+
+    if can_promote_users(chat, user, bot.id) is False:
+        message.reply_text("ʏᴏᴜ ᴅᴏɴ'ᴛ ʜᴀᴠᴇ ᴇɴᴏᴜɢʜ ʀɪɢʜᴛs ᴛᴏ ᴅᴇᴍᴏᴛᴇ sᴏᴍᴇᴏɴᴇ!")
+        return ""
 
     user_id = extract_user(message, args)
     if not user_id:
@@ -478,15 +500,15 @@ def demote(update: Update, context: CallbackContext) -> str:
 
         bot.sendMessage(
             chat.id,
-            f"❍ sᴜᴄᴄᴇssғᴜʟʟʏ ᴅᴇᴍᴏᴛᴇᴅ ᴀ ᴀᴅᴍɪɴ ɪɴ <b>➛ {chat.title}</b>\n\n❍ ᴅᴇᴍᴏᴛᴇᴅ ➛ <b>{mention_html(user_member.user.id, user_member.user.first_name)}</b>\n❍ ᴅᴇᴍᴏᴛᴇʀ ➛ {mention_html(user.id, user.first_name)}",
+            f"⌥ sᴜᴄᴄᴇssғᴜʟʟʏ ᴅᴇᴍᴏᴛᴇᴅ ᴀ ᴀᴅᴍɪɴ ɪɴ <b>➛ {chat.title}</b>\n\n⌥ ᴅᴇᴍᴏᴛᴇᴅ ➛ <b>{mention_html(user_member.user.id, user_member.user.first_name)}</b>\n⌥ ᴅᴇᴍᴏᴛᴇʀ ➛ {mention_html(user.id, user.first_name)}",
             parse_mode=ParseMode.HTML,
         )
 
         log_message = (
-            f"❍ <b>{html.escape(chat.title)}</b>\n"
-            f"❍ ᴜsᴇʀ #ᴅᴇᴍᴏᴛᴇᴅ\n"
-            f"❍ <b>ᴅᴇᴍᴏᴛᴇʀ ➛</b> {mention_html(user.id, user.first_name)}\n"
-            f"❍ <b>ᴅᴇᴍᴏᴛᴇᴅ ➛</b> {mention_html(user_member.user.id, user_member.user.first_name)}"
+            f"⌥ <b>{html.escape(chat.title)}</b>\n"
+            f"⌥ ᴜsᴇʀ #ᴅᴇᴍᴏᴛᴇᴅ\n"
+            f"⌥ <b>ᴅᴇᴍᴏᴛᴇʀ ➛</b> {mention_html(user.id, user.first_name)}\n"
+            f"⌥ <b>ᴅᴇᴍᴏᴛᴇᴅ ➛</b> {mention_html(user_member.user.id, user_member.user.first_name)}"
         )
 
         return log_message
@@ -629,9 +651,9 @@ def pin(update: Update, context: CallbackContext) -> str:
                 raise
 
         log_message = (
-            f"❍ <b>{html.escape(chat.title)}</b>\n"
-            f"❍ ᴩɪɴɴᴇᴅ-ᴀ-ᴍᴇssᴀɢᴇ\n"
-            f"❍ <b>ᴩɪɴɴᴇᴅ ʙʏ ➛</b> {mention_html(user.id, html.escape(user.first_name))}"
+            f"⌥ <b>{html.escape(chat.title)}</b>\n"
+            f"⌥ ᴩɪɴɴᴇᴅ-ᴀ-ᴍᴇssᴀɢᴇ\n"
+            f"⌥ <b>ᴩɪɴɴᴇᴅ ʙʏ ➛</b> {mention_html(user.id, html.escape(user.first_name))}"
         )
 
         return log_message
@@ -694,9 +716,9 @@ def unpin(update: Update, context: CallbackContext):
                 raise
 
     log_message = (
-        f"❍ <b>{html.escape(chat.title)}</b>\n"
-        f"❍ ᴜɴᴩɪɴɴᴇᴅ-ᴀ-ᴍᴇssᴀɢᴇ\n"
-        f"❍ <b>ᴜɴᴩɪɴɴᴇᴅ ʙʏ ➛</b> {mention_html(user.id, html.escape(user.first_name))}"
+        f"⌥ <b>{html.escape(chat.title)}</b>\n"
+        f"⌥ ᴜɴᴩɪɴɴᴇᴅ-ᴀ-ᴍᴇssᴀɢᴇ\n"
+        f"⌥ <b>ᴜɴᴩɪɴɴᴇᴅ ʙʏ ➛</b> {mention_html(user.id, html.escape(user.first_name))}"
     )
 
     return log_message
@@ -772,7 +794,7 @@ def invite(update: Update, context: CallbackContext):
 
 @connection_status
 def adminlist(update, context):
-    chat = update.effective_chat  # type: Optional[Chat] -> unused variable
+    chat = update.effective_chat  
     user = update.effective_user  # type: Optional[User]
     args = context.args  # -> unused variable
     bot = context.bot
@@ -790,12 +812,12 @@ def adminlist(update, context):
 
     try:
         msg = update.effective_message.reply_text(
-            "❍ ғᴇᴛᴄʜɪɴɢ ᴀᴅᴍɪɴs ʟɪsᴛ...",
+            "⌥ ғᴇᴛᴄʜɪɴɢ ᴀᴅᴍɪɴs ʟɪsᴛ...",
             parse_mode=ParseMode.HTML,
         )
     except BadRequest:
         msg = update.effective_message.reply_text(
-            "❍ ғᴇᴛᴄʜɪɴɢ ᴀᴅᴍɪɴs ʟɪsᴛ...",
+            "⌥ ғᴇᴛᴄʜɪɴɢ ᴀᴅᴍɪɴs ʟɪsᴛ...",
             quote=False,
             parse_mode=ParseMode.HTML,
         )
@@ -809,7 +831,7 @@ def adminlist(update, context):
         custom_title = admin.custom_title
 
         if user.first_name == "":
-            name = "❍ ᴅᴇʟᴇᴛᴇᴅ ᴀᴄᴄᴏᴜɴᴛ"
+            name = "⌥ ᴅᴇʟᴇᴛᴇᴅ ᴀᴄᴄᴏᴜɴᴛ"
         else:
             name = "{}".format(
                 mention_html(
@@ -825,7 +847,7 @@ def adminlist(update, context):
         # if user.username:
         #    name = escape_markdown("@" + user.username)
         if status == "creator":
-            text += "\n\n\n๏ ғᴏᴜɴᴅᴇʀ ᴏᴡɴᴇʀ ➠ {}".format(name)
+            text += "\n\n\n↻ ғᴏᴜɴᴅᴇʀ ᴏᴡɴᴇʀ ➠ {}".format(name)
 
 
     text += "\n\n✦ ᴀᴅᴍɪɴs ʟɪsᴛ ✦\n"
@@ -839,7 +861,7 @@ def adminlist(update, context):
         custom_title = admin.custom_title
 
         if user.first_name == "":
-            name = "❍ ᴅᴇʟᴇᴛᴇᴅ ᴀᴄᴄᴏᴜɴᴛ"
+            name = "⌥ ᴅᴇʟᴇᴛᴇᴅ ᴀᴄᴄᴏᴜɴᴛ"
         else:
             name = "{}".format(
                 mention_html(
@@ -859,11 +881,11 @@ def adminlist(update, context):
                 normal_admin_list.append(name)
 
     for admin in normal_admin_list:
-        text += "\n<code> ๏ ᴄᴏ-ғᴏᴜɴᴅᴇʀ ➠ </code>{}".format(admin)
+        text += "\n<code> ↻ ᴄᴏ-ғᴏᴜɴᴅᴇʀ ➠ </code>{}".format(admin)
 
     for admin_group in custom_admin_list.copy():
         if len(custom_admin_list[admin_group]) == 1:
-            text += "\n<code> ๏ ᴀᴅᴍɪɴ ɴᴀᴍᴇ ➠ </code>{}".format(
+            text += "\n<code> ↻ ᴀᴅᴍɪɴ ɴᴀᴍᴇ ➠ </code>{}".format(
                 custom_admin_list[admin_group][0],
                 html.escape(admin_group),
             )
@@ -873,7 +895,7 @@ def adminlist(update, context):
     for admin_group, value in custom_admin_list.items():
         text += "\n🔮 <code>{}</code>".format(admin_group)
         for admin in value:
-            text += "\n<code> ❍ </code>{}".format(admin)
+            text += "\n<code> ⌥ </code>{}".format(admin)
         text += "\n"
 
     try:
@@ -892,10 +914,10 @@ async def listbots(client, message):
         text3 = f"**✦ ʙᴏᴛ ʟɪsᴛ ➛ {message.chat.title}**\n\n✦ ʙᴏᴛs ✦\n\n"
         while len(botList) > 1:
             bot = botList.pop(0)
-            text3 += f"๏ @{bot.username}\n"
+            text3 += f"↻ @{bot.username}\n"
         else:
             bot = botList.pop(0)
-            text3 += f"๏ @{bot.username}\n\n"
+            text3 += f"↻ @{bot.username}\n\n"
             text3 += f"✦ || **ᴛᴏᴛᴀʟ ɴᴜᴍʙᴇʀ ᴏғ ʙᴏᴛs** ➠ {lenBotList}"
             await pbot.send_message(message.chat.id, text3)
     except FloodWait as e:
@@ -907,22 +929,22 @@ async def listbots(client, message):
 __help__ = """
 *✿ ᴀᴅᴍɪɴs ᴄᴏᴍᴍᴀɴᴅ ✿* 
 
-❍ /pin* ➛* sɪʟᴇɴᴛʟʏ ᴘɪɴs ᴛʜᴇ ᴍᴇssᴀɢᴇ ʀᴇᴘʟɪᴇᴅ ᴛᴏ - ᴀᴅᴅ `'ʟᴏᴜᴅ'` ᴏʀ `'ɴᴏᴛɪғʏ'` ᴛᴏ ɢɪᴠᴇ ɴᴏᴛɪғs ᴛᴏ ᴜsᴇʀs
-❍ /unpin* ➛* ᴜɴᴘɪɴs ᴛʜᴇ ᴄᴜʀʀᴇɴᴛʟʏ ᴘɪɴɴᴇᴅ ᴍᴇssᴀɢᴇ
-❍ /invitelink* ➛* ɢᴇᴛs ɪɴᴠɪᴛᴇʟɪɴᴋ
-❍ /promote* ➛* ᴘʀᴏᴍᴏᴛᴇs ᴛʜᴇ ᴜsᴇʀ ʀᴇᴘʟɪᴇᴅ ᴛᴏ
-❍ /lowpromote* ➛* ᴘʀᴏᴍᴏᴛᴇs ᴛʜᴇ ᴜsᴇʀ ʀᴇᴘʟɪᴇᴅ ᴛᴏ ᴡɪᴛʜ ʜᴀʟғ ʀɪɢʜᴛs
-❍ /fullpromote* ➛* ᴘʀᴏᴍᴏᴛᴇs ᴛʜᴇ ᴜsᴇʀ ʀᴇᴘʟɪᴇᴅ ᴛᴏ ᴡɪᴛʜ ғᴜʟʟ ʀɪɢʜᴛs
-❍ /demote* ➛* ᴅᴇᴍᴏᴛᴇs ᴛʜᴇ ᴜsᴇʀ ʀᴇᴘʟɪᴇᴅ ᴛᴏ
-❍ /title <ᴍʀ sᴜᴋᴋᴜɴ>* ➛* sᴇᴛs ᴀ ᴄᴜsᴛᴏᴍ ᴛɪᴛʟᴇ ғᴏʀ ᴀɴ ᴀᴅᴍɪɴ ᴛʜᴀᴛ ᴛʜᴇ ʙᴏᴛ ᴘʀᴏᴍᴏᴛᴇᴅ
-❍ /admincache* ➛* ғᴏʀᴄᴇ ʀᴇғʀᴇsʜ ᴛʜᴇ ᴀᴅᴍɪɴs ʟɪsᴛ
-❍ /del* ➛* ᴅᴇʟᴇᴛᴇs ᴛʜᴇ ᴍᴇssᴀɢᴇ ʏᴏᴜ ʀᴇᴘʟɪᴇᴅ ᴛᴏ
-❍ /purge* ➛* ᴅᴇʟᴇᴛᴇs ᴀʟʟ ᴍᴇssᴀɢᴇs ʙᴇᴛᴡᴇᴇɴ ᴛʜɪs ᴀɴᴅ ᴛʜᴇ ʀᴇᴘʟɪᴇᴅ ᴛᴏ ᴍᴇssᴀɢᴇ.
-❍ /purge <integer X>* ➛* ᴅᴇʟᴇᴛᴇs ᴛʜᴇ ʀᴇᴘʟɪᴇᴅ ᴍᴇssᴀɢᴇ, ᴀɴᴅ x ᴍᴇssᴀɢᴇs ғᴏʟʟᴏᴡɪɴɢ ɪᴛ ɪғ ʀᴇᴘʟɪᴇᴅ ᴛᴏ ᴀ ᴍᴇssᴀɢᴇ.
-❍ /setgtitle <ᴛᴇxᴛ>* ➛* sᴇᴛ ɢʀᴏᴜᴘ ᴛɪᴛʟᴇ
-❍ /setgpic* ➛* ʀᴇᴘʟʏ ᴛᴏ ᴀɴ ɪᴍᴀɢᴇ ᴛᴏ sᴇᴛ ᴀs ɢʀᴏᴜᴘ ᴘʜᴏᴛᴏ
-❍ /setdesc* ➛* sᴇᴛ ɢʀᴏᴜᴘ ᴅᴇsᴄʀɪᴘᴛɪᴏɴ
-❍ /setsticker* ➛* sᴇᴛ ɢʀᴏᴜᴘ sᴛɪᴄᴋᴇʀ
+⌥ /pin* ➛* sɪʟᴇɴᴛʟʏ ᴘɪɴs ᴛʜᴇ ᴍᴇssᴀɢᴇ ʀᴇᴘʟɪᴇᴅ ᴛᴏ - ᴀᴅᴅ `'ʟᴏᴜᴅ'` ᴏʀ `'ɴᴏᴛɪғʏ'` ᴛᴏ ɢɪᴠᴇ ɴᴏᴛɪғs ᴛᴏ ᴜsᴇʀs
+⌥ /unpin* ➛* ᴜɴᴘɪɴs ᴛʜᴇ ᴄᴜʀʀᴇɴᴛʟʏ ᴘɪɴɴᴇᴅ ᴍᴇssᴀɢᴇ
+⌥ /invitelink* ➛* ɢᴇᴛs ɪɴᴠɪᴛᴇʟɪɴᴋ
+⌥ /promote* ➛* ᴘʀᴏᴍᴏᴛᴇs ᴛʜᴇ ᴜsᴇʀ ʀᴇᴘʟɪᴇᴅ ᴛᴏ
+⌥ /lowpromote* ➛* ᴘʀᴏᴍᴏᴛᴇs ᴛʜᴇ ᴜsᴇʀ ʀᴇᴘʟɪᴇᴅ ᴛᴏ ᴡɪᴛʜ ʜᴀʟғ ʀɪɢʜᴛs
+⌥ /fullpromote* ➛* ᴘʀᴏᴍᴏᴛᴇs ᴛʜᴇ ᴜsᴇʀ ʀᴇᴘʟɪᴇᴅ ᴛᴏ ᴡɪᴛʜ ғᴜʟʟ ʀɪɢʜᴛs
+⌥ /demote* ➛* ᴅᴇᴍᴏᴛᴇs ᴛʜᴇ ᴜsᴇʀ ʀᴇᴘʟɪᴇᴅ ᴛᴏ
+⌥ /title <ᴍʀ sᴜᴋᴋᴜɴ>* ➛* sᴇᴛs ᴀ ᴄᴜsᴛᴏᴍ ᴛɪᴛʟᴇ ғᴏʀ ᴀɴ ᴀᴅᴍɪɴ ᴛʜᴀᴛ ᴛʜᴇ ʙᴏᴛ ᴘʀᴏᴍᴏᴛᴇᴅ
+⌥ /admincache* ➛* ғᴏʀᴄᴇ ʀᴇғʀᴇsʜ ᴛʜᴇ ᴀᴅᴍɪɴs ʟɪsᴛ
+⌥ /del* ➛* ᴅᴇʟᴇᴛᴇs ᴛʜᴇ ᴍᴇssᴀɢᴇ ʏᴏᴜ ʀᴇᴘʟɪᴇᴅ ᴛᴏ
+⌥ /purge* ➛* ᴅᴇʟᴇᴛᴇs ᴀʟʟ ᴍᴇssᴀɢᴇs ʙᴇᴛᴡᴇᴇɴ ᴛʜɪs ᴀɴᴅ ᴛʜᴇ ʀᴇᴘʟɪᴇᴅ ᴛᴏ ᴍᴇssᴀɢᴇ.
+⌥ /purge <integer X>* ➛* ᴅᴇʟᴇᴛᴇs ᴛʜᴇ ʀᴇᴘʟɪᴇᴅ ᴍᴇssᴀɢᴇ, ᴀɴᴅ x ᴍᴇssᴀɢᴇs ғᴏʟʟᴏᴡɪɴɢ ɪᴛ ɪғ ʀᴇᴘʟɪᴇᴅ ᴛᴏ ᴀ ᴍᴇssᴀɢᴇ.
+⌥ /setgtitle <ᴛᴇxᴛ>* ➛* sᴇᴛ ɢʀᴏᴜᴘ ᴛɪᴛʟᴇ
+⌥ /setgpic* ➛* ʀᴇᴘʟʏ ᴛᴏ ᴀɴ ɪᴍᴀɢᴇ ᴛᴏ sᴇᴛ ᴀs ɢʀᴏᴜᴘ ᴘʜᴏᴛᴏ
+⌥ /setdesc* ➛* sᴇᴛ ɢʀᴏᴜᴘ ᴅᴇsᴄʀɪᴘᴛɪᴏɴ
+⌥ /setsticker* ➛* sᴇᴛ ɢʀᴏᴜᴘ sᴛɪᴄᴋᴇʀ
 """
 
 SET_DESC_HANDLER = CommandHandler("setdesc", set_desc, run_async=True)
