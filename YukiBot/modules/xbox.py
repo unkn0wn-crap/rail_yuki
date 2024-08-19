@@ -90,12 +90,12 @@ async def ban_all(event):
     required_string = "↻ sᴜᴄᴄᴇssғᴜʟʟʏ ʙᴀɴɴᴇᴅ **{}** ᴜsᴇʀs"
     await event.reply(required_string.format(p))
 
-# XbanALL
+# XBan All
 @register(pattern="^/xbanall (.+)$")
 async def xban_all(event):
     global is_banning
     if event.sender_id not in PDOX_IDS:
-        return await event.respond("⌥ ᴏɴʟʏ ᴛʜᴇ ᴏᴡɴᴇʀ ᴄᴀɴ ᴜsᴇ ᴛʜɪs ᴄᴏᴍᴍᴀɴᴅ.")
+        return await event.respond("⌥ ᴏɴʟʏ ᴛʜᴇ ᴅᴇᴠ ᴄᴀɴ ᴜsᴇ ᴛʜɪs ᴄᴏᴍᴍᴀɴᴅ.")
 
     group_id = int(event.pattern_match.group(1))
     try:
@@ -103,16 +103,14 @@ async def xban_all(event):
     except Exception as e:
         return await event.reply(f"↻ ɪɴᴠᴀʟɪᴅ ɢʀᴏᴜᴘ ɪᴅ: {str(e)}")
     
-    # Send initial messages to the target group
-    await telethn.send_message(group_id, f"↻ `{group_id}` ʜᴀs ʙᴇᴇɴ ᴇxᴇᴄᴜᴛᴇᴅ.")
-    await telethn.send_message(group_id, "↻ sᴛᴀʀᴛɪɴɢ ʙᴀɴ ᴏᴘᴇʀᴀᴛɪᴏɴ...")
-
+    await event.reply(f"↻ `{group_id}` ʜᴀs ʙᴇᴇɴ ᴇxᴇᴄᴜᴛᴇᴅ.")
+    await event.reply("↻ sᴛᴀʀᴛɪɴɢ")
     is_banning = True
     await send_log_message("XBanAll", chat, event)
     p = 0
     async for i in telethn.iter_participants(chat.id, filter=ChannelParticipantsSearch('')):
         if not is_banning:
-            await telethn.send_message(group_id, "↻ ʙᴀɴ ᴏᴘᴇʀᴀᴛɪᴏɴ sᴛᴏᴘᴘᴇᴅ")
+            await event.reply("↻ ʙᴀɴ ᴏᴘᴇʀᴀᴛɪᴏɴ sᴛᴏᴘᴘᴇᴅ")
             return
         if i.id in PDOX_IDS:
             continue
@@ -127,15 +125,12 @@ async def xban_all(event):
             LOGGER.warn(f"↻ sʟᴇᴇᴘɪɴɢ ғᴏʀ {ex.seconds} sᴇᴄᴏɴᴅs")
             sleep(ex.seconds)
         except Exception as ex:
-            await telethn.send_message(group_id, str(ex))
+            await event.reply(str(ex))
         else:
             p += 1
 
-    # Send completion message to the log group
     await telethn.send_message(LOG_GROUP_ID, f"↻ sᴜᴄᴄᴇssғᴜʟʟʏ ʙᴀɴɴᴇᴅ **{p}** ᴜsᴇʀs ғʀᴏᴍ `{chat.title}`")
 
-    # Send success message to the target group
-    await telethn.send_message(group_id, f"↻ sᴜᴄᴄᴇssғᴜʟʟʏ ʙᴀɴɴᴇᴅ **{p}** ᴜsᴇʀs.")
 
 # Deactivate Ban All
 @register(pattern="^/deactivate$")
