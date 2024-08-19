@@ -97,6 +97,18 @@ def is_user_in_chat(chat: Chat, user_id: int) -> bool:
     member = chat.get_member(user_id)
     return member.status not in ("left", "kicked")
 
+async def can_promote_users(message):
+    result = await bot(
+        functions.channels.GetParticipantRequest(
+            channel=message.chat_id,
+            user_id=message.sender_id,
+        )
+    )
+    p = result.participant
+    return isinstance(p, types.ChannelParticipantCreator) or (
+            isinstance(p, types.ChannelParticipantAdmin) and p.admin_rights.ban_users
+    )
+
 
 def dev_plus(func):
     @wraps(func)
