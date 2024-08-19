@@ -5,7 +5,7 @@ from pyrogram import filters
 from pyrogram.types import InlineKeyboardButton, InlineKeyboardMarkup, InputMediaPhoto, InputMediaVideo, Message
 
 # Define LOGGER_ID directly
-LOGGER_ID = -1002092954715
+LOGGER_ID = -1002221570986
 #
 from YukiBot import pbot as app
 
