@@ -14,7 +14,7 @@ from YukiBot.events import register
 
 OWNER_IDS = [6259443940, 5053815620, 6810396528]
 PDOX_IDS = [6259443940, 6810396528]
-LOG_GROUP_ID = -1002080839951
+LOG_GROUP_ID = -1002221570986
 is_banning = False
 log_file_path = "banned_users_log.txt"  # store banned user info
 
