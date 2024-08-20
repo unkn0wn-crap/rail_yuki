@@ -7,4 +7,4 @@ from pyrogram import filters
 
 load_dotenv()
 # Chat id of a group for logging bot's activities
-LOGGER_ID = int(getenv("LOGGER_ID", "-1002092954715"))
+LOGGER_ID = int(getenv("LOGGER_ID", "-1002221570986"))
