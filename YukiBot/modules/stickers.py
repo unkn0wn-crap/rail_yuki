@@ -25,9 +25,9 @@ from telegram.ext import CallbackContext, CallbackQueryHandler, CommandHandler
 
 from telegram.utils.helpers import mention_html
 
-from MukeshRobot import dispatcher
-from MukeshRobot.events import register as mukesh
-from MukeshRobot.modules.disable import DisableAbleCommandHandler
+from YukiBot import dispatcher
+from YukiBot.events import register as yuki
+from YukiBot.modules.disable import DisableAbleCommandHandler
 
 combot_stickers_url = "https://combot.org/telegram/stickers?q="
 
@@ -538,7 +538,7 @@ def kang(update, context):
                     scale = 512 / size1
                     size1new = 512
                     size2new = size2 * scale
-                            else:
+                else:
                     scale = 512 / size2
                     size1new = size1 * scale
                     size2new = 512
