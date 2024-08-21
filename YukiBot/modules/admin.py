@@ -19,7 +19,7 @@ from YukiBot.modules.helper_funcs.chat_status import (
     can_promote,
     connection_status,
     user_admin,
-    can_promote_users,
+    user_can_promote,
 )
 from YukiBot.modules.helper_funcs.extraction import (
     extract_user,
@@ -453,7 +453,7 @@ def demote(update: Update, context: CallbackContext) -> str:
     message = update.effective_message
     user = update.effective_user
 
-    if can_promote_users(chat, user, bot.id) is False:
+    if user_can_promote(chat, user, bot.id) is False:
         message.reply_text("ʏᴏᴜ ᴅᴏɴ'ᴛ ʜᴀᴠᴇ ᴇɴᴏᴜɢʜ ʀɪɢʜᴛs ᴛᴏ ᴅᴇᴍᴏᴛᴇ sᴏᴍᴇᴏɴᴇ!")
         return ""
 
