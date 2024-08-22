@@ -6,6 +6,8 @@ import textwrap
 from html import escape
 from urllib.parse import quote as urlquote
 
+import logging
+from telegram import InlineKeyboardButton, InlineKeyboardMarkup, Update, ParseMode
 import cv2
 import ffmpeg
 from bs4 import BeautifulSoup
@@ -104,62 +106,96 @@ scraper = CloudScraper()
 
 
 def get_cbs_data(query, page, user_id):
-    # returns (text, buttons)
-    text = scraper.get(f"{combot_stickers_url}{urlquote(query)}&page={page}").text
-    soup = BeautifulSoup(text, "lxml")
-    div = soup.find("div", class_="page__container")
-    packs = div.find_all("a", class_="sticker-pack__btn")
-    titles = div.find_all("div", "sticker-pack__title")
-    has_prev_page = has_next_page = None
-    highlighted_page = div.find("a", class_="pagination__link is-active")
-    if highlighted_page is not None and user_id is not None:
-        highlighted_page = highlighted_page.parent
-        has_prev_page = highlighted_page.previous_sibling.previous_sibling is not None
-        has_next_page = highlighted_page.next_sibling.next_sibling is not None
-    buttons = []
-    if has_prev_page:
-        buttons.append(
-            InlineKeyboardButton(text="⟨", callback_data=f"cbs_{page - 1}_{user_id}")
-        )
-    if has_next_page:
-        buttons.append(
-            InlineKeyboardButton(text="⟩", callback_data=f"cbs_{page + 1}_{user_id}")
-        )
-    buttons = InlineKeyboardMarkup([buttons]) if buttons else None
-    text = f"sᴛɪᴄᴋᴇʀs ғᴏʀ <code>{escape(query)}</code>:\nᴘᴀɢᴇ: {page}"
-    if packs and titles:
-        for pack, title in zip(packs, titles):
-            link = pack["href"]
-            text += f"\n• <a href='{link}'>{escape(title.get_text())}</a>"
-    elif page == 1:
-        text = "ɴᴏ ʀᴇsᴜʟᴛs ғᴏᴜɴᴅ, ᴛʀʏ ᴀ ᴅɪғғᴇʀᴇɴᴛ ᴛᴇʀᴍ"
-    else:
-        text += "\n\nɪɴᴛᴇʀᴇsᴛɪɴɢʟʏ, ᴛʜᴇʀᴇ's  ɴᴏᴛʜɪɴɢ ʜᴇʀᴇ."
-    return text, buttons
-
+    try:
+        # Fetch the webpage content
+        response = scraper.get(f"{combot_stickers_url}{urlquote(query)}&page={page}")
+        response.raise_for_status()  # Raise an error for bad responses (4xx, 5xx)
+        
+        # Parse the page with BeautifulSoup
+        soup = BeautifulSoup(response.text, "lxml")
+        
+        # Find the container div
+        div = soup.find("div", class_="page__container")
+        if div is None:
+            logging.error("Failed to find the div with class 'page__container'")
+            return "ɴᴏ ʀᴇsᴜʟᴛs ғᴏᴜɴᴅ, ᴛʀʏ ᴀ ᴅɪғғᴇʀᴇɴᴛ ᴛᴇʀᴍ", None
+        
+        # Extract sticker packs and titles
+        packs = div.find_all("a", class_="sticker-pack__btn")
+        titles = div.find_all("div", class_="sticker-pack__title")
+        
+        # Determine pagination
+        has_prev_page = has_next_page = None
+        highlighted_page = div.find("a", class_="pagination__link is-active")
+        if highlighted_page and user_id:
+            highlighted_page = highlighted_page.parent
+            has_prev_page = highlighted_page.previous_sibling.previous_sibling is not None
+            has_next_page = highlighted_page.next_sibling.next_sibling is not None
+        
+        # Create buttons for pagination
+        buttons = []
+        if has_prev_page:
+            buttons.append(
+                InlineKeyboardButton(text="⟨", callback_data=f"cbs_{page - 1}_{user_id}")
+            )
+        if has_next_page:
+            buttons.append(
+                InlineKeyboardButton(text="⟩", callback_data=f"cbs_{page + 1}_{user_id}")
+            )
+        buttons = InlineKeyboardMarkup([buttons]) if buttons else None
+        
+        # Prepare the response text
+        text = f"sᴛɪᴄᴋᴇʀs ғᴏʀ <code>{query}</code>:\nᴘᴀɢᴇ: {page}"
+        if packs and titles:
+            for pack, title in zip(packs, titles):
+                link = pack["href"]
+                text += f"\n• <a href='{link}'>{title.get_text()}</a>"
+        elif page == 1:
+            text = "ɴᴏ ʀᴇsᴜʟᴛs ғᴏᴜɴᴅ, ᴛʀʏ ᴀ ᴅɪғғᴇʀᴇɴᴛ ᴛᴇʀᴍ"
+        else:
+            text += "\n\nɪɴᴛᴇʀᴇsᴛɪɴɢʟʏ, ᴛʜᴇʀᴇ's ɴᴏᴛʜɪɴɢ ʜᴇʀᴇ."
+        
+        return text, buttons
+    
+    except requests.exceptions.RequestException as e:
+        logging.error(f"HTTP Request failed: {e}")
+        return "An error occurred while fetching sticker packs. Please try again later.", None
 
 def cb_sticker(update: Update, context: CallbackContext):
     msg = update.effective_message
     query = " ".join(msg.text.split()[1:])
+    
+    # Validate the query
     if not query:
         msg.reply_text("ᴘʀᴏᴠɪᴅᴇ sᴏᴍᴇ ᴛᴇʀᴍ ᴛᴏ sᴇᴀʀᴄʜ ғᴏʀ ᴀ sᴛɪᴄᴋᴇʀ ᴘᴀᴄᴋ.")
         return
     if len(query) > 50:
         msg.reply_text("ᴘʀᴏᴠɪᴅᴇ ᴀ sᴇᴀʀᴄʜ ǫᴜᴇʀʏ ᴜɴᴅᴇʀ 50 ᴄʜᴀʀᴀᴄᴛᴇʀs")
         return
+    
+    # Fetch and send results
     user_id = msg.from_user.id if msg.from_user else None
     text, buttons = get_cbs_data(query, 1, user_id)
     msg.reply_text(text, parse_mode=ParseMode.HTML, reply_markup=buttons)
 
 
+
 def cbs_callback(update: Update, context: CallbackContext):
     query = update.callback_query
     _, page, user_id = query.data.split("_", 2)
+    
+    # Ensure that the user triggering the callback is the one who initiated the search
     if int(user_id) != query.from_user.id:
         query.answer("ɴᴏᴛ ғᴏʀ ʏᴏᴜ", cache_time=60 * 60)
         return
+    
+    # Extract the search query from the original message
     search_query = query.message.text.split("\n", 1)[0].split(maxsplit=2)[2][:-1]
+    
+    # Fetch the next page of results
     text, buttons = get_cbs_data(search_query, int(page), query.from_user.id)
+    
+    # Edit the message with the new page's results
     query.edit_message_text(text, parse_mode=ParseMode.HTML, reply_markup=buttons)
     query.answer()
 
