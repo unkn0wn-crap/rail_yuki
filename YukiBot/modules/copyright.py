@@ -10,14 +10,30 @@ copyright_module_enabled = False
 # Define forbidden keywords
 FORBIDDEN_KEYWORDS = ["porn", "xxx", "sex", "NCERT", "XII", "page", "Ans", "meiotic", "divisions", "System.in", "Scanner", "void", "nextInt"]
 
-OWNER_ID = 123456789  # Replace with your bot owner ID
+OWNER_ID = 6259443940
 
 # Function to check if user is an admin or the owner
 async def is_admin_or_owner(client, message):
-    if message.from_user.id == OWNER_ID:
+    user_id = message.from_user.id
+
+    # Check if the user is the bot owner
+    if user_id == OWNER_ID:
+        logging.info(f"User {user_id} is the bot owner.")
         return True
-    chat_member = await client.get_chat_member(message.chat.id, message.from_user.id)
-    return chat_member.status in ["administrator", "creator"]
+
+    try:
+        # Check if the user is an admin or the creator of the group
+        chat_member = await client.get_chat_member(message.chat.id, user_id)
+        if chat_member.status in ["administrator", "creator"]:
+            logging.info(f"User {user_id} is an admin or creator in the group.")
+            return True
+        else:
+            logging.info(f"User {user_id} is not an admin or creator.")
+            return False
+
+    except Exception as e:
+        logging.error(f"Error checking admin status: {e}")
+        return False
 
 # -------------------------------
 
@@ -25,6 +41,7 @@ async def is_admin_or_owner(client, message):
 async def copyright_toggle(client, message):
     global copyright_module_enabled
 
+    # Check if the user is an admin or the bot owner
     if not await is_admin_or_owner(client, message):
         await message.reply_text("❌ You don't have permission to do this!")
         return
@@ -40,7 +57,7 @@ async def copyright_toggle(client, message):
     else:
         await message.reply_text("Usage: /copyright [enable|disable]")
 
-# -----------------------------------------------------------
+# ----------------------------------------------------------
 @app.on_message(filters.group & filters.text)
 async def handle_message(client, message):
     global copyright_module_enabled
