@@ -6,7 +6,7 @@ from telegram.error import BadRequest
 from telegram.ext import CallbackContext, CommandHandler
 from telegram.utils.helpers import mention_html
 
-from YukiBot import LOGGER, TIGERS, dispatcher
+from YukiBot import LOGGER, TIGERS, dispatcher, OWNER_ID
 from YukiBot.modules.helper_funcs.chat_status import (
     bot_admin,
     can_restrict,
@@ -59,13 +59,30 @@ def mute(update: Update, context: CallbackContext) -> str:
     user = update.effective_user
     message = update.effective_message
 
-    user_id, reason = extract_user_and_text(message, args)
-    reply = check_user(user_id, bot, chat)
+    # Check if the command is from the bot owner or a group admin with mute/unmute permissions
+    if not (user.id == OWNER_ID or chat.get_member(user.id).can_restrict_members):
+        message.reply_text("You don't have permission to mute users. Please contact the owner.")
+        return ""
 
+    # Extract user and reason
+    user_id, reason = extract_user_and_text(message, args)
+    if not user_id:
+        message.reply_text("Please mention a valid user to mute.")
+        return ""
+    
+    # Check if the bot has the right permissions
+    bot_member = chat.get_member(bot.id)
+    if not bot_member.can_restrict_members:
+        message.reply_text("I don't have permission to mute users. Please contact the owner.")
+        return ""
+
+    # Check if the user to mute exists
+    reply = check_user(user_id, bot, chat)
     if reply:
         message.reply_text(reply)
         return ""
 
+    # Get member details
     member = chat.get_member(user_id)
 
     log = (
@@ -78,6 +95,7 @@ def mute(update: Update, context: CallbackContext) -> str:
     if reason:
         log += f"\n<b>Reason:</b> {reason}"
 
+    # Check if the user is already muted
     if member.can_send_messages is None or member.can_send_messages:
         chat_permissions = ChatPermissions(can_send_messages=False)
         bot.restrict_chat_member(chat.id, user_id, chat_permissions)
@@ -87,11 +105,12 @@ def mute(update: Update, context: CallbackContext) -> str:
             parse_mode=ParseMode.HTML,
         )
         return log
-
     else:
         message.reply_text("This user is already muted!")
 
     return ""
+
+
 @connection_status
 @bot_admin
 @user_admin
