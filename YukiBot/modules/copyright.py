@@ -7,7 +7,10 @@ import logging
 # Global variable to track copyright module state
 copyright_module_enabled = False
 
-OWNER_ID = 6259443940
+# Define forbidden keywords
+FORBIDDEN_KEYWORDS = ["porn", "xxx", "sex", "NCERT", "XII", "page", "Ans", "meiotic", "divisions", "System.in", "Scanner", "void", "nextInt"]
+
+OWNER_ID = 123456789  # Replace with your bot owner ID
 
 # Function to check if user is an admin or the owner
 async def is_admin_or_owner(client, message):
@@ -49,6 +52,7 @@ async def handle_message(client, message):
             user_mention = message.from_user.mention
             await message.reply_text(f"{user_mention}, please refrain from sending such content.")
 
+# -----------------------------------------------------------
 @app.on_message(filters.group & filters.document)
 async def message_handler(client, message):
     global copyright_module_enabled
