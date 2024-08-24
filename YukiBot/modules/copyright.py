@@ -3,6 +3,7 @@ from pyrogram.types import Message
 from pyrogram.errors import FloodWait
 from pyrogram.enums import ChatMemberStatus
 import logging
+from YukiBot import pbot as app
 
 # -------------------------------
 # In-memory dictionary to track enabled groups
