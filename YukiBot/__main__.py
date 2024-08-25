@@ -153,7 +153,7 @@ NYKAA = [
 ]
 
 
-DONATE_STRING = f"""ʜᴇʏ ʜᴜᴍᴀɴ, ʜᴀᴩᴩʏ ᴛᴏ ʜᴇᴀʀ ᴛʜᴀᴛ ʏᴏᴜ ᴡᴀɴɴᴀ ᴅᴏɴᴀᴛᴇ. ʏᴏᴜ ᴄᴀɴ ᴅɪʀᴇᴄᴛʟʏ ᴄᴏɴᴛᴀᴄᴛ ᴍʏ ᴅᴇᴠᴇʟᴏᴘᴇʀ @ghost_kun ғᴏʀ ᴅᴏɴᴀᴛɪɴɢ ᴏʀ ʏᴏᴜ ᴄᴀɴ ᴠɪsɪᴛ ᴍʏ sᴜᴩᴩᴏʀᴛ ᴄʜᴀᴛ @paradox_helpdesk ᴀɴᴅ ᴀsᴋ ᴛʜᴇʀᴇ ᴀʙᴏᴜᴛ ᴅᴏɴᴀᴛɪᴏɴ"""
+DONATE_STRING = f"""ʜᴇʏ ʜᴜᴍᴀɴ, ʜᴀᴩᴩʏ ᴛᴏ ʜᴇᴀʀ ᴛʜᴀᴛ ʏᴏᴜ ᴡᴀɴɴᴀ ᴅᴏɴᴀᴛᴇ. ʏᴏᴜ ᴄᴀɴ ᴅɪʀᴇᴄᴛʟʏ ᴄᴏɴᴛᴀᴄᴛ ᴍʏ ᴅᴇᴠᴇʟᴏᴘᴇʀ @corpsealone ғᴏʀ ᴅᴏɴᴀᴛɪɴɢ ᴏʀ ʏᴏᴜ ᴄᴀɴ ᴠɪsɪᴛ ᴍʏ sᴜᴩᴩᴏʀᴛ ᴄʜᴀᴛ @{SUPPORT_CHAT} ᴀɴᴅ ᴀsᴋ ᴛʜᴇʀᴇ ᴀʙᴏᴜᴛ ᴅᴏɴᴀᴛɪᴏɴ"""
 
 IMPORTED = {}
 MIGRATEABLE = []
@@ -229,7 +229,7 @@ def start(update: Update, context: CallbackContext):
                     update.effective_chat.id,
                     HELPABLE[mod].__help__,
                     InlineKeyboardMarkup(
-                        [[InlineKeyboardButton(text="◁", callback_data="help_back")]]
+                        [[InlineKeyboardButton(text="⇐", callback_data="help_back")]]
                     ),
                 )
             elif args[0].lower() == "markdownhelp":
@@ -257,19 +257,19 @@ def start(update: Update, context: CallbackContext):
                 PM_START_TEX.format(usr.first_name), parse_mode=ParseMode.MARKDOWN
             )
             time.sleep(0.4)
-            lol.edit_text("ʟᴏᴀᴅɪɴɢ... 10%")
+            lol.edit_text("ʟᴏᴀᴅɪɴɢ... 12%")
             time.sleep(0.5)
             lol.edit_text("ʟᴏᴀᴅɪɴɢ... 24%")
             time.sleep(0.3)
-            lol.edit_text("ʟᴏᴀᴅɪɴɢ... 39%")
+            lol.edit_text("ʟᴏᴀᴅɪɴɢ... 42%")
             time.sleep(0.4)
             lol.edit_text("ʟᴏᴀᴅɪɴɢ... 65%")
-            time.sleep(0.5)
-            lol.edit_text("ʟᴏᴀᴅɪɴɢ... 85%")
+            time.sleep(0.3)
+            lol.edit_text("ʟᴏᴀᴅɪɴɢ... 87%")
             time.sleep(0.3)
             lol.edit_text("ʟᴏᴀᴅɪɴɢ... 100%")
             time.sleep(0.4)
-            lol.edit_text("sʏɴᴄʜʀᴏɴɪᴢᴀᴛɪᴏɴ")
+            lol.edit_text("sʏɴᴄʜʀᴏɴɪᴢᴀᴛɪᴏɴ...")
             lol.delete()
             
             update.effective_message.reply_photo(random.choice(NYKAA),PM_START_TEXT.format(escape_markdown(first_name),BOT_NAME,sql.num_users(),sql.num_chats()),
@@ -942,7 +942,7 @@ def settings_button(update: Update, context: CallbackContext):
                     [
                         [
                             InlineKeyboardButton(
-                                text="◁",
+                                text="⇒",
                                 callback_data="stngs_back({})".format(chat_id),
                             )
                         ]
