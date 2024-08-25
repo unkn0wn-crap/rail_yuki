@@ -449,9 +449,10 @@ def demote(update: Update, context: CallbackContext) -> str:
     bot = context.bot
     args = context.args
 
-    chat = update.effective_chat
     message = update.effective_message
+    chat = update.effective_chat
     user = update.effective_user
+
     promoter = chat.get_member(user.id)
 
     if (
