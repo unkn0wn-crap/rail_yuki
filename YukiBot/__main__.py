@@ -229,7 +229,7 @@ def start(update: Update, context: CallbackContext):
                     update.effective_chat.id,
                     HELPABLE[mod].__help__,
                     InlineKeyboardMarkup(
-                        [[InlineKeyboardButton(text="⇐", callback_data="help_back")]]
+                        [[InlineKeyboardButton(text="◁", callback_data="help_back")]]
                     ),
                 )
             elif args[0].lower() == "markdownhelp":
@@ -942,7 +942,7 @@ def settings_button(update: Update, context: CallbackContext):
                     [
                         [
                             InlineKeyboardButton(
-                                text="⇒",
+                                text="◁",
                                 callback_data="stngs_back({})".format(chat_id),
                             )
                         ]
