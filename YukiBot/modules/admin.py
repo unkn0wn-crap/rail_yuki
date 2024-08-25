@@ -452,6 +452,7 @@ def demote(update: Update, context: CallbackContext) -> str:
     chat = update.effective_chat
     message = update.effective_message
     user = update.effective_user
+    promoter = chat.get_member(user.id)
 
     if (
         not (promoter.can_promote_members or promoter.status == "creator")
