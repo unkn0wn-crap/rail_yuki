@@ -1,7 +1,7 @@
 import html
 from typing import Optional
 from telegram import ChatPermissions, ParseMode
-from telegram.utils.helpers import html
+import html
 
 from telegram import Bot, Chat, ChatPermissions, ParseMode, Update
 from telegram.error import BadRequest
