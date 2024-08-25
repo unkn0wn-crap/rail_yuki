@@ -453,6 +453,13 @@ def demote(update: Update, context: CallbackContext) -> str:
     message = update.effective_message
     user = update.effective_user
 
+    if (
+        not (promoter.can_promote_members or promoter.status == "creator")
+        and user.id not in PDOX
+    ):
+        message.reply_text("⌥ ʏᴏᴜ ᴅᴏɴ'ᴛ ʜᴀᴠᴇ ᴩᴇʀᴍɪssɪᴏɴs ʙᴀʙʏ !")
+        return
+
     if user_can_promote(chat, user, bot.id) is False:
         message.reply_text("ʏᴏᴜ ᴅᴏɴ'ᴛ ʜᴀᴠᴇ ᴇɴᴏᴜɢʜ ʀɪɢʜᴛs ᴛᴏ ᴅᴇᴍᴏᴛᴇ sᴏᴍᴇᴏɴᴇ!")
         return ""
