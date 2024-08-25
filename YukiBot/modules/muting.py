@@ -1,12 +1,14 @@
 import html
 from typing import Optional
+from telegram import ChatPermissions, ParseMode
+from telegram.utils.helpers import html
 
 from telegram import Bot, Chat, ChatPermissions, ParseMode, Update
 from telegram.error import BadRequest
 from telegram.ext import CallbackContext, CommandHandler
 from telegram.utils.helpers import mention_html
 
-from YukiBot import LOGGER, TIGERS, dispatcher, OWNER_ID
+from YukiBot import LOGGER, TIGERS, dispatcher, OWNER_ID, DRAGONS
 from YukiBot.modules.helper_funcs.chat_status import (
     bot_admin,
     can_restrict,
@@ -51,6 +53,8 @@ def check_user(user_id: int, bot: Bot, chat: Chat) -> Optional[str]:
 @bot_admin
 @user_admin
 @loggable
+
+
 def mute(update: Update, context: CallbackContext) -> str:
     bot = context.bot
     args = context.args
@@ -61,8 +65,9 @@ def mute(update: Update, context: CallbackContext) -> str:
 
     # Check if the user issuing the command is the bot owner
     if user.id != OWNER_ID:
-        # For non-owners, check if the user is a group admin with mute/unmute permissions
-        if not chat.get_member(user.id).can_restrict_members:
+        # For non-owners, check if the user is a group admin with mute permissions
+        member = bot.get_chat_member(chat.id, user.id)
+        if not member.can_restrict_members:
             message.reply_text("You don't have permission to mute users. Please contact the owner.")
             return ""
 
@@ -72,8 +77,8 @@ def mute(update: Update, context: CallbackContext) -> str:
         message.reply_text("Please mention a valid user to mute.")
         return ""
 
-    # Check if the bot has the right permissions
-    bot_member = chat.get_member(bot.id)
+    # Check if the bot has the correct permissions
+    bot_member = bot.get_chat_member(chat.id, bot.id)
     if not bot_member.can_restrict_members:
         message.reply_text("I don't have permission to mute users. Please contact the owner.")
         return ""
@@ -85,7 +90,7 @@ def mute(update: Update, context: CallbackContext) -> str:
         return ""
 
     # Get member details
-    member = chat.get_member(user_id)
+    member = bot.get_chat_member(chat.id, user_id)
 
     log = (
         f"<b>{html.escape(chat.title)}:</b>\n"
