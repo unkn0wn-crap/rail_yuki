@@ -203,6 +203,7 @@ def promote(update: Update, context: CallbackContext) -> str:
         and user.id not in PDOX
         and user.id not in DRAGONS
     ):
+        message.reply_text("ʏᴏᴜ ᴅᴏɴ'ᴛ ʜᴀᴠᴇ ᴇɴᴏᴜɢʜ ʀɪɢʜᴛs ᴛᴏ ᴅᴇᴍᴏᴛᴇ sᴏᴍᴇᴏɴᴇ!")
         return
 
     user_id = extract_user(message, args)
@@ -288,6 +289,7 @@ def lowpromote(update: Update, context: CallbackContext) -> str:
         and user.id not in PDOX
         and user.id not in DRAGONS
     ):
+        message.reply_text("ʏᴏᴜ ᴅᴏɴ'ᴛ ʜᴀᴠᴇ ᴇɴᴏᴜɢʜ ʀɪɢʜᴛs ᴛᴏ ᴅᴇᴍᴏᴛᴇ sᴏᴍᴇᴏɴᴇ!")
         return
 
     user_id = extract_user(message, args)
@@ -369,6 +371,7 @@ def fullpromote(update: Update, context: CallbackContext) -> str:
         and user.id not in PDOX
         and user.id not in DRAGONS
     ):
+        message.reply_text("ʏᴏᴜ ᴅᴏɴ'ᴛ ʜᴀᴠᴇ ᴇɴᴏᴜɢʜ ʀɪɢʜᴛs ᴛᴏ ᴅᴇᴍᴏᴛᴇ sᴏᴍᴇᴏɴᴇ!")
         return
 
     user_id = extract_user(message, args)
@@ -456,9 +459,6 @@ def demote(update: Update, context: CallbackContext) -> str:
         and user.id not in PDOX
         and user.id not in DRAGONS
     ):
-        return
-
-    if user_can_promote(chat, user, bot.id) is False:
         message.reply_text("ʏᴏᴜ ᴅᴏɴ'ᴛ ʜᴀᴠᴇ ᴇɴᴏᴜɢʜ ʀɪɢʜᴛs ᴛᴏ ᴅᴇᴍᴏᴛᴇ sᴏᴍᴇᴏɴᴇ!")
         return
 
