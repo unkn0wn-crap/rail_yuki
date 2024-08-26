@@ -1,20 +1,19 @@
 import html
 from typing import Optional
-from telegram import ChatPermissions, ParseMode
-import html
 
 from telegram import Bot, Chat, ChatPermissions, ParseMode, Update
 from telegram.error import BadRequest
 from telegram.ext import CallbackContext, CommandHandler
 from telegram.utils.helpers import mention_html
 
-from YukiBot import LOGGER, TIGERS, dispatcher, OWNER_ID, DRAGONS
+from YukiBot import LOGGER, TIGERS, DRAGONS, dispatcher
 from YukiBot.modules.helper_funcs.chat_status import (
     bot_admin,
     can_restrict,
     connection_status,
     is_user_admin,
     user_admin,
+    user_can_mute,
 )
 from YukiBot.modules.helper_funcs.extraction import (
     extract_user,
@@ -26,24 +25,24 @@ from YukiBot.modules.log_channel import loggable
 
 def check_user(user_id: int, bot: Bot, chat: Chat) -> Optional[str]:
     if not user_id:
-        reply = "You don't seem to be referring to a user or the ID specified is incorrect.."
+        reply = "Yᴏᴜ ᴅᴏɴ'ᴛ sᴇᴇᴍ ᴛᴏ ʙᴇ ʀᴇғᴇʀʀɪɴɢ ᴛᴏ ᴀ ᴜsᴇʀ ᴏʀ ᴛʜᴇ ID sᴘᴇᴄɪғɪᴇᴅ ɪs ɪɴᴄᴏʀʀᴇᴄᴛ.."
         return reply
 
     try:
         member = chat.get_member(user_id)
     except BadRequest as excp:
         if excp.message == "User not found":
-            reply = "I can't seem to find this user"
+            reply = "I ᴄᴀɴ'ᴛ sᴇᴇᴍ ᴛᴏ ғɪɴᴅ ᴛʜɪs ᴜsᴇʀ"
             return reply
         else:
             raise
 
     if user_id == bot.id:
-        reply = "I'm not gonna MUTE myself, How high are you?"
+        reply = "I ᴄᴀɴ'ᴛ sᴇᴇᴍ ᴛᴏ ғɪɴᴅ ᴛʜɪs ᴜsᴇʀI'ᴍ ɴᴏᴛ ɢᴏɴɴᴀ MUTE ᴍʏsᴇʟғ, Hᴏᴡ ʜɪɢʜ ᴀʀᴇ ʏᴏᴜ?"
         return reply
 
     if is_user_admin(chat, user_id, member) or user_id in TIGERS:
-        reply = "Can't. Find someone else to mute but not this one."
+        reply = "Cᴀɴ'ᴛ. Fɪɴᴅ sᴏᴍᴇᴏɴᴇ ᴇʟsᴇ ᴛᴏ ᴍᴜᴛᴇ ʙᴜᴛ ɴᴏᴛ ᴛʜɪs ᴏɴᴇ"
         return reply
 
     return None
@@ -61,35 +60,22 @@ def mute(update: Update, context: CallbackContext) -> str:
     user = update.effective_user
     message = update.effective_message
 
-    # Check if the user issuing the command is the bot owner
-    if user.id != OWNER_ID:
-        # For non-owners, check if the user is a group admin with mute permissions
-        member = bot.get_chat_member(chat.id, user.id)
-        if not member.can_restrict_members:
-            message.reply_text("You don't have permission to mute users. Please contact the owner.")
-            return ""
-
-    # Extract user and reason
     user_id, reason = extract_user_and_text(message, args)
-    if not user_id:
-        message.reply_text("Please mention a valid user to mute.")
-        return ""
-
-    # Check if the bot has the correct permissions
-    bot_member = bot.get_chat_member(chat.id, bot.id)
-    if not bot_member.can_restrict_members:
-        message.reply_text("I don't have permission to mute users. Please contact the owner.")
-        return ""
-
-    # Check if the user to mute exists
     reply = check_user(user_id, bot, chat)
+
     if reply:
         message.reply_text(reply)
         return ""
 
-    # Get member details
-    member = bot.get_chat_member(chat.id, user_id)
+    # Check if the admin has mute/unmute rights or if they are in the DRAGONS list
+    if not user_can_mute(chat, user, bot.id) and user.id not in DRAGONS:
+        message.reply_text("Yᴏᴜ ᴅᴏɴ'ᴛ ʜᴀᴠᴇ ᴇɴᴏᴜɢʜ ʀɪɢʜᴛs ᴛᴏ ᴍᴜᴛᴇ ᴍᴇᴍʙᴇʀs ɪɴ ᴛʜɪs ɢʀᴏᴜᴘ ʜᴜᴍᴀɴ!")
+        return ""
 
+    # Proceed with muting the target user
+    member = chat.get_member(user_id)
+
+    # Logging the mute action
     log = (
         f"<b>{html.escape(chat.title)}:</b>\n"
         f"#MUTE\n"
@@ -111,10 +97,9 @@ def mute(update: Update, context: CallbackContext) -> str:
         )
         return log
     else:
-        message.reply_text("This user is already muted!")
+        message.reply_text("Tʜɪs ᴜsᴇʀ ɪs ᴀʟʀᴇᴀᴅʏ ᴍᴜᴛᴇᴅ!")
 
     return ""
-
 
 @connection_status
 @bot_admin
@@ -128,35 +113,18 @@ def dmute(update: Update, context: CallbackContext) -> str:
     user = update.effective_user
     message = update.effective_message
     
-    # Check if the user issuing the command is the bot owner
-    if user.id != OWNER_ID:
-        # For non-owners, check if the user is a group admin with mute/unmute permissions
-        if not chat.get_member(user.id).can_restrict_members:
-            message.reply_text("You don't have permission to mute users. Please contact the owner.")
-            return ""
-
-    # Extract user and reason
     user_id, reason = extract_user_and_text(message, args)
-    if not user_id:
-        message.reply_text("Please mention a valid user to mute.")
-        return ""
-
-    # Delete the command message
-    bot.delete_message(chat.id, message.message_id)
-
-    # Check if the bot has the right permissions
-    bot_member = chat.get_member(bot.id)
-    if not bot_member.can_restrict_members:
-        message.reply_text("I don't have permission to mute users. Please contact the owner.")
-        return ""
-
-    # Check if the user to mute exists
+    bot.delete_message(chat, message_id)
     reply = check_user(user_id, bot, chat)
+
     if reply:
         message.reply_text(reply)
         return ""
+    
+    if not user_can_mute(chat, user, bot.id) and user.id not in DRAGONS:
+        message.reply_text("Yᴏᴜ ᴅᴏɴ'ᴛ ʜᴀᴠᴇ ᴇɴᴏᴜɢʜ ʀɪɢʜᴛs ᴛᴏ ᴍᴜᴛᴇ ᴍᴇᴍʙᴇʀs ɪɴ ᴛʜɪs ɢʀᴏᴜᴘ ʜᴜᴍᴀɴ!")
+        return ""
 
-    # Get member details
     member = chat.get_member(user_id)
 
     log = (
@@ -169,15 +137,14 @@ def dmute(update: Update, context: CallbackContext) -> str:
     if reason:
         log += f"\n<b>Reason:</b> {reason}"
 
-    # Check if the user is already muted
     if member.can_send_messages is None or member.can_send_messages:
         chat_permissions = ChatPermissions(can_send_messages=False)
         bot.restrict_chat_member(chat.id, user_id, chat_permissions)
 
         return log
+
     else:
         pass
-
     return ""
     
 
@@ -191,33 +158,20 @@ def unmute(update: Update, context: CallbackContext) -> str:
     user = update.effective_user
     message = update.effective_message
 
-    # Check if the user issuing the command is the bot owner
-    if user.id != OWNER_ID:
-        # For non-owners, check if the user is a group admin with unmute permissions
-        if not chat.get_member(user.id).can_restrict_members:
-            message.reply_text("You don't have permission to unmute users. Please contact the owner.")
-            return ""
-
-    # Extract user to be unmuted
     user_id = extract_user(message, args)
     if not user_id:
         message.reply_text(
             "You'll need to either give me a username to unmute, or reply to someone to be unmuted."
         )
         return ""
-
-    # Check if the bot has the right permissions
-    bot_member = chat.get_member(bot.id)
-    if not bot_member.can_restrict_members:
-        message.reply_text("I don't have permission to unmute users. Please contact the owner.")
+    
+    if not user_can_mute(chat, user, bot.id) and user.id not in DRAGONS:
+        message.reply_text("Yᴏᴜ ᴅᴏɴ'ᴛ ʜᴀᴠᴇ ᴇɴᴏᴜɢʜ ʀɪɢʜᴛs ᴛᴏ ᴍᴜᴛᴇ ᴍᴇᴍʙᴇʀs ɪɴ ᴛʜɪs ɢʀᴏᴜᴘ ʜᴜᴍᴀɴ!")
         return ""
 
-    # Get member details
     member = chat.get_member(int(user_id))
 
-    # Check if the user is in the chat
     if member.status != "kicked" and member.status != "left":
-        # Check if the user is already unmuted
         if (
             member.can_send_messages
             and member.can_send_media_messages
@@ -253,8 +207,8 @@ def unmute(update: Update, context: CallbackContext) -> str:
             )
     else:
         message.reply_text(
-            "This user isn't even in the chat, unmuting them won't make them talk more than they "
-            "already do!"
+            "Tʜɪs ᴜsᴇʀ ɪsɴ'ᴛ ᴇᴠᴇɴ ɪɴ ᴛʜᴇ ᴄʜᴀᴛ, ᴜɴᴍᴜᴛɪɴɢ ᴛʜᴇᴍ ᴡᴏɴ'ᴛ ᴍᴀᴋᴇ ᴛʜᴇᴍ ᴛᴀʟᴋ ᴍᴏʀᴇ ᴛʜᴀɴ ᴛʜᴇʏ "
+            "ᴀʟʀᴇᴀᴅʏ ᴅᴏ!"
         )
 
     return ""
@@ -278,10 +232,14 @@ def temp_mute(update: Update, context: CallbackContext) -> str:
         message.reply_text(reply)
         return ""
 
+    if not user_can_mute(chat, user, bot.id) and user.id not in DRAGONS:
+        message.reply_text("Yᴏᴜ ᴅᴏɴ'ᴛ ʜᴀᴠᴇ ᴇɴᴏᴜɢʜ ʀɪɢʜᴛs ᴛᴏ ᴍᴜᴛᴇ ᴍᴇᴍʙᴇʀs ɪɴ ᴛʜɪs ɢʀᴏᴜᴘ ʜᴜᴍᴀɴ!")
+        return ""
+
     member = chat.get_member(user_id)
 
     if not reason:
-        message.reply_text("You haven't specified a time to mute this user for!")
+        message.reply_text("Yᴏᴜ ʜᴀᴠᴇɴ'ᴛ sᴘᴇᴄɪғɪᴇᴅ ᴀ ᴛɪᴍᴇ ᴛᴏ ᴍᴜᴛᴇ ᴛʜɪs ᴜsᴇʀ ғᴏʀ!")
         return ""
 
     split_reason = reason.split(None, 1)
