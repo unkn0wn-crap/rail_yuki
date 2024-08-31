@@ -130,7 +130,7 @@ POLICE = [
 "https://graph.org/file/07a99f24e310f972c66d6.jpg"
 ]
 
-@app.on_message(filters.command(["afk"], prefixes=["/", "!"]))
+@app.on_message(filters.command(["/afk"], ["brb"]))
 async def active_afk(_, message: Message):
     if message.sender_chat:
         return
@@ -302,7 +302,7 @@ async def chat_watcher_func(_, message):
     userid = message.from_user.id
     user_name = message.from_user.first_name
     if message.entities:
-        possible = ["/afk", f"/afk@{BOT_USERNAME}"]
+        possible = ["brb", "/afk", f"/afk@{BOT_USERNAME}"]
         message_text = message.text or message.caption
         for entity in message.entities:
             if entity.type == MessageEntityType.BOT_COMMAND:
