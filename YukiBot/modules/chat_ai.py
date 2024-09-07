@@ -130,7 +130,7 @@ def chatbot(update: Update, context: CallbackContext):
             return
         
         bot.send_chat_action(chat_id, action="typing")
-        api_url = f"http://api.brainshop.ai/get?bid=180331&key=1EGyiLpUu4Vv6mwy&uid={user_id}&msg={message.text}"
+        api_url = f"http://api.brainshop.ai/get?bid=183083&key=1gjodyDGiFSasdcd&uid={user_id}&msg={message.text}"
         response = requests.get(api_url).json()["cnt"]
 
         message.reply_text(response)
