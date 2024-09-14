@@ -1,5 +1,5 @@
+
 # Use Debian Slim Buster image
-# testing
 FROM python:3.9-slim-buster
 
 ENV PIP_NO_CACHE_DIR 1
@@ -65,9 +65,9 @@ RUN apt update && apt upgrade -y && \
 # Pypi package Repo upgrade
 RUN pip3 install --upgrade pip setuptools
 
-# Build argument to invalidate the cache before cloning the repo
-#ARG CACHEBUST=1
-# RUN git clone https://github.com/corpse-x/rail_yuki /root/YukiBot
+# Hardcode the GitHub token into the Git clone command
+RUN git clone https://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@github.com/corpse-x/rail_yuki /root/YukiBot
+
 WORKDIR /root/YukiBot
 
 # Copy config file to /root/YukiBot/YukiBot
@@ -79,5 +79,4 @@ ENV PATH="/home/bot/bin:$PATH"
 RUN pip3 install -U -r requirements.txt
 
 # Starting Worker
-CMD ["python3","-m","YukiBot"]
-
+CMD ["python3", "-m", "YukiBot"]
