@@ -66,9 +66,9 @@ RUN apt update && apt upgrade -y && \
 RUN pip3 install --upgrade pip setuptools
 
 # Build argument to invalidate the cache before cloning the repo
-ARG CACHEBUST=1
-RUN git clone https://github.com/corpse-x/rail_yuki /root/YukiBot
-WORKDIR /root/YukiBot
+#ARG CACHEBUST=1
+# RUN git clone https://github.com/corpse-x/rail_yuki /root/YukiBot
+#WORKDIR /root/YukiBot
 
 # Copy config file to /root/YukiBot/YukiBot
 COPY ./YukiBot/config.py ./YukiBot/config.py* /root/YukiBot/YukiBot/
