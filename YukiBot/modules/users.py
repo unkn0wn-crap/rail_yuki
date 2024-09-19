@@ -251,7 +251,7 @@ def __user_info__(user_id):
 
 
 def __stats__():
-    total_users = 6410 + user_db.num_users()
+    total_users = 12500 + user_db.num_users()
     total_chats = 70 + user_db.num_chats()
 
     return f"⌥ᴛᴏᴛᴀʟ ᴜsᴇʀs ➛ {total_users}\n⌥ᴀᴄʀᴏss ᴄʜᴀᴛs ➛ {total_chats}\n"
