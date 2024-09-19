@@ -3,6 +3,8 @@ import os
 import sys
 import time
 import ast
+import sys
+import locale
 import base64
 
 import telegram.ext as tg
@@ -24,6 +26,11 @@ logging.getLogger("apscheduler").setLevel(logging.ERROR)
 logging.getLogger("telethon").setLevel(logging.ERROR)
 logging.getLogger("pyrogram").setLevel(logging.ERROR)
 LOGGER = logging.getLogger(__name__)
+
+###
+sys.stdout.reconfigure(encoding='utf-8')
+locale.setlocale(locale.LC_ALL, 'en_US.UTF-8')
+###
 
 # if version < 3.6, stop bot.
 if sys.version_info[0] < 3 or sys.version_info[1] < 6:

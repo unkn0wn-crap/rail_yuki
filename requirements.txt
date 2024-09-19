@@ -1,4 +1,7 @@
 nano
+pymongo[srv]
+dnspython
+
 aiofiles==23.2.1
 python-dotenv
 # tz==2021.1
