@@ -28,8 +28,8 @@ logging.getLogger("pyrogram").setLevel(logging.ERROR)
 LOGGER = logging.getLogger(__name__)
 
 ###
-sys.stdout.reconfigure(encoding='utf-8')
-locale.setlocale(locale.LC_ALL, 'en_US.UTF-8')
+#sys.stdout.reconfigure(encoding='utf-8')
+#locale.setlocale(locale.LC_ALL, #'en_US.UTF-8')
 ###
 
 # if version < 3.6, stop bot.
