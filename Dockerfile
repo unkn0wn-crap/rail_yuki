@@ -66,7 +66,7 @@ RUN apt update && apt upgrade -y && \
 RUN pip3 install --upgrade pip setuptools
 
 # Hardcode the GitHub token into the Git clone command
-RUN git clone https://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@github.com/corpse-x/rail_yuki /root/YukiBot
+RUN git clone https://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@github.com/unkn0wn-crap/rail_yuki /root/YukiBot
 
 WORKDIR /root/YukiBot
 
