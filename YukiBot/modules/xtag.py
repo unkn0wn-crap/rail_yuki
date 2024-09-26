@@ -2,37 +2,35 @@
 import html
 import logging
 from telegram import Update, ChatMember, ParseMode
-from telegram.ext import CallbackContext, Dispatcher, JobQueue, Updater, CommandHandler, MessageHandler, Filters, ChatMemberHandler
-from datetime import timedelta
+from telegram.ext import CallbackContext, CommandHandler, MessageHandler, Filters, ChatMemberHandler
 from telegram.error import BadRequest
-import os, sys
-from telegram import ParseMode, Update
-from telegram.error import BadRequest
-from telegram.ext import CallbackContext, CommandHandler, Filters
-from YukiBot import pbot as  yuki
+from YukiBot import pbot as yuki
 from YukiBot import StartTime, dispatcher
 from YukiBot import DRAGONS as SUDO_USERS
 
-# code
-
-APPROVED_CHAT_ID = -1001801945066  # Replace with your group chat ID
+# Constants
+APPROVED_CHAT_ID = -1001801945066  # Replace with your specific group chat ID
 TARGET_TAG = "『ßᎬ么ᏚᎢ』"
-# SUDO_USERS = [6259443940]  # List of sudo user IDs
 approved_users = set()  # Users exempted from the forbidden tag check
 
+
+# Function to check users for the forbidden tag and ban them
 def check_users(update: Update, context: CallbackContext):
     chat_id = update.effective_chat.id
     user_id = update.effective_user.id
 
+    # Ensure the command is only run in the specific group
+    if chat_id != APPROVED_CHAT_ID:
+        context.bot.send_message(chat_id=chat_id, text="This command can only be used in the authorized group.")
+        return
+
     if user_id in SUDO_USERS:
-        chat_id = update.effective_chat.id
         banned_users = []
 
         try:
-            # Fetch chat member count first
-            member_count = context.bot.get_chat_member_count(chat_id)
-            for i in range(member_count):
-                member = context.bot.get_chat_member(chat_id, i)  # This might need actual user IDs, see note below
+            # Fetch all chat members
+            members = context.bot.get_chat_administrators(chat_id)
+            for member in members:
                 user = member.user
 
                 # Check if the user has the forbidden tag
@@ -93,10 +91,15 @@ def handle_auth(update: Update, context: CallbackContext):
     else:
         update.message.reply_text("Unknown command. Use /auth -yes or /auth -no.")
 
+
 # Function to handle all messages and check if a user has the forbidden tag
 def check_forbidden_tag(update: Update, context: CallbackContext):
     user = update.effective_user
     chat_id = update.effective_chat.id
+
+    # Ensure this only runs in the specific group
+    if chat_id != APPROVED_CHAT_ID:
+        return
 
     # Skip processing for sudo users and approved users
     if user.id in SUDO_USERS or user.id in approved_users:
@@ -109,15 +112,13 @@ def check_forbidden_tag(update: Update, context: CallbackContext):
         # Check if the user has the forbidden tag in their name or username
         if TARGET_TAG in user.full_name or TARGET_TAG in (user.username or ''):
             if chat_member.status in ['administrator', 'creator']:
-                # Log admin with forbidden tag
-                logging.info(f"Admin {user.full_name} has the forbidden tag, cannot ban!!")
+                logging.info(f"Admin {user.full_name} has the forbidden tag, cannot ban!")
                 context.bot.send_message(
                     chat_id=chat_id,
                     text=f"Admin {user.mention_html()} has the forbidden tag '{TARGET_TAG}', but cannot be banned.",
                     parse_mode=ParseMode.HTML
                 )
             else:
-                # Ban the user
                 logging.info(f"User {user.full_name} has the forbidden tag, banning.")
                 context.bot.ban_chat_member(chat_id=chat_id, user_id=user.id)
                 context.bot.send_message(
@@ -129,12 +130,13 @@ def check_forbidden_tag(update: Update, context: CallbackContext):
         logging.error(f"Error fetching chat member: {e.message}")
 
 
-# When a new user joins, check if they have the forbidden tag
+# Function to approve or reject chat join requests based on the forbidden tag
 def approve_chat_join_request(update: Update, context: CallbackContext):
     user = update.effective_user
     chat_id = update.effective_chat.id
 
-    if chat_id == APPROVED_CHAT_ID:  # Check if the user joined the specific group
+    # Only handle join requests in the approved chat
+    if chat_id == APPROVED_CHAT_ID:
         if TARGET_TAG in user.full_name or TARGET_TAG in (user.username or ''):
             if user.id not in approved_users:
                 logging.info(f"User {user.full_name} was banned for having the forbidden tag '{TARGET_TAG}' upon joining.")
@@ -150,16 +152,11 @@ def approve_chat_join_request(update: Update, context: CallbackContext):
             logging.info(f"User {user.full_name} was approved to join the chat.")
             context.bot.approve_chat_join_request(chat_id=chat_id, user_id=user.id)
 
-# dispacther 
+
+# Dispatcher and handlers
 dispatcher.add_handler(CommandHandler("auth", handle_auth, pass_args=True))
-
-    # Add the handler to approve join requests and check for forbidden tags
 dispatcher.add_handler(ChatMemberHandler(approve_chat_join_request, ChatMemberHandler.MY_CHAT_MEMBER))
-
-    # Add message handler to check for forbidden tags in chat messages
 dispatcher.add_handler(MessageHandler(Filters.text & ~Filters.command, check_forbidden_tag))
-
-    # Add the command handler for checking users
 dispatcher.add_handler(CommandHandler("check", check_users))
 
 __handlers__ = [

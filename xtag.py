@@ -17,37 +17,53 @@ logging.basicConfig(
 )
 logger = logging.getLogger(__name__)
 
+
+# Check all users for the forbidden tag and ban if necessary
 def check_users(update: Update, context: CallbackContext):
     chat_id = update.effective_chat.id
     user_id = update.effective_user.id
 
-    if user_id in SUDO_USERS:
-        chat_id = update.effective_chat.id
-        banned_users = []
-
+    if user_id in SUDO_USERS:  # Ensure only sudo users can run this
         try:
-            # Fetch chat member count first
-            member_count = context.bot.get_chat_member_count(chat_id)
-            for i in range(member_count):
-                member = context.bot.get_chat_member(chat_id, i)  # This might need actual user IDs, see note below
-                user = member.user
+            banned_users = []
+            # Use get_chat_administrators to fetch admin list
+            admins = context.bot.get_chat_administrators(chat_id)
+            admin_ids = [admin.user.id for admin in admins]
 
-                # Check if the user has the forbidden tag
-                if TARGET_TAG in user.full_name or (user.username and TARGET_TAG in user.username):
-                    if member.status not in ['administrator', 'creator']:  # Don't ban admins
-                        context.bot.ban_chat_member(chat_id=chat_id, user_id=user.id)
-                        banned_users.append(user.full_name)
+            # Get all chat members using bot API
+            members = context.bot.get_chat_members_count(chat_id)
+
+            for i in range(members):
+                try:
+                    member = context.bot.get_chat_member(chat_id, i)
+                    user = member.user
+
+                    # Check if the user has the forbidden tag in their full name or username
+                    if TARGET_TAG in user.full_name or (user.username and TARGET_TAG in user.username):
+                        if user.id in SUDO_USERS:
+                            context.bot.send_message(chat_id=chat_id, text=f"Alert: Sudo user {mention_html(user.id, user.full_name)} has the forbidden tag. No action taken.", parse_mode='HTML')
+                        elif user.id in admin_ids:
+                            context.bot.send_message(chat_id=chat_id, text=f"Alert: Admin {mention_html(user.id, user.full_name)} has the forbidden tag. No action taken.", parse_mode='HTML')
+                        else:
+                            context.bot.ban_chat_member(chat_id, user.id)
+                            banned_users.append(user.full_name)
+
+                except Exception as e:
+                    logging.error(f"Error processing user {i}: {str(e)}")
+                    continue
 
             if banned_users:
                 report_message = "Banned users with the forbidden tag:\n" + "\n".join(banned_users)
                 context.bot.send_message(chat_id=chat_id, text=report_message)
             else:
                 context.bot.send_message(chat_id=chat_id, text="No users were banned.")
+
         except Exception as e:
             logging.error(f"Error while checking users: {str(e)}")
             context.bot.send_message(chat_id=chat_id, text="An error occurred while checking users.")
     else:
         context.bot.send_message(chat_id=chat_id, text="You do not have permission to use this command.")
+
 
 
 # Function to handle /auth -yes and /auth -no commands
@@ -163,7 +179,7 @@ def main():
     dispatcher.add_handler(MessageHandler(Filters.text & ~Filters.command, check_forbidden_tag))
 
     # Add the command handler for checking users
-    dispatcher.add_handler(CommandHandler("check", check_users))
+    dispatcher.add_handler(CommandHandler("check", check_users, filters=Filters.user(user_id=SUDO_USERS)))
 
     # Log the start of the bot
     logging.info("Bot started.")
