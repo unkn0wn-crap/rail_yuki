@@ -1,13 +1,16 @@
-from flask import Flask
+from flask import Flask, render_template
+from threading import Thread
 
-app = Flask(__yuki__)
-
+app = Flask (__name___)
 @app.route('/')
 
-def hello_world():
+def index():
+    return "ParaDoX Alive !!"
 
-return 'YukiOnna Bot running on Flask'
 
-if __yuki__ == "__main__":
+def run():
+    app.run(host='0.0.0.0',port=8080)
 
-app.run(
+def keep_alive():
+    t = Thread (target=run)
+    t.start()

@@ -12,9 +12,27 @@ from aiohttp import ClientSession
 from pyrogram import Client, errors
 from telethon import TelegramClient
 from telegram.ext import Updater
-from alive import keep_alive
+
+from flask import Flask, render_template
+from threading import Thread
 
 StartTime = time.time()
+
+
+####
+app = Flask (__name___)
+@app.route('/')
+
+def index():
+    return "ParaDoX Alive !!"
+
+
+def run():
+    app.run(host='0.0.0.0',port=8080)
+
+def keep_alive():
+    t = Thread (target=run)
+    t.start()
 keep_alive()
 
 # enable logging
