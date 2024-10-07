@@ -12,8 +12,10 @@ from aiohttp import ClientSession
 from pyrogram import Client, errors
 from telethon import TelegramClient
 from telegram.ext import Updater
+from alive import keep_alive
 
 StartTime = time.time()
+keep_alive()
 
 # enable logging
 logging.basicConfig(
