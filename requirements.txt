@@ -83,3 +83,5 @@ pyfiglet
 unidecode
 openai==1.26.0
 numpy==1.24.4
+werkzeug==2.2.2
+
