@@ -16,7 +16,7 @@ async def Draw(bot, message): # Hey I'm @nandha (:
         image = str(uuid.uuid4()) + ".jpg"
         with open(image, "wb") as file: file.write(image_data);
         await m.reply_photo(
-          image, caption=f"By @{bot.me.username}"
+          image, caption=f"By @yukii_onna_bot"
         )
 
 
