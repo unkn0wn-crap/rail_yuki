@@ -54,6 +54,8 @@ pretty_errors==1.2.25
 psutil==5.9.7
 psycopg2-binary==2.9.9
 pydictionary==2.0.1
+git+https://github.com/python-telegram-bot/ptbcontrib.git
+
 pykeyboard==0.1.5
 pynewtonmath==1.0.1
 pyrate-limiter==2.10.0
