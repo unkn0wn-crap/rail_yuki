@@ -26,6 +26,6 @@ __mod_name__ = "ᴀɪ-ᴅʀᴀᴡ"
 __help__ = f"""
  *Aɪ-ᴅʀᴀᴡ*:
 
-ɢᴇɴᴇʀᴀᴛᴇ ᴀɪ ɪᴍᴀɢᴇs ʙʏ @{BOT_USERNAME}
+ɢᴇɴᴇʀᴀᴛᴇ ᴀɪ ɪᴍᴀɢᴇs ʙʏ @yukii_onna_bot
 Usᴇ `/draw sexy girl`
 """
