@@ -15,9 +15,9 @@ from telegram.ext import Updater
 from telethon.sync import TelegramClient
 from telethon.sessions import MemorySession
 #from ptbcontrib.postgres_persistence import PostgresPersistence
-from pyrogram import Client, errors, __version__ as pyrover
+#from pyrogram import Client, errors, __version__ as pyrover
 
-pyrogram_version = pyrover
+#pyrogram_version = pyrover
 
 StartTime = time.time()
 
