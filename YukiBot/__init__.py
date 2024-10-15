@@ -14,7 +14,7 @@ from telethon import TelegramClient
 from telegram.ext import Updater
 from telethon.sync import TelegramClient
 from telethon.sessions import MemorySession
-from ptbcontrib.postgres_persistence import PostgresPersistence
+#from ptbcontrib.postgres_persistence import PostgresPersistence
 from pyrogram import Client, errors, __version__ as pyrover
 
 pyrogram_version = pyrover
@@ -174,15 +174,15 @@ from YukiBot.modules.sql import SESSION
 BOT_API_URL = "https://api.telegram.org/bot" 
 
 #aiohttpsession = ClientSession()
-arq = ARQ(ARQ_API_URL, ARQ_API_KEY, aiohttpsession)
-updater = tg.Updater(
-    token=TOKEN,
-    base_url=BOT_API_URL,
-    workers=min(32, os.cpu_count() + 4),
-    request_kwargs={"read_timeout": 10, "connect_timeout": 10},
-    use_context=True,
-    persistence=PostgresPersistence(session=SESSION),
-)
+#arq = ARQ(ARQ_API_URL, ARQ_API_KEY, #aiohttpsession)
+#updater = tg.Updater(
+#    token=TOKEN,
+#    base_url=BOT_API_URL,
+#    workers=min(32, os.cpu_count() + 4),
+#    request_kwargs={"read_timeout": 10, #"connect_timeout": 10},
+#    use_context=True,
+#   #persistence=PostgresPersistence(session=S#ESSION),
+#)
 
 
 updater = tg.Updater(TOKEN, workers=WORKERS, use_context=True)
