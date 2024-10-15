@@ -57,14 +57,14 @@ async def mentionall(event):
         if not chat_id in spam_chats:
             break
         usrnum += 1
-        usrtxt += f"» [{usr.first_name}](tg://user?id={usr.id})\n\n «"
+        usrtxt += f"» [{usr.first_name}](tg://user?id={usr.id})\n\n "
         if usrnum == 6:
             if mode == "text_on_cmd":
                 txt = f"{msg}\n\n{usrtxt}"
                 await client.send_message(chat_id, txt)
             elif mode == "text_on_reply":
                 await msg.reply(usrtxt)
-            await asyncio.sleep(3)
+            await asyncio.sleep(2)
             usrnum = 0
             usrtxt = ""
     try:
@@ -73,7 +73,7 @@ async def mentionall(event):
         pass
 
 
-@client.on(events.NewMessage(pattern="^/cancel$"))
+@client.on(events.NewMessage(pattern="^/stop$"))
 async def cancel_spam(event):
     if not event.chat_id in spam_chats:
         return await event.respond("❍ ᴛʜᴇʀᴇ ɪs ɴᴏ ᴘʀᴏᴄᴄᴇss ᴏɴ ɢᴏɪɴɢ..")

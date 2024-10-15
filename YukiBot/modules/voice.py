@@ -39,7 +39,7 @@ voices = {
 async def voice(_, message):
     Usage = "Rᴇᴘʟʏ ᴛᴏ ᴀ ᴍᴇssᴀɢᴇ ᴡɪᴛʜ ᴛʜᴇ ᴛᴇᴅᴛ ʏᴏᴜ ᴡᴀɴᴛ ᴛᴏ ᴄᴏɴᴠᴇʀᴛ ɪɴᴛᴏ ᴠᴏɪᴄᴇ"
     user_id = message.from_user.id
-    if not user_id == config.OWNER_ID and user_id in temp:
+    if not user_id == DRAGONS and user_id in temp:
         count = temp.count(user_id)
         if count >= 7:
             return await message.reply(
