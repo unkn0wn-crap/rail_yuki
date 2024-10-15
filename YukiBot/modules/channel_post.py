@@ -1,13 +1,16 @@
 import asyncio
+import os, sys
 from pyrogram import filters, Client
 from pyrogram.types import Message, InlineKeyboardMarkup, InlineKeyboardButton
 from pyrogram.errors import FloodWait
 
 from YukiBot import pbot as Bot
-from YukiBot import CHANNEL_ID, DISABLE_CHANNEL_BUTTON
+from YukiBot import CHANNEL_ID
 from YukiBot import DRAGONS as ADMINS
 from YukiBot.modules.helper_funcs.file_helper import encode
 
+
+DISABLE_CHANNEL_BUTTON = os.environ.get("DISABLE_CHANNEL_BUTTON", "True") == 'True'
 CHANNEL_ID =""
 @Bot.on_message(filters.private & filters.user(ADMINS) & ~filters.command(['genlink']))
 async def channel_post(client: Client, message: Message):

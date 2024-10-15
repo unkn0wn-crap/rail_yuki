@@ -65,6 +65,9 @@ if ENV:
     START_IMG = os.environ.get(
         "START_IMG", ""
     )
+    CHANNEL_ID = int(os.environ.get("CHANNEL_ID", "-1002092954715"))
+    
+    DISABLE_CHANNEL_BUTTON = os.environ.get("DISABLE_CHANNEL_BUTTON", "False") == 'False'
     STRICT_GBAN = bool(os.environ.get("STRICT_GBAN", True))
     SUPPORT_CHAT = os.environ.get("SUPPORT_CHAT", "yukilogs")
     TEMP_DOWNLOAD_DIRECTORY = os.environ.get("TEMP_DOWNLOAD_DIRECTORY", "./")

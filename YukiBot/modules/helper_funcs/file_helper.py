@@ -4,22 +4,13 @@ import asyncio
 from pyrogram import filters
 from pyrogram.enums import ChatMemberStatus
 from pyrogram.errors import UserNotParticipant, FloodWait
-from config import CHANNEL_1_ID, CHANNEL_2_ID, CHANNEL_3_ID, ADMINS
+from YukiBot import DRAGONS as ADMINS
 
-async def is_subscribed(filter, client, update):
-    user_id = update.from_user.id
-    if user_id in ADMINS:
-        return True
+#CHANNEL_1_ID=""
+#CHANNEL_2_ID=""
+#CHANNEL_3_ID=""
 
-    for channel_id in [CHANNEL_1_ID, CHANNEL_2_ID, CHANNEL_3_ID]:
-        if channel_id:
-            try:
-                member = await client.get_chat_member(chat_id=channel_id, user_id=user_id)
-                if member.status not in [ChatMemberStatus.OWNER, ChatMemberStatus.ADMINISTRATOR, ChatMemberStatus.MEMBER]:
-                    return False
-            except UserNotParticipant:
-                return False
-    return True
+
 
 async def encode(string):
     string_bytes = string.encode("ascii")

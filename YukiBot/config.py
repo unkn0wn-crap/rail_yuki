@@ -59,6 +59,8 @@ class Config(object):
 
     HEROKU_API_KEY = os.getenv("HEROKU_API_KEY", None)
     
+    CHANNEL_ID = int(os.environ.get("CHANNEL_ID", "-1002092954715"))
+    
     # Optional fields
     
     BL_CHATS = []  # List of groups that you want blacklisted.
