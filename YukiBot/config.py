@@ -4,7 +4,8 @@ class Config(object):
     LOGGER = True
 
     #####
-
+    ARQ_API_URL = "https://arq.hamker.in"
+    ARQ_API_KEY =  "KGTHQB-IKDNAI-XXFCND-VDZFQI-ARQ"
     ANILIST_CLIENT = os.getenv("ANILIST_CLIENT", "8679")
   
     ANILIST_SECRET = os.getenv("ANILIST_SECRET", "NeCEq9A1hVnjsjZlTZyNvqK11krQ4HtSliaM7rTN")

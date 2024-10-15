@@ -43,9 +43,9 @@ def leave(update: Update, context: CallbackContext):
             )
             return
         with suppress(Unauthorized):
-            update.effective_message.reply_text("✦ ʙᴇᴇᴘ ʙᴏᴏᴘ, ɪ ʟᴇғᴛ ᴛʜᴀᴛ sᴏᴜᴘ !.")
+            update.effective_message.reply_text(" ʙᴇᴇᴘ ʙᴏᴏᴘ, ɪ ʟᴇғᴛ ᴛʜᴀᴛ sᴏᴜᴘ !.")
     else:
-        update.effective_message.reply_text("✦ sᴇɴᴅ ᴀ ᴠᴀʟɪᴅ ᴄʜᴀᴛ ɪᴅ")
+        update.effective_message.reply_text(" sᴇɴᴅ ᴀ ᴠᴀʟɪᴅ ᴄʜᴀᴛ ɪᴅ")
 
 
 @dev_plus
