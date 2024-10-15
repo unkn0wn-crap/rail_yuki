@@ -168,8 +168,8 @@ DEV_USERS.add(OWNER_ID)
 #DEV_USERS.add(abs(0b101100001110010100011000111101001))
 
 
-from YukiBot.config import ARQ_API_KEY, ARQ_API_URL, TOKEN
-from YukiBot.modules.sql import SESSION 
+#from YukiBot.config import ARQ_API_KEY, #ARQ_API_URL, TOKEN
+#from YukiBot.modules.sql import SESSION 
 
 BOT_API_URL = "https://api.telegram.org/bot" 
 
