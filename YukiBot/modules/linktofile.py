@@ -40,7 +40,7 @@ to show your all saved tokens in db.
 
 Also you can share files through inline.
 
-Example: `@{config.BOT_USERNAME} fs token`
+Example: `@yukii_onna_bot fs token`
 """
 
 
