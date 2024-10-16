@@ -1,30 +1,73 @@
-from YukiBot import pbot as bot
-from pyrogram import filters, types
-import pymongo
-import string
+from pyrogram.types import Message, InlineKeyboardMarkup, InlineKeyboardButton
+from pyrogram import Client, filters
 import random
+import string
+import base64
+import re
+import asyncio
+from pyrogram import filters
+from pyrogram.enums import ChatMemberStatus
+from pyrogram.errors import UserNotParticipant, FloodWait
+#from database import *
+#from utils import *
+#from batch import *
+import dns.resolver
+from pymongo import MongoClient
+from YukiBot import pbot as bot
 
-# MongoDB connection setup
-MONGO_URI = "mongodb+srv://arnavgupta0078:arnav@cluster3301.ojyvd.mongodb.net/?retryWrites=true&w=majority"
-DB_NAME = "LinkToShare"
-COLLECTION_NAME = "tokens"
+import dns.resolver
+dns.resolver.default_resolver=dns.resolver.Resolver(configure=False)
+dns.resolver.default_resolver.nameservers=['8.8.8.8']
+DB_URI = "mongodb+srv://arnavgupta0078:arnav@cluster3301.ojyvd.mongodb.net/?retryWrites=true&w=majority"
+client = MongoClient(DB_URI)
+DATABASE = client["Yuki_File_Share"]
 
-# Connect to the MongoDB client
-client = pymongo.MongoClient(MONGO_URI)
-db = client[DB_NAME]
-collection = db[COLLECTION_NAME]
-
-link = 'yukii_onna_bot.t.me?start=getfile-{}'
-
-def gen_token(length=10):
-    characters = string.ascii_letters + string.digits
-    return ''.join(random.choice(characters) for _ in range(length))
+# Define the collection
+db = DATABASE["files"]
 
 def get_user_token_and_index(user_id):
-    user_data = collection.find_one({'user_id': user_id})
+
+    user_data = db.find_one({'user_id': user_id})
+
     if user_data:
         tokens_with_count = [(key, len(value)) for key, value in user_data.items() if key not in ['_id', 'user_id']]
         return tokens_with_count
+    return None
+
+
+
+def get_user_data(user_id):
+    return db.find_one({'user_id': user_id})
+
+def update_user_data(user_id, token, file_id):
+    db.update_one(
+        {'user_id': user_id},
+        {'$push': {token: file_id}},
+        upsert=True
+    )
+
+def delete_file(user_id, token, index):
+    result = db.update_one(
+        {'user_id': user_id, token: {'$exists': True}},
+        {'$unset': {f"{token}.{index}": ""}}
+    )
+    db.update_one(
+        {'user_id': user_id, token: {'$exists': True}},
+        {'$pull': {token: None}}
+    )
+    return result.modified_count == 1
+
+def delete_token(user_id, token):
+    result = db.update_one(
+        {'user_id': user_id},
+        {'$unset': {token: ""}}
+    )
+    return result.modified_count > 0
+
+def get_user_tokens(user_id):
+    user_data = db.find_one({'user_id': user_id})
+    if user_data:
+        return [key for key in user_data if key not in ['_id', 'user_id']]
     return []
 
 def get_file_ids_by_token(token):
@@ -35,88 +78,92 @@ def get_file_ids_by_token(token):
             return user_id, file_ids
     return None, None
 
-def get_user_tokens(user_id):
-    user_data = collection.find_one({'user_id': user_id})
-    if user_data:
-        tokens = [key for key in user_data.keys() if key not in ['_id', 'user_id']]
-        return tokens
-    return []
 
-def delete_file(user_id, token, index):
-    result = collection.update_one(
-        {'user_id': user_id, token: {'$exists': True}},
-        {'$unset': {f"{token}.{index}": ""}}
-    )
-    # Remove any 'None' values from the list after deletion
-    collection.update_one(
-        {'user_id': user_id, token: {'$exists': True}},
-        {'$pull': {token: None}}
-    )
-    return result.modified_count == 1
+def gen_token(length=10):
 
-def delete_token(user_id, token):
-    result = collection.update_one(
-        {'user_id': user_id},
-        {'$unset': {token: ""}}
-    )
-    return result.modified_count > 0
+    characters = string.ascii_letters + string.digits
 
-@bot.on_message(filters.command(['clearfile','cfile']))
-async def clear_file(_, message):
-     m = message
-     r = message.reply_to_message
-
-     usage = "❌ Give the token with number `/cfile token 0`"
-
-     if len(message.command) == 3:
-          token = m.text.split()[1]
-          try:
-             file_id = int(m.text.split()[2])-1
-          except ValueError:
-             return await m.reply_text(
-               text=usage
-) 
-     else:
-         return await m.reply_text(
-             text=usage
-         )
-
-     user_id = m.from_user.id
-
-     if delete_file(user_id, token, file_id):
-          return await m.reply_text(
-               f"⛔ File deleted from token {token}"
-                                       )
-     else:
-          return await m.reply_text(
-                "❌ File doesn't exsit in Token."
-              )             
+    return ''.join(random.choice(characters) for _ in range(length))
 
 
-@bot.on_message(filters.command(['cleartoken','deltoken']))
-async def clear_token(_, message):
-     m = message
-     if len(message.command) != 2:
-          return await m.reply_text("Ok! but where token to delete?")
-     else:
-          user_id = m.from_user.id
-          if delete_token(user_id, m.text.split()[1]):
-              return await m.reply_text(
-                  "Token deleted!"
-                                       )
-          else:
-              return await m.reply_text(
-                  "Token doesn't exsit in database."
-              )         
+@bot.on_message(filters.private & filters.command("addfile"))
+async def handle_add_file(_, message):
+    user_id = message.from_user.id
+    reply = message.reply_to_message
+    file = (reply.document or reply.video) if reply and (reply.document or reply.video) else None
 
-@bot.on_message(filters.command(["ctoken","checkt"]))
+    if not file:
+        await message.reply("Please reply to a document or video.")
+        return
+
+    file_id = file.file_id
+    token = message.text.split()[1] if len(message.command) == 2 else gen_token()
+    update_user_data(user_id, token, file_id)
+    linkx = f'deds3c_bot.t.me?start={token}'
+    link = f'deds3c_bot.t.me?start={{}}'
+    await message.reply(
+        f"File added to token: `{token}` \n\nClick to copy \n `{linkx}`\n",
+        reply_markup=InlineKeyboardMarkup(
+            [[InlineKeyboardButton("Click here", url=link.format(token))]]
+                        ))
+@bot.on_message(filters.private & filters.command(["clearfile", "cfile"]))
+
+async def handle_delete_file(_, message):
+
+
+    user_id = message.from_user.id
+
+    if len(message.command) != 3:
+        await message.reply("Usage: /cfile token index")
+        return
+
+    token = message.command[1]
+    try:
+        index = int(message.command[2]) - 1
+    except ValueError:
+        await message.reply("Invalid index.")
+        return
+
+    if delete_file(user_id, token, index):
+        await message.reply(f"File deleted from token: {token}")
+    else:
+        await message.reply("File does not exist in the specified token.")
+
+@bot.on_message(filters.private & filters.command(['gettokens', 'gettk']))
+async def GetTokens(_, message):
+     user_id = message.from_user.id
+     tokens = get_user_token_and_index(user_id)
+     string = f"**🌟 Stored tokens in {message.from_user.mention}**:\n"
+     for i, (token, file) in enumerate(tokens):
+          string += f"{i+1}, `{token}`: **{file}**\n"
+     return await message.reply_text(
+           text=string, quote=True
+     )
+
+
+@bot.on_message(filters.private & filters.command(["cleartoken", "deltoken"]))
+async def handle_delete_token(_, message):
+
+    user_id = message.from_user.id
+
+    if len(message.command) != 2:
+        await message.reply("Please provide a token to delete.")
+        return
+
+    token = message.command[1]
+    if delete_token(user_id, token):
+        await message.reply("Token deleted.")
+    else:
+        await message.reply("Token does not exist in the database.")
+    
+@bot.on_message(filters.private & filters.command(["ctoken","checktoken"]))
 async def CheckToken(bot, message):
 
      if not message.from_user:
          return
      user_id = message.from_user.id
      if not len(message.text.split()) == 2:
-           return await message.reply_text("Can you provide me token?\n```Example\n/checkt token```")
+           return await message.reply_text("Can you provide me token?\n```Example\n/ctoken token```")
      token = message.text.split()[1]
      if not token in get_user_tokens(user_id):
           return await message.reply("Token Seems like invalid 🤔")
@@ -126,73 +173,33 @@ async def CheckToken(bot, message):
          reply_markup=button
      )
 
+@bot.on_message(filters.text)
+async def send_file_by_token(_, message):
+    # Check if the message starts with /start followed by a token
+    if message.text.startswith("/start "):
+        # Extract the token from the message
+        token = message.text.split("/start ", 1)[1].strip()
+        user_id, file_ids = get_file_ids_by_token(token)
 
-@bot.on_message(filters.command(['gettokens', 'gettk']))
-async def GetTokens(_, message):
-    user_id = message.from_user.id
-    tokens = get_user_token_and_index(user_id)
-    String = f"**🌟 Stored tokens in {message.from_user.mention}**:\n"
-    
-    if tokens:
-        for i, (token, file_count) in enumerate(tokens):
-            String += f"{i+1}. `{token}`: **{file_count} files**\n"
-    else:
-        String += "No tokens found."
+        # Check if the token is valid and if files are associated with it
+        if not file_ids:
+            return await message.reply("No files found for the given token, or the token is invalid.")
 
-    return await message.reply_text(
-        text=String, quote=True
-    )
+        # Send all files linked to the token
+        for file_id in file_ids:
+            try:
+                await message.reply_document(file_id)
+            except Exception as e:
+                await message.reply(f"Failed to send file: {str(e)}")
+#    else:
+#        await message.reply("Invalid format. Please use the /start command followed by a valid token.")
 
-@bot.on_message(filters.command(['addfile', 'getlink']))
-async def Getlink(_, message):
-    user_id = message.from_user.id
-    reply = message.reply_to_message
-    file = (reply.document or reply.video) if reply and (reply.document or reply.video) else None
+__mod_name__ = "Sᴛᴏʀᴀɢᴇ"
 
-    if not file:
-        return await message.reply('Please reply to a document or video file.')
-
-    file_id = file.file_id
-    user_data = {'user_id': user_id}
-
-    if len(message.text.split()) == 2:
-        token = message.text.split(None, 1)[1]
-        existing_user = collection.find_one(user_data)
-        if existing_user and token in existing_user:
-            collection.update_one(
-                user_data, {'$push': {token: file_id}}
-            )
-            return await message.reply(
-                f'**Successfully added file to token.**\n**🌟 Token**: `{token}`',
-                reply_markup=types.InlineKeyboardMarkup(
-                    [[types.InlineKeyboardButton('Click here', url=link.format(token))]]
-                )
-            )
-        else:
-            return await message.reply('Sorry, that is not a valid token.')
-
-    # Generate a new token if no token was specified
-    token = gen_token()
-    collection.update_one(
-        {'user_id': user_id},
-        {'$set': {token: [file_id]}},
-        upsert=True
-    )
-
-    return await message.reply(
-        f'**Successfully generated new token and added file.**\n**🌟 Token**: `{token}`',
-        reply_markup=types.InlineKeyboardMarkup(
-            [[types.InlineKeyboardButton('Click here', url=link.format(token))]]
-        )
-    )
-
-
-__mod_name__ = "Fɪʟe Sᴛᴏʀᴇ"
-
-__help__ = f"""
+__help__ = """
  **File Store bot**:
 
-➩ /getlink: 
+➩ /addfile:
 to upload a file and get a new token
 also you can upload a file to a specific token like `/getlink token` with reply to document or video.
 
@@ -207,8 +214,5 @@ Use it with query `/checktoken token` to get link for share.
 
 ➩ /gettokens:
 to show your all saved tokens in db.
-
-Also you can share files through inline.
-
 Example: `@yukii_onna_bot fs token`
 """
