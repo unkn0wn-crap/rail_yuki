@@ -1,5 +1,6 @@
 import logging
 import os
+import config
 import sys
 import time
 import ast
