@@ -99,8 +99,8 @@ async def handle_add_file(_, message):
     file_id = file.file_id
     token = message.text.split()[1] if len(message.command) == 2 else gen_token()
     update_user_data(user_id, token, file_id)
-    linkx = f'deds3c_bot.t.me?start={token}'
-    link = f'deds3c_bot.t.me?start={{}}'
+    linkx = f'yukii_onna_bot.t.me?start={token}'
+    link = f'yukii_onna_bot.t.me?start={{}}'
     await message.reply(
         f"File added to token: `{token}` \n\nClick to copy \n `{linkx}`\n",
         reply_markup=InlineKeyboardMarkup(
