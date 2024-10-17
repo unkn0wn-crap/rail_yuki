@@ -49,18 +49,18 @@ ENV = bool(os.environ.get("ENV", False))
 
 if ENV:
 
-    API_ID = int(os.environ.get("API_ID", None))
-    API_HASH = os.environ.get("API_HASH", None)
+    API_ID = int(os.environ.get("API_ID", "6435225"))
+    API_HASH = os.environ.get("API_HASH", "4e984ea35f854762dcde906dce426c2d")
     
     ALLOW_CHATS = os.environ.get("ALLOW_CHATS", True)
     ALLOW_EXCL = os.environ.get("ALLOW_EXCL", False)
-    CASH_API_KEY = os.environ.get("CASH_API_KEY", None)
-    DB_URI = os.environ.get("DATABASE_URL")
+    CASH_API_KEY = os.environ.get("CASH_API_KEY", "KMYJ7SJCG1MYX65X")
+    DB_URI = os.environ.get("DATABASE_URL", "postgresql://postgres:WUcp0oe6jS5DtnUY@tastelessly-delicate-moccasin.data-1.use1.tembo.io:5432/postgres")
     DEL_CMDS = bool(os.environ.get("DEL_CMDS", False))
-    EVENT_LOGS = os.environ.get("EVENT_LOGS", None)
+    EVENT_LOGS = os.environ.get("EVENT_LOGS", "-1002221570986")
     INFOPIC = bool(os.environ.get("INFOPIC", "True"))
     LOAD = os.environ.get("LOAD", "").split()
-    MONGO_DB_URI = os.environ.get("MONGO_DB_URI", None)
+    MONGO_DB_URI = os.environ.get("MONGO_DB_URI", "mongodb+srv://arnavgupta0078:arnav@cluster3301.ojyvd.mongodb.net/?retryWrites=true&w=majority")
     NO_LOAD = os.environ.get("NO_LOAD", "").split()
     START_IMG = os.environ.get(
         "START_IMG", ""
@@ -71,12 +71,12 @@ if ENV:
     STRICT_GBAN = bool(os.environ.get("STRICT_GBAN", True))
     SUPPORT_CHAT = os.environ.get("SUPPORT_CHAT", "yukilogs")
     TEMP_DOWNLOAD_DIRECTORY = os.environ.get("TEMP_DOWNLOAD_DIRECTORY", "./")
-    TOKEN = os.environ.get("TOKEN", None)
-    TIME_API_KEY = os.environ.get("TIME_API_KEY", None)
+    TOKEN = os.environ.get("TOKEN", "7134066784:AAGVKa8zcfdteUF5jCyKRlSMG7mhlvEecqY")
+    TIME_API_KEY = os.environ.get("TIME_API_KEY", "1CUBX1HXGNHW")
     WORKERS = int(os.environ.get("WORKERS", 8))
 
     try:
-        OWNER_ID = int(os.environ.get("OWNER_ID", None))
+        OWNER_ID = int(os.environ.get("OWNER_ID", "6259443940"))
         HEROKU_APP_NAME = os.environ.get("HEROKU_APP_NAME", None)
         HEROKU_API_KEY = os.environ.get("HEROKU_API_KEY", None)
     except ValueError:
